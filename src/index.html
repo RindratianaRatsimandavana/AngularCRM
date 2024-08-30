@@ -47,31 +47,26 @@
     <img alt="Logo" src="./assets/images/logo-dark.png" width="59" height="24" style="margin-left: 6px" />
   </div>
   <script>
-    // document.querySelector('app-root')
-    //   ?.addEventListener('DOMNodeInserted', () => {
-    //     document.querySelector('#splash-screen')?.classList.add('remove')
-    //   })
+    // Sélectionner l'élément 'app-root'
+    const appRoot = document.querySelector('app-root');
 
-     // Sélectionner l'élément 'app-root'
-     const appRoot = document.querySelector('app-root');
+    // Créez un callback pour le MutationObserver
+    const callback = (mutationsList, observer) => {
+      // Lorsque le noeud d'enfant de 'app-root' est inséré
+      for (const mutation of mutationsList) {
+        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+          document.querySelector('#splash-screen')?.classList.add('remove');
+          // Arrêter d'observer une fois que l'élément a été inséré
+          observer.disconnect();
+        }
+      }
+    };
 
-// Créez un callback pour le MutationObserver
-const callback = (mutationsList, observer) => {
-  // Lorsque le noeud d'enfant de 'app-root' est inséré
-  for (const mutation of mutationsList) {
-    if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-      document.querySelector('#splash-screen')?.classList.add('remove');
-      // Arrêter d'observer une fois que l'élément a été inséré
-      observer.disconnect();
-    }
-  }
-};
+    // Créez une instance de MutationObserver avec le callback
+    const observer = new MutationObserver(callback);
 
-// Créez une instance de MutationObserver avec le callback
-const observer = new MutationObserver(callback);
-
-// Démarrer l'observation de 'app-root' pour les changements dans les enfants
-observer.observe(appRoot, { childList: true });
+    // Démarrer l'observation de 'app-root' pour les changements dans les enfants
+    observer.observe(appRoot, { childList: true });
   </script>
   <noscript>You need to enable JavaScript to run this app.</noscript>
 </body>

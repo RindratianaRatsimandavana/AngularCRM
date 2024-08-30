@@ -12,7 +12,23 @@ import { Store } from '@ngrx/store'
   standalone: true,
   imports: [TopbarComponent, RouterModule, SidebarComponent, FooterComponent],
   templateUrl: './vertical.component.html',
-  styles: ``,
+  styles: `
+      /* Ajoutez ce CSS à votre fichier styles.css ou directement dans le style de votre composant */
+.container-xxl {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Assurez-vous que le conteneur principal occupe au moins toute la hauteur de la vue */
+  }
+  
+  .card {
+    flex-grow: 1; /* Fait en sorte que la carte occupe tout l'espace restant */
+  }
+  
+  .footer {
+    margin-top: auto; /* Place le footer en bas de la page */
+  }
+  
+  `,
 })
 export class VerticalComponent {
   private store = inject(Store)

@@ -5,7 +5,36 @@
 <div class="page-wrapper">
   <div class="page-content">
     <div class="container-xxl">
-      <router-outlet />
+
+      <!-- DEBUT SELF ADD -->
+
+      <div class="main-container d-flex flex-column" style="display: flex;flex-direction: column;min-height: 100vh;">
+        <div class="card flex-grow-1" style="flex-grow: 1;">
+          <div class="card-header">
+            <div class="row align-items-center">
+              <div class="col">
+                <h4 class="card-title">Bought - Awaiting Delivery</h4> <!--titre mbola ho avadika dynamique-->
+              </div>
+              <!--end col-->
+              <div class="col-auto">
+                <a href="" class="text-secondary"
+                  ><i class="fas fa-download me-1"></i> Download Invoice</a
+                >
+              </div>
+              <!--end col-->
+            </div>
+            <!--end row-->
+          </div>
+          <!--end card-header-->
+          <div class="card-body pt-0">
+            <router-outlet />
+          </div>
+          <!--card-body-->
+        </div>
+        <!--end card-->
+      </div>
+      
+      <!-- END SELF ADD -->      
     </div>
     <app-footer />
   </div>

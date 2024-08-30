@@ -8,6 +8,8 @@ import { PricingComponent } from './pricing/pricing.component'
 import { BlogsComponent } from './blogs/blogs.component'
 import { FaqComponent } from './faq/faq.component'
 import { GalleryComponent } from './gallery/gallery.component'
+import { CreateProjectComponent } from './create-project/create-project.component'
+import { TypeProjectComponent } from './type-project/type-project.component'
 
 export const PAGES_ROUTES: Route[] = [
   {
@@ -54,5 +56,15 @@ export const PAGES_ROUTES: Route[] = [
     path: 'gallery',
     component: GalleryComponent,
     data: { title: 'Gallery' },
+  },
+  {
+    path: 'createProject',
+    component: CreateProjectComponent,
+    data: { title: 'Nouveau projet' },
+  },
+  {
+    path: 'typeProject',
+    component: TypeProjectComponent,
+    data: { title: 'Type de projet' },
   },
 ]
