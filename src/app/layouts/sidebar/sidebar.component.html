@@ -6,46 +6,72 @@
     <ngx-simplebar class="startbar-collapse" id="startbarCollapse">
       <div class="d-flex align-items-start flex-column w-100">
         <ul class="navbar-nav mb-auto w-100">
-          @for (item of menuItems; track $index; let first = $first) {
-            @if (item.isTitle) {
-              <li
-                class=""
-                [ngClass]="!first ? 'menu-label mt-2' : 'menu-label pt-0 mt-0'"
-              >
-                @if (!first) {
-                  <small class="label-border">
-                    <div class="border_left hidden-xs"></div>
-                    <div class="border_right"></div>
-                  </small>
-                  <span>{{ item.label }}</span>
-                } @else {
-                  <span>{{ item.label }}</span>
-                }
-              </li>
-            } @else if (hasSubmenu(item)) {
-              <ng-container
-                *ngTemplateOutlet="
-                  MenuItemWithChildren;
-                  context: {
-                    menu: item,
-                  }
-                "
-              >
-              </ng-container>
-            } @else {
-              <ng-container
-                *ngTemplateOutlet="
-                  MenuItem;
-                  context: {
-                    menu: item,
-                  }
-                "
-              >
-              </ng-container>
-            }
-          }
+          <!-- Menu 1 (Title Section) -->
+          <!-- <li class="menu-label pt-0 mt-0">
+            <span>Menu Title 1</span>
+          </li> -->
+          <!-- Menu Item 1 -->
+          <!-- <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/path-to-page1"
+              ngClass="menu-label mt-2"
+            >
+              <i class="menu-icon icon-class1"></i>
+              <span class="nav-text">Menu Item 1</span>
+            </a>
+          </li> -->
+          <!-- Menu with Submenu -->
+          <!-- <li class="nav-item">
+            <a
+              class="nav-link"
+              href="#"
+              data-bs-toggle="collapse"
+              aria-expanded="false"
+              aria-controls="submenu1"
+            >
+              <i class="menu-icon icon-class2"></i>
+              <span class="nav-text">Menu with Submenu</span>
+            </a>
+            <div class="collapse" id="submenu1">
+              <ul class="nav flex-column"> -->
+                <!-- Submenu Item 1 -->
+                <!-- <li class="nav-item">
+                  <a class="nav-link" routerLink="/path-to-subpage1">
+                    <span class="nav-text">Submenu Item 1</span>
+                  </a>
+                </li> -->
+                <!-- Submenu Item 2 -->
+                <!-- <li class="nav-item">
+                  <a class="nav-link" routerLink="/path-to-subpage2">
+                    <span class="nav-text">Submenu Item 2</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li> -->
+          <!-- Menu 2 (Another Title Section) -->
+          <li class="menu-label mt-2">
+            <small class="label-border">
+              <div class="border_left hidden-xs"></div>
+              <div class="border_right"></div>
+            </small>
+            <span>MENU</span>
+          </li>
+          <!-- Menu Item 2 -->
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/pages/projectList"
+              ngClass="menu-label mt-2 "
+            >
+              <i class="menu-icon icon-class3"></i>
+              <span class="nav-text">Vos projets</span>
+            </a>
+          </li>
         </ul>
-        <div class="update-msg text-center">
+
+        <!-- <div class="update-msg text-center">
           <div
             class="d-flex justify-content-center align-items-center thumb-lg update-icon-box rounded-circle mx-auto"
           >
@@ -62,87 +88,9 @@
             class="btn text-primary shadow-sm rounded-pill"
             >Upgrade your plan</a
           >
-        </div>
+        </div> -->
       </div>
     </ngx-simplebar>
   </div>
 </div>
 <div class="startbar-overlay d-print-none"></div>
-
-<ng-template #MenuItemWithChildren let-menu="menu">
-  <li class="nav-item">
-    <a
-      class="nav-link"
-      [routerLink]="menu.url"
-      [ngClass]="{ active: activeMenuItems.includes(menu.key) }"
-      data-bs-toggle="collapse"
-      (click)="toggleMenuItem(menu, collapse)"
-      role="button"
-      [attr.aria-expanded]="!menu.collapsed"
-      aria-controls="sidebarDashboards"
-      [attr.aria-controls]="menu.key"
-    >
-      @if (menu.icon) {
-        <i class="{{ menu.icon }} menu-icon"></i>
-      }
-      <span class="nav-text"> {{ menu.label }} </span>
-      @if (menu.badge) {
-        <span class="badge rounded text-success bg-success-subtle ms-1"
-          >New</span
-        >
-      }
-    </a>
-    <div
-      #collapse="ngbCollapse"
-      [(ngbCollapse)]="menu.collapsed"
-      class="collapse"
-      id="sidebarDashboards"
-    >
-      <ul class="nav flex-column">
-        @for (child of menu.subMenu; track child.label) {
-          @if (hasSubmenu(child)) {
-            <ng-container
-              *ngTemplateOutlet="
-                MenuItemWithChildren;
-                context: {
-                  menu: child,
-                }
-              "
-            >
-            </ng-container>
-          } @else {
-            <ng-container
-              *ngTemplateOutlet="
-                MenuItem;
-                context: {
-                  menu: child,
-                }
-              "
-            >
-            </ng-container>
-          }
-        }
-      </ul>
-    </div>
-  </li>
-</ng-template>
-
-<ng-template #MenuItem let-menu="menu">
-  <li
-    class="nav-item"
-    [ngClass]="{ active: activeMenuItems.includes(menu.key) }"
-  >
-    <ng-container *ngTemplateOutlet="MenuItemLink; context: { menu: menu }">
-    </ng-container>
-  </li>
-</ng-template>
-<ng-template #MenuItemLink let-menu="menu">
-  <a
-    class="nav-link"
-    [routerLink]="menu.url"
-    [ngClass]="{ active: activeMenuItems.includes(menu.key) }"
-    [attr.aria-controls]="menu.key"
-  >
-    <span class="nav-text">{{ menu.label }}</span>
-  </a>
-</ng-template>

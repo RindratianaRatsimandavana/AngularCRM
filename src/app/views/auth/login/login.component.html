@@ -55,6 +55,27 @@
                       id="userpassword"
                       placeholder="Enter password"
                     />
+
+                    <!-- ALERTTTTTTTTTTTT -->
+                     @if((!wrongAuth) && (submitted)){
+                        <ngb-alert
+                          type="danger"
+                          class="shadow-sm border-theme-white-2"
+                          role="alert"
+                          [dismissible]="false"
+                        >
+                          <div
+                            class="d-inline-flex justify-content-center align-items-center thumb-xs bg-danger rounded-circle mx-auto me-1"
+                          >
+                            <i class="fas fa-xmark align-self-center mb-0 text-white"></i>
+                          </div>
+                          <strong> Oh snap!</strong> Change a few things up and try submitting
+                          again.
+                      </ngb-alert>
+  
+                     }
+                    
+
                   </div>
                   <!--end form-group-->
 

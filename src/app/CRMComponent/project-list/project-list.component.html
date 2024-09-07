@@ -1,0 +1,73 @@
+<div class="col-auto justify-content-left">
+    <button class="btn btn-primary">
+      <i class="fas fa-plus me-1"></i> Nouveu projet
+    </button>
+  </div>
+
+<div class="row justify-content">
+    
+    @if(projectList.length>0){
+        @for(a of projectList; track a.projet_statut) 
+        {
+            <div class="col-md-6 col-lg-3">
+                <h3>Vos projets</h3>
+                <div class="card">
+                    <img
+                    class="card-img-top img-fluid bg-light-alt"
+                    src="assets/images/extra/card/img-1.jpg"
+                    alt="Card image cap"
+                    />
+                    <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                        <h4 class="card-title">{{a.projet_nom}}</h4>
+                        </div>
+                        <!--end col-->
+                        <div class="col-auto">
+                        <img
+                            class="rounded-circle me-0.5"
+                            src="assets/images/users/avatar-7.jpg"
+                            alt=""
+                            height="24"
+                        />
+                        <span class="badge bg-primary-subtle text-primary"
+                            >Permission: {{a.permission}} </span
+                        >
+                        </div>
+                        <!--end col-->
+                    </div>
+                    <!--end row-->
+                    </div>
+                    <!--end card-header-->
+                    <div class="card-body pt-0">
+                    <p class="card-text text-muted">
+                        Date d'écheance: {{a.projet_date_echeance}}
+                        <!-- Afaka ampiana text -->
+                        <!-- Some quick example text to build on the card title and make up the
+                        bulk of the card's content. -->
+                    </p>
+                    <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm"
+                        >Voir les détails</a
+                    >
+                    </div>
+                    <!--end card -body-->
+                </div>
+                <!--end card-->
+              
+             </div>
+
+
+        }
+
+    }
+    @if(projectList.length===0){
+        <h2 style="text-align: center;">Pas de projet enregistré</h2>
+
+    }
+    
+    
+    
+    
+  </div>
+  <!--end row-->
+  

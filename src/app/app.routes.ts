@@ -17,7 +17,8 @@ export const routes: Routes = [
     component: LayoutComponent,
     canActivate: [
       () => {
-        const currentUser = inject(AuthenticationService).session
+        // const currentUser = inject(AuthenticationService).session
+        const currentUser = localStorage.getItem('user');
         const router: Router = inject(Router)
         if (currentUser) return true
         const urlTree: UrlTree = router.parseUrl('/auth/log-in')

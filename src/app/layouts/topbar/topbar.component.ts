@@ -1,7 +1,7 @@
 import { changetheme } from '@/app/store/layout/layout-action'
 import { getLayoutColor } from '@/app/store/layout/layout-selector'
 import { Component, EventEmitter, Output, inject } from '@angular/core'
-import { RouterModule } from '@angular/router'
+import { Router, RouterModule } from '@angular/router'
 import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap'
 import { Store } from '@ngrx/store'
 import { SimplebarAngularModule } from 'simplebar-angular'
@@ -24,8 +24,9 @@ export class TopbarComponent {
   store = inject(Store)
   scrollY = 0
   @Output() mobileMenuButtonClicked = new EventEmitter()
+  
 
-  constructor() {
+  constructor(private router: Router) {
     window.addEventListener('scroll', this.handleScroll, { passive: true })
     this.handleScroll()
   }
@@ -48,5 +49,12 @@ export class TopbarComponent {
   }
   handleScroll = () => {
     this.scrollY = window.scrollY
+  }
+
+  logout() {
+    localStorage.removeItem('user');
+    //this.isConnected = false;
+    console.log("ni deconexte");
+    this.router.navigate(['/auth/log-in']);
   }
 }

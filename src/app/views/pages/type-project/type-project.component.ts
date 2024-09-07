@@ -1,6 +1,6 @@
 import { currentYear } from '@/app/common/constants'
-import { Userole } from '@/app/interfaceCRM/userole';
-import { GeneralService } from '@/app/serviceCRM/general.service';
+import { Userole } from '@/app/CRMinterface/userole';
+import { GeneralService } from '@/app/CRMservice/general.service';
 import { Component } from '@angular/core'
 import { NgbProgressbarModule } from '@ng-bootstrap/ng-bootstrap'
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap'

@@ -10,6 +10,7 @@ import { FaqComponent } from './faq/faq.component'
 import { GalleryComponent } from './gallery/gallery.component'
 import { CreateProjectComponent } from './create-project/create-project.component'
 import { TypeProjectComponent } from './type-project/type-project.component'
+import { ProjectListComponent } from '@/app/CRMComponent/project-list/project-list.component'
 
 export const PAGES_ROUTES: Route[] = [
   {
@@ -66,5 +67,10 @@ export const PAGES_ROUTES: Route[] = [
     path: 'typeProject',
     component: TypeProjectComponent,
     data: { title: 'Type de projet' },
+  },
+  {
+    path: 'projectList',
+    component: ProjectListComponent,
+    data: { title: 'Vos projets' },
   },
 ]
