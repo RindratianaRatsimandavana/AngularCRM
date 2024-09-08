@@ -1,8 +1,16 @@
 <div class="col-auto justify-content-left">
-    <button class="btn btn-primary">
+    <button class="btn btn-primary" (click)="openModal(exampleModalXL, { size: 'xl' })">
       <i class="fas fa-plus me-1"></i> Nouveu projet
     </button>
   </div>
+
+  <!-- <button
+                    type="button"
+                    class="btn btn-primary btn-sm"
+                    (click)="openModal(exampleModalXL, { size: 'xl' })"
+                  >
+                    Launch demo modal
+                  </button> -->
 
 <div class="row justify-content">
     
@@ -70,4 +78,321 @@
     
   </div>
   <!--end row-->
+
+  <ng-template
+          #exampleModalXL
+          let-modal
+          class="modal fade bd-example-modal-xl"
+          id="bd-example-modal-xl"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="myExtraLargeModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-header">
+            <h6 class="modal-title m-0" id="myExtraLargeModalLabel">
+              Créer votre projet
+            </h6>
+            <button
+              type="button"
+              class="btn-close"
+              (click)="modal.dismiss()"
+              aria-label="Close"
+            ></button>
+          </div>
+          <!--end modal-header-->
+
+        
+          <!-- Insertion du progressbar -->
+
+
+          <div class="position-relative m-4">
+            <ngb-progressbar [value]="50" style="height: 1px"></ngb-progressbar>
+            <div
+              class="position-absolute top-0 start-0 translate-middle bg-primary text-white rounded-pill thumb-md"
+            >
+              <i class="iconoir-home"></i>
+            </div>
+            <div
+              class="position-absolute top-0 start-50 translate-middle bg-primary-subtle text-primary rounded-pill thumb-md"
+            >
+              <i class="iconoir-delivery-truck"></i>
+            </div>
+            <div
+              class="position-absolute top-0 start-100 translate-middle bg-light text-dark rounded-pill thumb-md"
+            >
+              <i class="iconoir-map-pin"></i>
+            </div>
+          </div>
+          <div class="row row-cols-3">
+            <div class="col text-start">
+              <h6 class="mb-1">Order Created</h6>
+              <p class="mb-0 text-muted fs-12 fw-medium">
+                
+                 11:30 AM
+              </p>
+            </div>
+            <div class="col text-center">
+              <h6 class="mb-1">On Delivery</h6>
+              <p class="mb-0 text-muted fs-12 fw-medium">
+                05:15 PM
+              </p>
+            </div>
+            <div class="col text-end">
+              <h6 class="mb-1">Order Delivered</h6>
+              <p class="mb-0 text-muted fs-12 fw-medium">
+                 01:00 PM
+              </p>
+            </div>
+          </div>
+
+
+
+          <!-- Fin insertion progressBar -->
+
+
+          <div class="modal-body">
+            <h5 class="mt-0">Titre </h5>
+            <!-- <h4 class="card-title fs-16 mb-0 pt-3 ps-4">Create Project</h4> -->
+            <!-- debut form -->
+            <form class="p-4 pt-3">
+              <div class="form-group mb-2 mb-lg-1">
+                <label for="projectName" class="form-label">Nom du projet :</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nomProjet"
+                  aria-describedby="emailHelp"
+                  placeholder="Enter project name"
+                />
+              </div>
+              <!--end form-group-->
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+                    <label class="form-label mt-2" for="pro-start-date">Date de debut</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="startdate"
+                      appDatepicker
+                      #startDateInput
+                      id="pro-start-date"
+                      placeholder="Enter start date"
+                    />
+                  </div>
+                  <!--end col-->
+                  <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+                    <label class="form-label mt-2" for="pro-end-date">Date d'écheance</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="enddate"
+                      appDatepicker
+                      #endDateInput
+                      id="pro-end-date"
+                      placeholder="Enter end date"
+                    />
+                  </div>
+                  <!--end col-->
+                  <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+                    <label class="form-label mt-2" for="pro-rate">Type de projet</label>
+                    <select class="form-select">
+                        <option>Hourly</option>
+                        <option>Daily</option>
+                        <option>Fix</option>
+                      </select>
+                    <!-- <input
+                      type="text"
+                      class="form-control"
+                      id="pro-rate"
+                      placeholder="Enter rate"
+                    /> -->
+                  </div>
+                  <!--end col-->
+                  <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+                    <label class="form-label mt-2" for="pro-price-type">Type de suivi</label>
+                    <select class="form-select">
+                      <option>Hourly</option>
+                      <option>Daily</option>
+                      <option>Fix</option>
+                    </select>
+                  </div>
+                  <!--end col-->
+                </div>
+                <!--end row-->
+              </div>
+              <!--end form-group-->
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-lg-6 mb-2 mb-lg-1">
+                    <label class="form-label mt-2">Product owner</label>
+                    <select class="form-select">
+                      <option>--Select--</option>
+                      <option>UI/UX Design</option>
+                      <option>Payment System</option>
+                      <option>Android 10</option>
+                    </select>
+                  </div>
+                  <!--end col-->
+                  <div class="col-lg-3 col-6">
+                    <!-- <label class="form-label mt-2">Invoice Time</label>
+                    <select class="form-select">
+                      <option>30 Day</option>
+                      <option>3 Month</option>
+                      <option>1 Year</option>
+                    </select> -->
+                  </div>
+                  <!--end col-->
+                  <div class="col-lg-3 col-6">
+                    <!-- <label class="form-label mt-2">Priority</label>
+                    <select class="form-select">
+                      <option>-- select --</option>
+                      <option>High</option>
+                      <option>Medium</option>
+                      <option>Low</option>
+                    </select> -->
+                  </div>
+                  <!--end col-->
+                </div>
+                <!--end row-->
+              </div>
+              <!--end form-group-->
+              <div class="form-group mb-3">
+                <label class="form-label mt-2" for="pro-message">Description</label>
+                <textarea
+                  class="form-control"
+                  rows="5"
+                  id="pro-message"
+                  placeholder="..."
+                ></textarea>
+              </div>
+              <!--end form-group-->
+
+              <!-- dEBUT AJOUT MEMBRE -->
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+                    <label class="form-label mt-2" for="pro-start-date">Date de debut</label>
+                    <input
+					  type="text"
+					  class="form-control"
+					  id="nomProjet"
+					  name="nomProjet"
+					  aria-describedby="emailHelp"
+					  placeholder="Entrez un nom de membre"
+					  [(ngModel)]="newMembre"
+					/>
+                  </div>
+                  <!--end col-->
+                  <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+                    <div class="col-md-9">
+                        <label class="form-label mt-2" for="pro-start-date">Permission</label>
+
+						  <div class="form-check form-check-inline">
+							<!-- <input
+							  class="form-check-input"
+							  type="checkbox"
+							  id="inlineCheckbox1"
+							  value="option1"
+							/>
+							<label class="form-check-label" for="inlineCheckbox1"
+							  >Admin</label 
+							>-->
+						  </div>
+						  <div class="form-check form-check-inline">
+							<input
+							  class="form-check-input"
+							  type="radio"
+							  id="permissionRadio"
+                              name="permissionRadio"
+                              value="admin"
+                              [(ngModel)]="selectedPermissions"
+							/>
+							<label class="form-check-label" for="inlineCheckbox2"
+							  >Admin</label
+							>
+						  </div>
+						  <div class="form-check form-check-inline">
+							<input
+							  class="form-check-input"
+							  type="radio"
+                              id="permissionRadio"
+                              name="permissionRadio"
+                              value="membre"
+                              [(ngModel)]="selectedPermissions"
+							/>
+							<label class="form-check-label" for="inlineCheckbox3"
+							  >Membre</label
+							>
+						  </div>
+						</div>
+                  </div>
+                  <!--end col-->
+                  <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+						<button class="btn btn-primary" type="button" (click)="ajouterMembre()">
+							Ajouter le melbre
+						</button>
+                  </div>
+                  <!--end col-->
+                </div>
+                <!--end row-->
+            
+			  
+                <div>
+                        <!-- Liste des membres sous forme d'alerte -->
+                <!-- <div *ngFor="let membre of membres; let i = index" class="mb-2"> -->
+                    @for(membre of membres; track membre.valFormInput) 
+                    {
+                        <ngb-alert
+                        [type]="'success'"
+                        [dismissible]="true"
+                        (closed)="supprimerMembre(membre.valFormInput)" 
+                        class="border-2 border-success text-success alert-dismissible fade show rounded-pill bg-transparent"
+                        role="alert"
+                        >
+                        <div class="d-inline-flex justify-content-center align-items-center thumb-xs bg-success rounded-circle mx-auto me-1">
+                            <i class="fas fa-check align-self-center mb-0 text-white"></i>
+                        </div>
+                        <strong>{{ membre.valFormInput }}</strong> a été ajouté au projet.
+                        <span class="badge bg-secondary">Permission: {{ membre.permission }}</span>
+                        </ngb-alert>
+
+                    }
+
+                </div>
+			  
+			  
+                
+
+
+                
+                 
+                    
+                <!-- </div> -->
+              </div>
+              <!-- Fin ajout membre -->
+
+            
+              <button type="submit" class="btn btn-primary me-0.5">Creer le projet</button>
+              <button type="button" class="btn btn-danger">Annuler</button>
+            </form>
+            <!--end form-->
+            
+          </div>
+          <!--end modal-body-->
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm"
+              (click)="modal.dismiss()"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary btn-sm">
+              Save changes
+            </button>
+          </div>
+          <!--end modal-footer--> </ng-template
+        ><!--end modal-->
   
