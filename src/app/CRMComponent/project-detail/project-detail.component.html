@@ -1,0 +1,89 @@
+
+  <!-- @for(a of tachesParSprint; track a.id_sprint) 
+    {
+        <p>{{tachesParSprint.descTache}}</p>
+
+    } -->
+
+    <div *ngFor="let sprint of tachesParSprint | keyvalue">
+        <h2>{{ sprint.key }}</h2> <!-- Affiche l'ID du sprint -->
+        <table>
+          <tr *ngFor="let tache of sprint.value">
+            <td>{{ tache.nom }}</td>
+            <td>{{ tache.descTache }}</td>
+            <!-- Ajoutez d'autres colonnes si nécessaire -->
+          </tr>
+        </table>
+      </div>
+
+      <div *ngFor="let sprint of tachesParSprint | keyvalue; let i = index">
+        <!-- Accordéon pour chaque sprint -->
+        <div ngbAccordion [closeOthers]="true" class="accordion card-bg" id="sprint-{{ i }}">
+          
+          <h2>{{ sprint.key }}</h2> <!-- Affiche l'ID du sprint -->
+          
+          <div *ngFor="let task of sprint.value; trackBy: trackById">
+            <!-- Un élément d'accordéon pour chaque tâche -->
+            <div ngbAccordionItem [collapsed]="i == 0 ? false : true" class="task-accordion rounded border-dashed border-theme-color p-2">
+              
+              <!-- Header de l'accordéon (clic pour déplier/replier) -->
+              <div ngbAccordionHeader class="cursor-pointer">
+                <div ngbAccordionToggle>
+                  <table class="table text-nowrap mb-0">
+                    <tbody>
+                      <tr>
+                        <td>
+                          <div class="d-flex align-items-center">
+                            <i class="iconoir-calendar fs-2 me-2"></i>
+                            <div class="flex-grow-1">
+                              <h6 class="m-0 mb-1 fw-semibold">{{ task.nom }}</h6>
+                              <span>{{ task.sprint_date_debut }} - <span class="text-danger">{{ task.sprint_date_fin }}</span></span>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="text-start">
+                          <h6 class="fw-semibold">Priorité</h6>
+                          <span>{{ task.priorite }}</span>
+                        </td>
+                        <td class="text-end">
+                          <h6 class="fw-semibold">Statut</h6>
+                          <span>{{ task.sprint_statut }}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+      
+              <!-- Contenu de l'accordéon (détails de la tâche) -->
+              <div ngbAccordionCollapse id="task-details-{{ task.id }}" class="accordion-collapse collapse show">
+                <div ngbAccordionBody class="accordion-body bg-body border-dashed-top p-3">
+                  <h6 class="fw-semibold">Détails de la tâche</h6>
+                  <p>{{ task.descTache }}</p>
+                  
+                  <div class="row g-3">
+                    <div class="col-md-3">
+                      <h6>Employé assigné</h6>
+                      <p>{{ task.employe_nom }}</p>
+                    </div>
+                    <div class="col-md-3">
+                      <h6>Type de projet</h6>
+                      <p>{{ task.id_projet }}</p>
+                    </div>
+                    <!-- <div class="col-md-3">
+                      <h6>Progression</h6>
+                      <ngb-progressbar [value]="task.progress" class="progress-bar"></ngb-progressbar>
+                    </div> -->
+                    <!-- <div class="col-md-3">
+                      <h6>Total rapport</h6>
+                      <p>{{ task.total_report }}</p>
+                    </div> -->
+                  </div>
+                </div>
+              </div>
+      
+            </div>
+          </div>
+        </div>
+      </div>
+      

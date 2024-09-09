@@ -2379,6 +2379,13 @@ angular-imask@^7.6.1:
     imask "^7.6.1"
     tslib "^2.6.2"
 
+angular-ng-autocomplete@^2.0.12:
+  version "2.0.12"
+  resolved "https://registry.npmjs.org/angular-ng-autocomplete/-/angular-ng-autocomplete-2.0.12.tgz"
+  integrity sha512-EVv0x5REi96bQ7gXqGls+xUNiWLZxpbOLqQDg667jzV1swuBxVy/1oLvskTwsiLpgtxiDMgqq9M7fOEur6a/9A==
+  dependencies:
+    tslib "^2.3.0"
+
 animate.css@^4.1.1:
   version "4.1.1"
   resolved "https://registry.npmjs.org/animate.css/-/animate.css-4.1.1.tgz"

@@ -11,6 +11,7 @@ import { GalleryComponent } from './gallery/gallery.component'
 import { CreateProjectComponent } from './create-project/create-project.component'
 import { TypeProjectComponent } from './type-project/type-project.component'
 import { ProjectListComponent } from '@/app/CRMComponent/project-list/project-list.component'
+import { ProjectDetailComponent } from '@/app/CRMComponent/project-detail/project-detail.component'
 
 export const PAGES_ROUTES: Route[] = [
   {
@@ -71,6 +72,11 @@ export const PAGES_ROUTES: Route[] = [
   {
     path: 'projectList',
     component: ProjectListComponent,
+    data: { title: 'Vos projets' },
+  },
+  {
+    path: 'projectDetail/:id',
+    component: ProjectDetailComponent,
     data: { title: 'Vos projets' },
   },
 ]

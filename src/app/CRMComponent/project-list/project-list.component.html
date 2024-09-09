@@ -55,7 +55,7 @@
                         bulk of the card's content. -->
                     </p>
                     <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm"
-                        >Voir les détails</a
+                    routerLink="/pages/projectDetail/{{a.id_projet}}">Voir les détails</a
                     >
                     </div>
                     <!--end card -body-->
@@ -273,8 +273,17 @@
               <div class="form-group">
                 <div class="row">
                   <div class="col-lg-3 col-6 mb-2 mb-lg-1">
-                    <label class="form-label mt-2" for="pro-start-date">Date de debut</label>
-                    <input
+                    <label class="form-label mt-2" for="pro-start-date">Email du membre</label>
+                    <!-- Autocomplete input field -->
+                    <ng-autocomplete
+                    [data]="userData"                
+                    [searchKeyword]="keyword"       
+                    placeholder="Entrez un nom de membre"
+                    (selected)="selectEvent($event)" 
+                    (inputChanged)="onChangeSearch($event)"
+                    (inputFocused)="onFocused($event)">
+                    </ng-autocomplete>
+                    <!-- <input
 					  type="text"
 					  class="form-control"
 					  id="nomProjet"
@@ -282,7 +291,7 @@
 					  aria-describedby="emailHelp"
 					  placeholder="Entrez un nom de membre"
 					  [(ngModel)]="newMembre"
-					/>
+					/> -->
                   </div>
                   <!--end col-->
                   <div class="col-lg-3 col-6 mb-2 mb-lg-1">

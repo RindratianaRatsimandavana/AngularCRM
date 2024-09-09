@@ -42,6 +42,7 @@
     "@uppy/tus": "^3.5.5",
     "angular-cropperjs": "^14.0.1",
     "angular-imask": "^7.6.1",
+    "angular-ng-autocomplete": "^2.0.12",
     "animate.css": "^4.1.1",
     "apexcharts": "^3.49.1",
     "bootstrap": "^5.3.3",
