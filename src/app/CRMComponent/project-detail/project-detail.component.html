@@ -19,13 +19,15 @@
       <div *ngFor="let sprint of tachesParSprint | keyvalue; let i = index">
         <!-- Accordéon pour chaque sprint -->
         <div ngbAccordion [closeOthers]="true" class="accordion card-bg" id="sprint-{{ i }}">
+            <p>pppppppppppppppppp: {{i}}</p>
           
           <h2>{{ sprint.key }}</h2> <!-- Affiche l'ID du sprint -->
           
           <div *ngFor="let task of sprint.value; trackBy: trackById">
             <!-- Un élément d'accordéon pour chaque tâche -->
             <div ngbAccordionItem [collapsed]="i == 0 ? false : true" class="task-accordion rounded border-dashed border-theme-color p-2">
-              
+
+            
               <!-- Header de l'accordéon (clic pour déplier/replier) -->
               <div ngbAccordionHeader class="cursor-pointer">
                 <div ngbAccordionToggle>

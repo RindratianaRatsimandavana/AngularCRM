@@ -40,13 +40,13 @@ export class ProjectListComponent {
   selectedPermissions: string = '';
 
   // Sample data from your database (replace this with real data from your service)
-  userData = [
+  data = [
     { id: '1', email: 'user1@example.com' },
     { id: '2', email: 'user2@example.com' },
     { id: '3', email: 'user3@example.com' }
   ];
 
-  keyword = 'email'; // Search by email
+  public keyword = "email"; // Search by email
   selectedUserId: string = ''; // Store selected user id
 
   constructor(
@@ -82,19 +82,10 @@ export class ProjectListComponent {
     console.log('tatooooSelected item: ', item);
     this.newMembre = item.email; // Store selected email in newMembre
     this.selectedUserId = item.id; // Store selected user's ID
+    console.log("après selected newMembre ",this.newMembre);
+    console.log("après selected selectedUserId ",this.selectedUserId);
   }
 
-  // Handle search input changes
-  onChangeSearch(val: string) {
-    console.log("tenan niova ny onChangeSearch");
-    // You can fetch remote data or filter the userData here based on the search term
-  }
-
-  onFocused(e: any) {
-    console.log("tenan niova ny onFocused");
-    // Optionally handle focus event
-  }
-  
   openModal(content: TemplateRef<HTMLElement>, options: NgbModalOptions) {
     this.modalService.open(content, options)
   }

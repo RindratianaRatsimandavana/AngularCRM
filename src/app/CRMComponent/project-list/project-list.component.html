@@ -172,7 +172,7 @@
                   <div class="col-lg-3 col-6 mb-2 mb-lg-1">
                     <label class="form-label mt-2" for="pro-start-date">Date de debut</label>
                     <input
-                      type="text"
+                      type="date"
                       class="form-control"
                       name="startdate"
                       appDatepicker
@@ -185,7 +185,7 @@
                   <div class="col-lg-3 col-6 mb-2 mb-lg-1">
                     <label class="form-label mt-2" for="pro-end-date">Date d'écheance</label>
                     <input
-                      type="text"
+                      type="date"
                       class="form-control"
                       name="enddate"
                       appDatepicker
@@ -198,9 +198,9 @@
                   <div class="col-lg-3 col-6 mb-2 mb-lg-1">
                     <label class="form-label mt-2" for="pro-rate">Type de projet</label>
                     <select class="form-select">
-                        <option>Hourly</option>
-                        <option>Daily</option>
-                        <option>Fix</option>
+                        <option value="CRMTP1">Informatique</option>
+                        <option value="CRMTP2">Judiciaire</option>
+                        <option value="CRMTP3">Marketing</option>
                       </select>
                     <!-- <input
                       type="text"
@@ -213,9 +213,9 @@
                   <div class="col-lg-3 col-6 mb-2 mb-lg-1">
                     <label class="form-label mt-2" for="pro-price-type">Type de suivi</label>
                     <select class="form-select">
-                      <option>Hourly</option>
-                      <option>Daily</option>
-                      <option>Fix</option>
+                      <option value="CRMTS1">Sprint</option>
+                      <!-- <option>Daily</option>
+                      <option>Fix</option> -->
                     </select>
                   </div>
                   <!--end col-->
@@ -274,15 +274,22 @@
                 <div class="row">
                   <div class="col-lg-3 col-6 mb-2 mb-lg-1">
                     <label class="form-label mt-2" for="pro-start-date">Email du membre</label>
-                    <!-- Autocomplete input field -->
-                    <ng-autocomplete
-                    [data]="userData"                
-                    [searchKeyword]="keyword"       
-                    placeholder="Entrez un nom de membre"
-                    (selected)="selectEvent($event)" 
-                    (inputChanged)="onChangeSearch($event)"
-                    (inputFocused)="onFocused($event)">
+                    <ng-autocomplete 
+                    [data]="data"
+                    [searchKeyword]="keyword"
+                    placeholder="Select country"
+                    [itemTemplate]="itemTemplate"
+                    [notFoundTemplate]="notFoundTemplate"
+                    (selected)='selectEvent($event)'>                                 
                     </ng-autocomplete>
+                    
+                    <ng-template #itemTemplate let-item>
+                    <a [innerHTML]="item.email"></a>
+                    </ng-template>
+                    
+                    <ng-template #notFoundTemplate let-notFound>
+                    <div [innerHTML]="notFound"></div>
+                    </ng-template>
                     <!-- <input
 					  type="text"
 					  class="form-control"
@@ -402,6 +409,8 @@
               Save changes
             </button>
           </div>
+
+          
           <!--end modal-footer--> </ng-template
         ><!--end modal-->
   

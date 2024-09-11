@@ -67,6 +67,7 @@ tachesParSprint: { [sprintId: string]: CrmTacheLib[] } = {};
   }
 
   trackById(index: number, task: any): number {
-    return task.id;
+    return task.id; // Assurez-vous que chaque tâche a un ID unique
   }
+  
 }
