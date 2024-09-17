@@ -44,10 +44,16 @@ export const deleteBoardFailure = createAction(
 
 // Kanban Task
 export const fetchKanbanTask = createAction('[Order] Fetch KanbanTask Product')
+//initial
+// export const fetchKanbanTaskSuccess = createAction(
+//   '[Order] Fetch KanbanTask Success',
+//   props<{ task: KanbanTaskType[] }>()
+// )
+//CRM
 export const fetchKanbanTaskSuccess = createAction(
-  '[Order] Fetch KanbanTask Success',
-  props<{ task: KanbanTaskType[] }>()
-)
+  '[Kanban] Fetch KanbanTask Success',
+  props<{ tasks: KanbanTaskType[] }>()  // Assurez-vous que "tasks" est utilisé et non "task"
+);
 export const fetchKanbanTaskFailure = createAction(
   '[Data] Fetch KanbanTask Failure',
   props<{ error: string }>()

@@ -7,8 +7,10 @@ import {
 } from '@ng-bootstrap/ng-bootstrap'
 import { kanbanSectionsData, type KanbanSectionType } from '../../data'
 import { Store } from '@ngrx/store'
-import { addBoard, fetchKanbanBoard } from '@/app/store/kanban/kanban.action'
-import { getKanbanBoard } from '@/app/store/kanban/kanban.selectors'
+import { addBoard, fetchKanbanBoard } from '@/app/CRMservice/kanban/kanban.action'
+import { getKanbanBoard } from '@/app/CRMservice/kanban/kanban.selectors'
+//import { addBoard, fetchKanbanBoard } from '@/app/store/kanban/kanban.action'
+//import { getKanbanBoard } from '@/app/store/kanban/kanban.selectors'
 
 @Component({
   selector: 'kanban-invite-member',

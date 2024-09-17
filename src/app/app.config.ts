@@ -23,7 +23,7 @@ import {
 } from '@angular/common/http'
 import { FakeBackendProvider } from './core/helpers/fake-backend'
 import { CalendarEffects } from './store/calendar/calendar.effects'
-import { KanbanEffects } from './store/kanban/kanban.effects'
+import { KanbanEffects } from './CRMservice/kanban/kanban.effects'
 
 // scroll
 const scrollConfig: InMemoryScrollingOptions = {

@@ -24,6 +24,7 @@ import {
   updateKanbanFailure,
   updateKanbanSuccess,
 } from './kanban.action'
+//import { CrudService } from '@/app/core/service/crud.service'
 import { CrudService } from '@/app/core/service/crud.service'
 
 @Injectable()
@@ -66,17 +67,69 @@ export class KanbanEffects {
   )
 
   // Task
-  fetchTask$ = createEffect(() =>
+  // fetchTask$ = createEffect(() =>
+  //   this.actions$.pipe(
+  //     ofType(fetchKanbanTask),
+  //     mergeMap(() =>
+  //       this.CrudService.fetchTask().pipe(
+  //         map((task) => fetchKanbanTaskSuccess({ task })),
+  //         catchError((error) => of(fetchKanbanTaskFailure({ error })))
+  //       )
+  //     )
+  //   )
+  // )
+
+
+  // fetchTask$ = createEffect(() => 
+  //   this.actions$.pipe(
+  //     ofType(fetchKanbanTask),
+  //     mergeMap(() =>
+  //       this.CrudService.fetchTask().pipe(
+  //         map((tasks) => fetchKanbanTaskSuccess({ tasks })),  // Changement de "task" à "tasks"
+  //         catchError((error) => of(fetchKanbanTaskFailure({ error })))
+  //       )
+  //     )
+  //   )
+  // )
+ 
+  // fetchTask$ = createEffect(() => 
+  //   this.actions$.pipe(
+  //     ofType(fetchKanbanTask),
+  //     mergeMap(() =>
+  //       this.CrudService.fetchTask().pipe(
+  //         map((tasks) => {
+  //           console.log("tonga ve")
+  //           // console.log(tasks);  // Vérification des données reçues
+  //           return fetchKanbanTaskSuccess({ tasks });
+  //         }),
+  //         catchError((error) => of(fetchKanbanTaskFailure({ error })))
+  //       )
+  //     )
+  //   )
+  // );
+  
+  fetchTask$ = createEffect(() => 
     this.actions$.pipe(
       ofType(fetchKanbanTask),
-      mergeMap(() =>
-        this.CrudService.fetchTask().pipe(
-          map((task) => fetchKanbanTaskSuccess({ task })),
-          catchError((error) => of(fetchKanbanTaskFailure({ error })))
-        )
-      )
+      mergeMap(() => {
+        return this.CrudService.fetchTask().pipe(
+          // tap(tasks => console.log("Tâches avant map:", tasks)), // Nouveau tap pour vérifier
+          map((tasks) => {
+            // console.log("Données récupérées dans l'effet", tasks);
+            return fetchKanbanTaskSuccess({ tasks });
+          }),
+          catchError((error) => {
+            // console.error("Erreur lors de la récupération des tâches", error);
+            return of(fetchKanbanTaskFailure({ error }));
+          })
+        );
+      })
     )
-  )
+);
+
+   
+  
+  
 
   addKanban$ = createEffect(() =>
     this.actions$.pipe(

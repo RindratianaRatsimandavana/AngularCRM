@@ -8,7 +8,7 @@ import {
   calendarReducer,
   type CalendarState,
 } from './calendar/calendar.reducer'
-import { KanbanReducer, type KanbanState } from './kanban/kanban.reducer'
+import { KanbanState, KanbanReducer } from '../CRMservice/kanban/kanban.reducer'
 
 export interface RootReducerState {
   layout: LayoutState

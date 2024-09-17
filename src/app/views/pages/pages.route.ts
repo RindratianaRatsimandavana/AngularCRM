@@ -12,6 +12,7 @@ import { CreateProjectComponent } from './create-project/create-project.componen
 import { TypeProjectComponent } from './type-project/type-project.component'
 import { ProjectListComponent } from '@/app/CRMComponent/project-list/project-list.component'
 import { ProjectDetailComponent } from '@/app/CRMComponent/project-detail/project-detail.component'
+import { KanbanBoardComponent } from '@/app/CRMComponent/kanban-board/kanban-board.component'
 
 export const PAGES_ROUTES: Route[] = [
   {
@@ -79,4 +80,9 @@ export const PAGES_ROUTES: Route[] = [
     component: ProjectDetailComponent,
     data: { title: 'Vos projets' },
   },
+  {
+    path: 'kanban',
+    component: KanbanBoardComponent,
+    data: { title: 'Kanban' },
+  }
 ]

@@ -55,12 +55,15 @@
         [attr.data-section-id]="data.id"
         class="pt-1"
       >
-        @for (task of taskList; track $index) {
-          @if (task.sectionId == data.id) {
-            <app-kanban-card [task]="task" [attr.data-task-id]="task.id" />
-          }
-        }
+        <ng-container *ngIf="dataLoaded">
+          <div *ngFor="let task of taskList; trackBy: trackByFn">
+            <ng-container *ngIf="task.sectionId == data.title">
+              <app-kanban-card [task]="task" [attr.data-task-id]="task.id"></app-kanban-card>
+            </ng-container>
+          </div>
+        </ng-container>
       </div>
+
       <!--end project-list-left-->
       <a
         class="btn btn-outline-primary w-100"

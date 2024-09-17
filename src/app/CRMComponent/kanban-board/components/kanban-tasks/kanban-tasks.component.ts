@@ -1,7 +1,7 @@
 import { Component, inject, type OnInit, type TemplateRef } from '@angular/core'
-import { kanbanSectionsData, kanbanTasksData } from '../../data'
+import { kanbanSectionsData, KanbanSectionType, kanbanTasksData, KanbanTaskType } from '../../data'
 import { NgbDropdownModule, NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { KanbanCardComponent } from '../kanban-card/kanban-card.component'
+//import { KanbanCardComponent } from '../kanban-card/kanban-card.component'
 import { DragulaModule, DragulaService } from 'ng2-dragula'
 import {
   FormsModule,
@@ -12,19 +12,11 @@ import {
 } from '@angular/forms'
 import { CommonModule } from '@angular/common'
 import { Store } from '@ngrx/store'
-import {
-  addKanban,
-  deleteBoard,
-  fetchKanbanBoard,
-  fetchKanbanTask,
-  updateKanban,
-} from '@/app/store/kanban/kanban.action'
-import {
-  getKanbanBoard,
-  getKanbanData,
-} from '@/app/store/kanban/kanban.selectors'
-import type { KanbanSectionType, KanbanTaskType } from '@/app/store/kanban/data'
 import { cloneDeep } from 'lodash'
+import { KanbanCardComponent } from '../kanban-card/kanban-card.component'
+import { fetchKanbanTask, fetchKanbanBoard, addKanban, deleteBoard } from '@/app/CRMservice/kanban/kanban.action'
+import { getKanbanData, getKanbanBoard } from '@/app/CRMservice/kanban/kanban.selectors'
+import { filter, tap } from 'rxjs'
 
 @Component({
   selector: 'kanban-tasks',
@@ -48,6 +40,8 @@ export class KanbanTasksComponent implements OnInit {
   submitted: boolean = false
   sectionId: string = ''
 
+  dataLoaded = false
+
   private store = inject(Store)
   private modalService = inject(NgbModal)
   private fb = inject(UntypedFormBuilder)
@@ -55,14 +49,24 @@ export class KanbanTasksComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(fetchKanbanTask())
-    this.store.select(getKanbanData).subscribe((data) => {
-      this.taskList = cloneDeep(data)
-    })
-
     this.store.dispatch(fetchKanbanBoard())
-    this.store.select(getKanbanBoard).subscribe((data) => {
-      this.sectionsData = data
-    })
+
+    this.store.select(getKanbanData).pipe(
+      filter(data => data.length > 0), // Only proceed if data is not empty
+      tap(data => {
+        this.taskList = cloneDeep(data)
+        console.log(this.taskList) // This will log only once
+        this.dataLoaded = true // Set flag to true when data is loaded
+      })
+    ).subscribe()
+
+    this.store.select(getKanbanBoard).pipe(
+      filter(data => data.length > 0), // Only proceed if data is not empty
+      tap(data => {
+        this.sectionsData = data
+        console.log(this.sectionsData)
+      })
+    ).subscribe()
 
     this.taskForm = this.fb.group({
       title: ['', [Validators.required]],
@@ -78,6 +82,11 @@ export class KanbanTasksComponent implements OnInit {
         this.onDrop(el, target)
       })
   }
+
+  trackByFn(index: number, item: KanbanTaskType): any {
+    return item.id; // or any unique identifier
+  }
+  
 
   getTaskVarient(title: string) {
     let variant = 'primary'
@@ -100,7 +109,7 @@ export class KanbanTasksComponent implements OnInit {
   }
 
   getTaskPerSection(id: string) {
-    return this.taskList.filter((task) => task.sectionId == id)
+    return this.taskList ? this.taskList.filter((task) => task.sectionId == id) : []
   }
 
   get form() {

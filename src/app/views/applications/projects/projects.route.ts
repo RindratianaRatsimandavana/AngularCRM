@@ -5,7 +5,7 @@ import { CreateComponent } from './create/create.component'
 import { ProjectComponent } from './project/project.component'
 import { TaskComponent } from './task/task.component'
 import { UsersComponent } from './users/users.component'
-import { KanbanBoardComponent } from './kanban-board/kanban-board.component'
+import { KanbanBoardComponent } from '@/app/CRMComponent/kanban-board/kanban-board.component'
 
 export const PROJECTS_ROUTES: Route[] = [
   {
