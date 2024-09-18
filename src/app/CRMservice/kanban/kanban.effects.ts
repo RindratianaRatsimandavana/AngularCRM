@@ -111,21 +111,22 @@ export class KanbanEffects {
   fetchTask$ = createEffect(() => 
     this.actions$.pipe(
       ofType(fetchKanbanTask),
-      mergeMap(() => {
-        return this.CrudService.fetchTask().pipe(
-          // tap(tasks => console.log("Tâches avant map:", tasks)), // Nouveau tap pour vérifier
+      mergeMap((action) => {
+        // Utiliser action.projectID comme paramètre
+        return this.CrudService.fetchTask(action.projectID).pipe(
+          // Mapper la réponse de l'API vers une action success
           map((tasks) => {
-            // console.log("Données récupérées dans l'effet", tasks);
             return fetchKanbanTaskSuccess({ tasks });
           }),
+          // Gestion d'erreur en cas de problème
           catchError((error) => {
-            // console.error("Erreur lors de la récupération des tâches", error);
             return of(fetchKanbanTaskFailure({ error }));
           })
         );
       })
     )
-);
+  );
+  
 
    
   

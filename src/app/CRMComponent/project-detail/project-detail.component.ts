@@ -20,15 +20,17 @@ tachesParSprint: { [sprintId: string]: CrmTacheLib[] } = {};
 
  // idProject=this.route.snapshot.params['id'];
 
-  constructor(private tacheSprintService: TacheSprintService,private route:ActivatedRoute) {}
+  constructor(private tacheSprintService: TacheSprintService,private route:ActivatedRoute,public service :UtilsService) {}
 
   ngOnInit() {
     const id = this.route.snapshot.params['id'];
     this.tacheSprintService.getTaches(id).subscribe(result => {
       this.tacheTemp = result.data;
-      console.log("resultaaaaaaaaaaaaaaat",this.tacheTemp);
+      // console.log(result.data)
+      // console.log("resultaaaaaaaaaaaaaaat",this.tacheTemp);
       this.tachesParSprint = this.groupBySprint(result.data);
-      console.log("verificationnnnnnnnnnnnnnnnnn",this.groupBySprint(result.data))
+      console.log(this.tachesParSprint)
+      // console.log("verificationnnnnnnnnnnnnnnnnn",this.groupBySprint(result.data))
     });
 
 
@@ -62,6 +64,8 @@ tachesParSprint: { [sprintId: string]: CrmTacheLib[] } = {};
         grouped[sprintId] = [];
       }
       grouped[sprintId].push(tache);
+      // console.log("grouped");
+      // console.log(grouped);
       return grouped;
     }, {});
   }

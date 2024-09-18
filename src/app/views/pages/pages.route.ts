@@ -81,7 +81,7 @@ export const PAGES_ROUTES: Route[] = [
     data: { title: 'Vos projets' },
   },
   {
-    path: 'kanban',
+    path: 'kanban/:id',
     component: KanbanBoardComponent,
     data: { title: 'Kanban' },
   }

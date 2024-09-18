@@ -41,13 +41,31 @@ export class ProjectListComponent {
 
   // Sample data from your database (replace this with real data from your service)
   data = [
-    { id: '1', email: 'user1@example.com' },
-    { id: '2', email: 'user2@example.com' },
-    { id: '3', email: 'user3@example.com' }
+    { id: 'FWU1', email: 'rak@gmail.com' },
+    { id: 'FWU2', email: 'clara@gmail.com' },
+    { id: 'FWU3', email: 'jean@gmail.com' },
+    { id: 'FWU4', email: 'sophie@gmail.com' },
+    { id: 'FWU5', email: 'thierry@gmail.com' },
+    { id: 'FWU6', email: 'marie@gmail.com' },
+    { id: 'FWU7', email: 'eric@gmail.com' },
+    { id: 'FWU8', email: 'julie@gmail.com' },
+    { id: 'FWU9', email: 'patrick@gmail.com' },
+    { id: 'FWU10', email: 'anna@gmail.com' }
   ];
 
   public keyword = "email"; // Search by email
   selectedUserId: string = ''; // Store selected user id
+
+  nomProjet= "";
+  startdate = "";
+  enddate = "";
+  id_type_projet = "";
+  id_type_suivi = "";
+  id_client = "";
+  description = "";
+  statut= 1;
+
+  idNewProject = "";
 
   constructor(
     private projectService:ProjectService
@@ -94,8 +112,8 @@ export class ProjectListComponent {
   ajouterMembre() {
     if (this.newMembre.trim()) {
       const newMemberObject: TempMembreProjet = {
-        id_membre: (this.membres.length + 1).toString(), // Generate a temporary ID
-        valFormInput: this.newMembre.trim(),
+        id_employe: this.selectedUserId, 
+        id_projet: this.idNewProject,
         permission: this.selectedPermissions.trim() // You can modify this value as needed
       };
       this.membres.push(newMemberObject);
@@ -114,7 +132,7 @@ export class ProjectListComponent {
 
   supprimerMembre(val?: string) {
     // Trouver l'index du membre à supprimer
-    const index = this.membres.findIndex(membre => membre.valFormInput === val);
+    const index = this.membres.findIndex(membre => membre.id_employe === val);
     
     console.log("index ",index);
     // Vérifier si l'index est valide avant de supprimer
@@ -122,6 +140,45 @@ export class ProjectListComponent {
       this.membres.splice(index, 1);
     }
   }
+
+
+
+ 
   
+  onSubmit(){
+    const object = {
+      nom: this.nomProjet,
+      date_creation : this.startdate,
+      date_echeance : this.enddate,
+      id_type_projet : this.id_type_projet,
+      id_type_suivi : this.id_type_suivi,
+      id_client : this.id_client,
+      description : this.description,
+      statut: this.statut
+    }
+
+    this.projectService
+      .createProject(object)
+      .subscribe((result) => {
+        console.log(result.message);
+        this.idNewProject=result.data.id
+        console.log("idNewProject",result.data.id);
+        console.log("idNewProject",this.idNewProject);
+        this.refreshIdProjet(this.idNewProject);
+        this.projectService.saveMembers(this.membres).subscribe(response => {
+          console.log('Members saved successfully!', response.message);
+        }, error => {
+          console.error('Error saving members', error);
+        });
+
+
+      });
+  }
+
+  refreshIdProjet(idProjet:string){
+    for(let i=0;i<this.membres.length;i++){
+      this.membres[i].id_projet=idProjet;
+    }
+  }
 
 }

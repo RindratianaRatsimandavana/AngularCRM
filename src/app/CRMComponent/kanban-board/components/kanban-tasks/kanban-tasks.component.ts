@@ -17,6 +17,7 @@ import { KanbanCardComponent } from '../kanban-card/kanban-card.component'
 import { fetchKanbanTask, fetchKanbanBoard, addKanban, deleteBoard } from '@/app/CRMservice/kanban/kanban.action'
 import { getKanbanData, getKanbanBoard } from '@/app/CRMservice/kanban/kanban.selectors'
 import { filter, tap } from 'rxjs'
+import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'kanban-tasks',
@@ -33,6 +34,7 @@ import { filter, tap } from 'rxjs'
   styles: ``,
 })
 export class KanbanTasksComponent implements OnInit {
+  
   sectionsData!: KanbanSectionType[]
   taskList!: KanbanTaskType[]
 
@@ -47,8 +49,11 @@ export class KanbanTasksComponent implements OnInit {
   private fb = inject(UntypedFormBuilder)
   private dragulaService = inject(DragulaService)
 
+  constructor(private route:ActivatedRoute) {}
+
   ngOnInit(): void {
-    this.store.dispatch(fetchKanbanTask())
+    const id = this.route.snapshot.params['id'];
+    this.store.dispatch(fetchKanbanTask({projectID: id}))
     this.store.dispatch(fetchKanbanBoard())
 
     this.store.select(getKanbanData).pipe(
@@ -141,4 +146,6 @@ export class KanbanTasksComponent implements OnInit {
   deleteTask(id: string) {
     this.store.dispatch(deleteBoard({ id }))
   }
+
+  
 }

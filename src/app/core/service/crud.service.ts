@@ -86,9 +86,9 @@ export class CrudService {
   //   );
   // }
 
-  fetchTask(): Observable<KanbanTaskType[]> {
+  fetchTask(projectID: string): Observable<KanbanTaskType[]> {
     // console.log("tatooooooooo")
-    return this.tacheSprintService.getTaches('CRMPJ2').pipe(
+    return this.tacheSprintService.getTaches(projectID).pipe(
       map((response: { data: CrmTacheLib[] }) => {
         const listeTacheProjet: CrmTacheLib[] = response.data;
         // console.log("teeeeeeeeeeest",listeTacheProjet)

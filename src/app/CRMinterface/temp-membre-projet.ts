@@ -1,5 +1,5 @@
 export interface TempMembreProjet {
-    id_membre?: string  ;
-    valFormInput?: string  ; 
+    id_employe?: string  ;
+    id_projet?: string  ; 
     permission?: string  ;
 }
