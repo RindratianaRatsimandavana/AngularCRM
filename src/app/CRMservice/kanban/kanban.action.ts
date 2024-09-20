@@ -43,7 +43,7 @@ export const deleteBoardFailure = createAction(
 )
 
 // Kanban Task
-export const fetchKanbanTask = createAction('[Order] Fetch KanbanTask Product',props<{ projectID: string }>())
+export const fetchKanbanTask = createAction('[Order] Fetch KanbanTask Product',props<{ projectID: string, permission: string }>())
 //initial
 // export const fetchKanbanTaskSuccess = createAction(
 //   '[Order] Fetch KanbanTask Success',

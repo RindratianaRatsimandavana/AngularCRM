@@ -12,5 +12,5 @@ export interface CRMMembreProjet {
     chef_projet_nom?: string  ;
     employe_nom?: string  ; 
     employe_email?: string  ;
-
+    id_type_projet?: string  ;
 }

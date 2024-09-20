@@ -86,9 +86,11 @@ export class CrudService {
   //   );
   // }
 
-  fetchTask(projectID: string): Observable<KanbanTaskType[]> {
+  fetchTask(projectID: string, permission: string): Observable<KanbanTaskType[]> {
     // console.log("tatooooooooo")
-    return this.tacheSprintService.getTaches(projectID).pipe(
+    const userString = localStorage.getItem('user');
+    const userObject = userString ? JSON.parse(userString) : null;
+    return this.tacheSprintService.getTaches(projectID,userObject.id, permission).pipe(
       map((response: { data: CrmTacheLib[] }) => {
         const listeTacheProjet: CrmTacheLib[] = response.data;
         // console.log("teeeeeeeeeeest",listeTacheProjet)

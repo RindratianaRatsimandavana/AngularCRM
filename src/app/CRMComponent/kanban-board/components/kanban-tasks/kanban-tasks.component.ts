@@ -49,11 +49,26 @@ export class KanbanTasksComponent implements OnInit {
   private fb = inject(UntypedFormBuilder)
   private dragulaService = inject(DragulaService)
 
+  idProjet?:string;
+  permission?:string;
+
   constructor(private route:ActivatedRoute) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.params['id'];
-    this.store.dispatch(fetchKanbanTask({projectID: id}))
+    const id = this.route.snapshot.params['id']; 
+    const permission = this.route.snapshot.params['permission'];
+
+    this.idProjet=id; 
+    this.permission=permission;
+
+    const userString = localStorage.getItem('user');
+    const userObject = userString ? JSON.parse(userString) : null;
+
+    console.log("idProjet",id);
+    console.log("permission",permission);
+
+    //const id = this.route.snapshot.params['id'];
+    this.store.dispatch(fetchKanbanTask({projectID: id, permission:permission}))
     this.store.dispatch(fetchKanbanBoard())
 
     this.store.select(getKanbanData).pipe(

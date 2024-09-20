@@ -17,7 +17,8 @@
         data-popper-placement="bottom-end"
       >
         <a class="dropdown-item" href="javascript:void(0);" (click)="
-        openModal(exampleModalScrollable, { scrollable: true })"
+        openModal(exampleModalXL, { size: 'xl' },task.id)
+      "
           ><i class="las la-pen fs-16 me-1 align-text-bottom"></i> Edit</a
         >
         <a class="dropdown-item text-danger"
@@ -168,18 +169,18 @@
 
 
 <ng-template
-          #exampleModalScrollable
+          #exampleModalXL
           let-modal
-          class="modal fade"
-          id="exampleModalScrollable"
+          class="modal fade bd-example-modal-xl"
+          id="bd-example-modal-xl"
           tabindex="-1"
           role="dialog"
-          aria-labelledby="exampleModalScrollableTitle"
+          aria-labelledby="myExtraLargeModalLabel"
           aria-hidden="true"
         >
           <div class="modal-header">
-            <h6 class="modal-title m-0" id="exampleModalScrollableTitle">
-              Center Modal
+            <h6 class="modal-title m-0" id="myExtraLargeModalLabel">
+              Extra Large Modal
             </h6>
             <button
               type="button"
@@ -188,102 +189,73 @@
               aria-label="Close"
             ></button>
           </div>
-          <!--end modal-header-->
-          <div class="modal-body">
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>
 
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>
-          </div>
-          <!--end modal-body-->
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary btn-sm"
-              (click)="modal.dismiss()"
-            >
-              Close
-            </button>
-            <button type="button" class="btn btn-primary btn-sm">
-              Save changes
-            </button>
-          </div>
-          <!--end modal-footer--> </ng-template
+          <!--end modal-header-->
+          <form class="p-4 pt-3" (ngSubmit)="addSousTask()">
+          <div class="modal-body">
+            
+              <div class="form-group mb-2 mb-lg-1">
+                <label for="projectName" class="form-label">Ajoutez une sous tâche :</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nomProjet"
+                  aria-describedby="emailHelp"
+                  placeholder="Entrez le titre de la tâche"
+                  [(ngModel)]="nameSousTask" name="nameSousTask" 
+                />
+              </div>
+              <div class="mb-3 row" *ngIf="ssTaskList.length > 0; else noTasks">
+                <label class="col-md-3 my-2 control-label">Sous-tâches</label>
+                <ngb-progressbar type="secondary" class="mb-3" [value]="thistask!.progresDyn!"
+                    >{{thistask!.progresDyn!}}%</ngb-progressbar
+                  >
+                <div class="col-md-9" *ngFor="let tache of ssTaskList">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      [checked]="tache.statut === 3"
+                      [id]="'flexCheck' + tache.id"
+                      [disabled]="tache.statut === 3"
+                      (change)="toggleSousTaskStatus(tache)"
+
+                    />
+                    <label class="form-check-label" [for]="'flexCheck' + tache.id">
+                      {{ tache.nom }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+              
+              <ng-template #noTasks>
+                <p>Pas de sous-tâches enregistrés.</p>
+              </ng-template>
+            </div>
+           
+               
+                <!--end modal-body-->
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary btn-sm"
+                    (click)="modal.dismiss()"
+                  >
+                    Fermer
+                  </button>
+                  <button type="submit" class="btn btn-primary btn-sm">
+                    Créer la tâche
+                  </button>
+                </div>
+              </form>
+          <!--end modal-footer--> 
+          
+          
+          
+          
+          
+          
+          
+          
+          </ng-template
         ><!--end modal-->

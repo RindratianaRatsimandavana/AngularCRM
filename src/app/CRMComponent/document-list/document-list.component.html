@@ -1,6 +1,6 @@
 <div class="col-auto justify-content-left">
     <button class="btn btn-primary" (click)="openModal(exampleModalXL, { size: 'xl' })">
-      <i class="fas fa-plus me-1"></i> Nouveau projet
+      <i class="fas fa-plus me-1"></i> Nouveau dossier
     </button>
   </div>
 
@@ -38,9 +38,9 @@
                             alt=""
                             height="24"
                         />
-                        <span class="badge bg-primary-subtle text-primary"
+                        <!-- <span class="badge bg-primary-subtle text-primary"
                             >Permission: {{a.permission}} </span
-                        >
+                        > -->
                         </div>
                         <!--end col-->
                     </div>
@@ -49,13 +49,13 @@
                     <!--end card-header-->
                     <div class="card-body pt-0">
                     <p class="card-text text-muted">
-                        Date d'écheance: {{a.projet_date_echeance}}
+                        Prevision d'écheance: {{a.projet_date_echeance}}
                         <!-- Afaka ampiana text -->
                         <!-- Some quick example text to build on the card title and make up the
                         bulk of the card's content. -->
                     </p>
                     <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm"
-                    routerLink="/pages/projectDetail/{{a.id_projet}}/{{a.permission}}">Voir les détails</a
+                    routerLink="/pages/projectDetail/{{a.id_projet}}">Voir les détails</a
                     >
                     </div>
                     <!--end card -body-->
@@ -69,7 +69,7 @@
 
     }
     @if(projectList.length===0){
-        <h2 style="text-align: center;">Pas de projet enregistré</h2>
+        <h2 style="text-align: center;">Pas de dossier enregistré</h2>
 
     }
     

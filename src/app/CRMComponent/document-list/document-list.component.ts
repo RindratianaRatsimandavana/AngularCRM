@@ -21,15 +21,14 @@ import { RouterLink } from '@angular/router';
 
 
 
-
 @Component({
-  selector: 'app-project-list',
+  selector: 'app-document-list',
   standalone: true,
   imports: [NgbProgressbarModule,NgbAlertModule,FormsModule,AutocompleteLibModule,RouterLink],
-  templateUrl: './project-list.component.html',
-  styleUrl: './project-list.component.scss'
+  templateUrl: './document-list.component.html',
+  styleUrl: './document-list.component.scss'
 })
-export class ProjectListComponent {
+export class DocumentListComponent {
   projectList: CRMMembreProjet[] = [];
 
   private modalService = inject(NgbModal)
@@ -74,7 +73,7 @@ export class ProjectListComponent {
   getAllUserProject(){
     const userString = localStorage.getItem('user');
     const userObject = userString ? JSON.parse(userString) : null;
-    this.projectService.getAllUserProject(userObject.id,"CRMTP1")
+    this.projectService.getAllUserProject(userObject.id,"CRMTP2")
     .subscribe(result => {
       console.log("hi log resultat");
       console.log(result);

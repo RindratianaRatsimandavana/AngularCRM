@@ -12,6 +12,7 @@ export interface CrmTacheLib {
     id_sprint?: string;
     id_tache_parent?: string;
     date_creation?: Date;
+    progres?: number;
     projet_nom?: string  ;
     projet_date_creation?: Date  ;
     projet_date_echeance?: Date;
@@ -22,4 +23,6 @@ export interface CrmTacheLib {
     sprint_date_fin?: Date;
     sprint_statut?: number;
     sprint_active?: number;
+    progresDyn?: number;
+    permission?: string  ;
 }

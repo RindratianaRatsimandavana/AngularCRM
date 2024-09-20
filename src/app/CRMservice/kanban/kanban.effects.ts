@@ -113,7 +113,7 @@ export class KanbanEffects {
       ofType(fetchKanbanTask),
       mergeMap((action) => {
         // Utiliser action.projectID comme paramètre
-        return this.CrudService.fetchTask(action.projectID).pipe(
+        return this.CrudService.fetchTask(action.projectID, action.permission).pipe(
           // Mapper la réponse de l'API vers une action success
           map((tasks) => {
             return fetchKanbanTaskSuccess({ tasks });

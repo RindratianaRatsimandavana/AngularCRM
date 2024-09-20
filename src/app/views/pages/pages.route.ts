@@ -13,6 +13,7 @@ import { TypeProjectComponent } from './type-project/type-project.component'
 import { ProjectListComponent } from '@/app/CRMComponent/project-list/project-list.component'
 import { ProjectDetailComponent } from '@/app/CRMComponent/project-detail/project-detail.component'
 import { KanbanBoardComponent } from '@/app/CRMComponent/kanban-board/kanban-board.component'
+import { DocumentListComponent } from '@/app/CRMComponent/document-list/document-list.component'
 
 export const PAGES_ROUTES: Route[] = [
   {
@@ -76,13 +77,23 @@ export const PAGES_ROUTES: Route[] = [
     data: { title: 'Vos projets' },
   },
   {
-    path: 'projectDetail/:id',
+    path: 'projectDetail/:id/:permission',
     component: ProjectDetailComponent,
     data: { title: 'Vos projets' },
   },
   {
-    path: 'kanban/:id',
+    path: 'kanban/:id/:permission',
     component: KanbanBoardComponent,
     data: { title: 'Kanban' },
+  },
+  {
+    path: 'documentList',
+    component: DocumentListComponent,
+    data: { title: 'Vos documents' },
+  },
+  {
+    path: 'documentDetail/:id',
+    component: ProjectDetailComponent,
+    data: { title: 'Vos projets' },
   }
 ]

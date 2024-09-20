@@ -13,9 +13,9 @@ export class ProjectService {
   uri = 'http://localhost:3000/api/erp/';
 
 
-  getAllUserProject(idEmploye?:string): Observable<any> {
+  getAllUserProject(idEmploye?:string,idTypeProjet?:string): Observable<any> {
     console.log("tato amin proejct service");
-    const offUrl=this.uri +"CRMMembreProjet/"+idEmploye; 
+    const offUrl=this.uri +"CRMMembreProjet/"+idEmploye+"/"+idTypeProjet; 
     console.log("Urllllllllllllllllllllllllllllllllllll");
     console.log(offUrl);
     console.log("Fin Url");
