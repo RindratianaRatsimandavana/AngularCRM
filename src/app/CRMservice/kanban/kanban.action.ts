@@ -73,6 +73,16 @@ export const addKanbanFailure = createAction(
   props<{ error: string }>()
 )
 
+// Move Task Data
+export const moveTaskKanban = createAction(
+  '[Data] Move task kanban',
+  props<{ taskId: string, statut: number,projectID: string, permission: string }>()
+)
+export const moveTaskKanbanSuccess = createAction(
+  '[Data] Move task Kanban Success',
+  props<{ tasks: KanbanTaskType[] }>()
+)
+
 // Update Kanban Data
 export const updateKanban = createAction(
   '[Data] Update Kanban',

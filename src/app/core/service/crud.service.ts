@@ -110,6 +110,31 @@ export class CrudService {
       })
     );
   }
+
+  moveTask(taskId: string, statut: number,projectID: string, permission: string): Observable<KanbanTaskType[]> {
+    // console.log("tatooooooooo")
+    const userString = localStorage.getItem('user');
+    const userObject = userString ? JSON.parse(userString) : null;
+    return this.tacheSprintService.moveTask(taskId,statut,userObject.id,projectID,permission).pipe(
+      map((response: { data: CrmTacheLib[] }) => {
+        const listeTacheProjet: CrmTacheLib[] = response.data;
+        // console.log("teeeeeeeeeeest",listeTacheProjet)
+        let res= listeTacheProjet.map((tache: CrmTacheLib) => ({
+          id: tache.id ?? '',
+          sectionId: this.getSectionIdFromStatut(tache.statut), // Assurez-vous que cette fonction renvoie une section valide
+          priority: this.getPriorityLabel(tache.priorite),
+          title: tache.nom ?? '',
+          description: tache.descTache ?? '',
+          commentsCount: 0,
+          totalTasks: 1,
+          completedTasks: tache.etat === 1 ? 1 : 0,
+          tags: []
+        }));
+        // console.log(res);
+        return res;
+      })
+    );
+  }
   
 
 

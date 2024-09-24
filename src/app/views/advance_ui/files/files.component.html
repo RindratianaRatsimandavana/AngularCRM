@@ -1,4 +1,5 @@
-<div class="row justify-content-center">
+
+<!-- <div class="row justify-content-center">
   @for (data of folders; track $index) {
     <div class="col-md-6 col-lg-3">
       <div class="card">
@@ -47,24 +48,26 @@
                 <small class="flex-shrink-1 ms-1">{{ data.progress }}%</small>
               </div>
             </div>
-            <!--end media body-->
+           
           </div>
-          <!--end media-->
+          
         </div>
-        <!--end card-body-->
+        
       </div>
-      <!--end card-->
+      
     </div>
-    <!--end col-->
+    
   }
-</div>
+</div> -->
 <!--end row-->
+
+
 <div class="row justify-content-center">
   <div class="col-12">
     <div class="clearfix">
       <div ngbDropdown class="btn-group float-end ms-2">
         <button type="button" class="btn btn-secondary me-0 overflow-hidden">
-          Upload File
+          Ajouter un fichier
           <input
             type="file"
             name="file"
@@ -83,11 +86,11 @@
         <div ngbDropdownMenu class="dropdown-menu dropdown-menu-end">
           <a class="dropdown-item" href="javascript:void(0);"
             ><i class="las la-file-upload fs-16 me-1 align-text-bottom"></i>
-            Upload File</a
+            Ajouter un fichier</a
           >
           <a class="dropdown-item" href="javascript:void(0);"
             ><i class="las la-cloud-upload-alt fs-16 me-1 align-text-bottom"></i
-            >Upload Folder</a
+            >Ajouter un dossier</a
           >
         </div>
       </div>
@@ -100,7 +103,7 @@
             aria-selected="true"
             ><i class="fa-regular fa-folder-open me-1"></i> Documents
             <span class="badge rounded text-blue bg-blue-subtle ms-1"
-              >32</span
+              >{{documents.length}}</span
             ></a
           >
           <ng-template ngbNavContent>
@@ -109,11 +112,12 @@
                 <table class="table mb-0">
                   <thead class="table-light">
                     <tr>
-                      <th class="border-top-0">Name</th>
-                      <th class="border-top-0 text-end">Last Modified</th>
-                      <th class="border-top-0 text-end">Size</th>
-                      <th class="border-top-0 text-end">Members</th>
-                      <th class="border-top-0 text-end">Action</th>
+                      <th class="border-top-0">Nom</th>
+                      <th class="border-top-0 text-end">Date d'ajout</th>
+                      <th class="border-top-0 text-end">Taille</th>
+                      <!-- <th class="border-top-0 text-end">Members</th>
+                      <th class="border-top-0 text-end">Action</th> -->
+                      <th class="border-top-0 text-end"></th>
                     </tr>
                     <!--end tr-->
                   </thead>
@@ -135,7 +139,7 @@
                         </td>
                         <td class="text-end">{{ doc.date }}</td>
                         <td class="text-end">{{ doc.size }}</td>
-                        <td class="text-end">
+                        <!-- <td class="text-end">
                           @if (doc.avatars?.length != 0) {
                             <div class="img-group d-flex justify-content-end">
                               @for (
@@ -174,6 +178,16 @@
                               class="las la-trash-alt text-secondary fs-18"
                             ></i
                           ></a>
+                        </td> -->
+                        <!-- <td class="text-end"><button (click)="openFilePreview(doc)">Aperçu</button></td> -->
+                        <td>
+                          <button
+                            type="button"
+                            class="btn btn-danger btn-sm"
+                            (click)="openVarientModal(exampleModalFullscreenLg, 'xxl',doc)"
+                          >
+                            Aperçu
+                          </button>
                         </td>
                       </tr>
                       <!--end tr-->
@@ -381,3 +395,58 @@
   <!--end col-->
 </div>
 <!--end row-->
+
+
+<!-- Modal ou cadre d'affichage pour l'aperçu -->
+<ng-template
+          #exampleModalFullscreenLg
+          let-modal
+          class="modal fade"
+          id="exampleModalFullscreenSm"
+          tabindex="-1"
+          aria-labelledby="exampleModalFullscreenSmLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-header">
+            <h6 class="modal-title" id="exampleModalFullscreenSmLabel">
+              {{ selectedFile.file_name }}
+            </h6>
+            <button
+              type="button"
+              class="btn-close"
+              (click)="modal.dismiss()"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+                <!-- Modal ou cadre d'affichage pour l'aperçu -->
+              <div *ngIf="selectedFile" class="file-preview-modal">
+                  <!-- <h3> Aperçu du fichier : {{ selectedFile.file_name }} </h3> -->
+                  <div [ngSwitch]="selectedFile.type">
+                    <!-- Aperçu PDF -->
+                    <iframe *ngSwitchCase="'pdf'" [src]="sanitizer.bypassSecurityTrustResourceUrl(selectedFile.url)" width="100%" height="600px"></iframe>
+
+                    <!-- Aperçu image -->
+                    <img *ngSwitchCase="'image'" [src]="selectedFile.url" alt="Image Aperçu" width="100%" height="auto" />
+
+                    <!-- Aperçu vidéo -->
+                    <video *ngSwitchCase="'video'" controls>
+                      <source [src]="selectedFile.url" type="video/mp4" />
+                      Votre navigateur ne supporte pas la vidéo.
+                    </video>
+
+                    <!-- Autres types de fichiers -->
+                    <p *ngSwitchDefault> Aperçu non disponible pour ce type de fichier.</p>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm"
+              (click)="modal.dismiss()"
+            >
+              Close
+            </button>
+          </div>
+        </ng-template>

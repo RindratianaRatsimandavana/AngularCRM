@@ -8,6 +8,8 @@ import {
   fetchKanbanBoardSuccess,
   fetchKanbanTask,
   fetchKanbanTaskSuccess,
+  moveTaskKanban,
+  moveTaskKanbanSuccess,
   updateKanbanSuccess,
 } from './kanban.action'
 
@@ -109,6 +111,25 @@ export const KanbanReducer = createReducer(
     return { ...state }
   }),
   on(fetchKanbanTaskSuccess, (state, { tasks }: { tasks: KanbanTaskType[] }) => {
+    const todo = tasks.filter(task => task.sectionId === 'To Do');
+    const inProgress = tasks.filter(task => task.sectionId === 'In Progress');
+    const done = tasks.filter(task => task.sectionId === 'Done');
+    const review = tasks.filter(task => task.sectionId === 'Review');
+    
+    return { 
+      ...state, 
+      tasks, 
+      todo, 
+      inProgress, 
+      done,
+      review 
+    };
+  }),
+
+  on(moveTaskKanban, (state) => {
+    return { ...state }
+  }),
+  on(moveTaskKanbanSuccess, (state, { tasks }: { tasks: KanbanTaskType[] }) => {
     const todo = tasks.filter(task => task.sectionId === 'To Do');
     const inProgress = tasks.filter(task => task.sectionId === 'In Progress');
     const done = tasks.filter(task => task.sectionId === 'Done');

@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common'
 import { Store } from '@ngrx/store'
 import { cloneDeep } from 'lodash'
 import { KanbanCardComponent } from '../kanban-card/kanban-card.component'
-import { fetchKanbanTask, fetchKanbanBoard, addKanban, deleteBoard } from '@/app/CRMservice/kanban/kanban.action'
+import { fetchKanbanTask, fetchKanbanBoard, addKanban, deleteBoard, moveTaskKanban } from '@/app/CRMservice/kanban/kanban.action'
 import { getKanbanData, getKanbanBoard } from '@/app/CRMservice/kanban/kanban.selectors'
 import { filter, tap } from 'rxjs'
 import { ActivatedRoute } from '@angular/router'
@@ -123,7 +123,21 @@ export class KanbanTasksComponent implements OnInit {
     if (taskId && targetSectionId) {
       const task = this.taskList.find((t) => t.id === taskId)
       if (task) {
-        task.sectionId = targetSectionId
+        task.sectionId = targetSectionId;
+        let statut=0;
+        if(targetSectionId==="501" || targetSectionId==="To Do"){
+          statut=0;
+        }
+        else if(targetSectionId==="502" || targetSectionId==="In Progress"){
+          statut=1;
+        }
+        else if(targetSectionId==="503" || targetSectionId==="Review"){
+          statut=2;
+        }
+        else if(targetSectionId==="504" || targetSectionId==="Done"){
+          statut=3;
+        }
+        this.store.dispatch(moveTaskKanban({taskId: taskId, statut, permission:this.permission!, projectID:this.idProjet!}))//?????????????????
       }
     }
   }

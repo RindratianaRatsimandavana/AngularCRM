@@ -19,8 +19,9 @@ export class GeneralService {
     return this.http.get<Userole>(this.uri +"UserRole/");
   }
 
-  getAllEmployeInfo(): Observable<any> {
-    console.log("tato amin service");
-    return this.http.get<User>(this.uri +"UserRole/");
+  getAllMembreProject(idProjet?:string): Observable<any> {
+    console.log("Le url pour getAllMembreProject");
+    console.log(this.uri +"user/listEmpDev/info/"+idProjet)
+    return this.http.get<User>(this.uri +"user/listEmpDev/info/"+idProjet);
   }
 }

@@ -14,6 +14,7 @@ import { ProjectListComponent } from '@/app/CRMComponent/project-list/project-li
 import { ProjectDetailComponent } from '@/app/CRMComponent/project-detail/project-detail.component'
 import { KanbanBoardComponent } from '@/app/CRMComponent/kanban-board/kanban-board.component'
 import { DocumentListComponent } from '@/app/CRMComponent/document-list/document-list.component'
+import { TestComponent } from '@/app/CRMComponent/test/test.component'
 
 export const PAGES_ROUTES: Route[] = [
   {
@@ -95,5 +96,10 @@ export const PAGES_ROUTES: Route[] = [
     path: 'documentDetail/:id',
     component: ProjectDetailComponent,
     data: { title: 'Vos projets' },
+  },
+  {
+    path: 'test',
+    component: TestComponent,
+    data: { title: 'Vos tests' },
   }
 ]

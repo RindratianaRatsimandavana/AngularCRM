@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
             const jsonString = JSON.stringify(response.data[0]);
             localStorage.setItem('user', jsonString);
             //localStorage.setItem('id_matiere', response.id_matiere);
-            this.router.navigate(['/pages/typeProject']).then(() => {
+            this.router.navigate(['/pages/projectList']).then(() => {
               //window.location.reload();
             });
           }

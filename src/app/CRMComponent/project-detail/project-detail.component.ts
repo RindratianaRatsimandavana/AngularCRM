@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, TemplateRef } from '@angular/core';
 import { UtilsService } from '@/app/core/service/utils.service'
 import { TacheSprintService } from '@/app/CRMservice/tache-sprint.service';
 import { ActivatedRoute } from '@angular/router';
@@ -11,15 +11,28 @@ import { CrmTache } from '@/app/CRMinterface/crm-tache';
 import { CrmSprint } from '@/app/CRMinterface/crm-sprint';
 import { GeneralService } from '@/app/CRMservice/general.service';
 import { User } from '@/app/CRMinterface/user';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+import { CardTitleComponent } from '@/app/components/card-title.component'
+import { ReactiveFormsModule } from '@angular/forms';
+
+import {
+  NgbModal,
+  NgbModalConfig,
+  type NgbModalOptions,
+} from '@ng-bootstrap/ng-bootstrap'
+
+
 @Component({
   selector: 'app-project-detail',
   standalone: true,
   imports: [NgbAccordionModule,NgbProgressbarModule,CommonModule,NgbAccordionModule,
-    NgbProgressbarModule,RouterLink],
+    NgbProgressbarModule,RouterLink,CardTitleComponent,ReactiveFormsModule],
   templateUrl: './project-detail.component.html',
   styleUrl: './project-detail.component.scss'
 })
 export class ProjectDetailComponent {
+  private modalService = inject(NgbModal)
   tacheTemp: CrmTacheLib[] = [];
   idProjet?:string;
   permission?:string;
@@ -29,11 +42,20 @@ tachesParSprint: { [sprintId: string]: CrmTacheLib[] } = {};
 
 listeSprint: CrmSprint[] = [];
 listeEmployeInfo: User[] = [];
+  //modalService: any;
 
  // idProject=this.route.snapshot.params['id'];
 
-  constructor(private tacheSprintService: TacheSprintService,private route:ActivatedRoute,
-    public service :UtilsService,public generalService :GeneralService) {}
+//backlogForm: FormGroup; // Formulaire réactif
+
+
+  constructor(private fb: FormBuilder,private tacheSprintService: TacheSprintService,private route:ActivatedRoute,
+    public service :UtilsService,public generalService :GeneralService) {
+      // Initialise le formulaire principal
+    // this.backlogForm = this.fb.group({
+    //   tasks: this.fb.array([]) // FormArray qui contiendra les formulaires pour chaque ligne de tâche
+    // });
+}
 
   ngOnInit() {
     const id = this.route.snapshot.params['id']; 
@@ -55,22 +77,26 @@ listeEmployeInfo: User[] = [];
       this.tachesParSprint = this.groupBySprint(result.data);
       console.log(this.tachesParSprint)
       // console.log("verificationnnnnnnnnnnnnnnnnn",this.groupBySprint(result.data))
+
+      //this.initTaskForms(); // Initialiser les formulaires de chaque tâche
+
     });
 
-    this.tacheSprintService.getTacheBacklogByProject(id).subscribe(result => {
+    
+    this.tacheSprintService.getTacheBacklogByProject(this.idProjet).subscribe(result => {
       this.tacheBacklog = result.data;
-      console.log(this.tacheBacklog)
+      console.log("this.tacheBacklog",this.tacheBacklog)
     });
 
 
-    this.tacheSprintService.getSprintByProject(id).subscribe(result => {
+    this.tacheSprintService.getSprintByProject(this.idProjet).subscribe(result => {
       this.listeSprint = result.data;
-      console.log(this.listeSprint)
+      console.log("this.listeSprint",this.listeSprint)
     });
 
-    this.generalService.getAllEmployeInfo().subscribe(result => {
+    this.generalService.getAllMembreProject(this.idProjet).subscribe(result => {
       this.listeEmployeInfo = result.data;
-      console.log(this.listeEmployeInfo)
+      console.log("this.listeEmployeInfo",this.listeEmployeInfo)
     });
     
 
@@ -104,8 +130,8 @@ listeEmployeInfo: User[] = [];
         grouped[sprintId] = [];
       }
       grouped[sprintId].push(tache);
-      // console.log("grouped");
-      // console.log(grouped);
+      console.log("grouped");
+      console.log(grouped);
       return grouped;
     }, {});
   }
@@ -113,5 +139,51 @@ listeEmployeInfo: User[] = [];
   trackById(index: number, task: any): number {
     return task.id; // Assurez-vous que chaque tâche a un ID unique
   }
+
+  openModal(content: TemplateRef<HTMLElement>, options: NgbModalOptions) {
+    this.modalService.open(content, options)
+  }
+
+
+  // Méthode pour créer un FormArray dynamique basé sur les tâches du backlog
+  // initTaskForms() {
+  //   //const taskFormArray = this.backlogForm.get('tasks') as FormArray;
+  //   this.tacheBacklog.forEach(task => {
+  //     taskFormArray.push(this.fb.group({
+  //       id: [task.id],
+  //       nom: [task.nom],
+  //       desc_tache: [task.descTache],
+  //       priorite: ['', Validators.required], // Champ pour la priorité
+  //       id_sprint: ['', Validators.required], // Champ pour la priorité
+  //       id_employe_assigne: ['', Validators.required] // Champ pour l'employé assigné
+  //     }));
+  //   });
+  // }
   
+  // Accès rapide au FormArray
+  // get taskForms() {
+  //   return this.backlogForm.get('tasks') as FormArray;
+  // }
+
+  // Méthode pour attribuer une tâche
+  //assignTask(index: number) {
+    //const taskForm = this.taskForms.at(index); // Récupérer le formulaire de la ligne spécifique
+
+    // Préparer l'objet à envoyer au backend
+  //   const taskUpdate = { 
+  //     id: taskForm.value.id,
+  //     priorite: taskForm.value.priorite,
+  //     id_employe_assigne: taskForm.value.idEmploye,
+  //     id_sprint: taskForm.value.idSprint
+  //   };
+
+  //   // Appeler le service pour attribuer la tâche
+  //   this.tacheSprintService.updateattributeTask(taskUpdate).subscribe(response => {
+  //     console.log('Tâche attribuée avec succès', response);
+  //     // Effectuer d'autres actions après la mise à jour, par exemple actualiser la liste
+  //   }, error => {
+  //     console.error('Erreur lors de l\'attribution de la tâche', error);
+  //   });
+  // }
+
 }

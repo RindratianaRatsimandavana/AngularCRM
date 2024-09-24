@@ -25,6 +25,11 @@ export class TacheSprintService {
     return this.http.get<any>(this.apiUrl+"tache/"+idTache);
   }
 
+  moveTask(taskId?: string,statut?: number,id_employe_assigne?:string,idProject?:string,permission?:string): Observable<any> {
+    const url = this.apiUrl+`updateStatut/`+idProject+"/"+id_employe_assigne+"/"+permission; 
+    return this.http.put<any>(url,{id:taskId, statut: statut });
+  }
+
   saveSsTask(credentials: { 
     nom?: string,
     statut?: number,
@@ -38,10 +43,12 @@ export class TacheSprintService {
 
 
   getTacheBacklogByProject(idProject?:string): Observable<any> {
+    console.log("url backlog",this.apiUrl+"backlog/"+idProject)
     return this.http.get<any>(this.apiUrl+"backlog/"+idProject);
   }
 
   getSprintByProject(idProject?:string): Observable<any> {
+    console.log("url sprinttttttttttttttt",this.apiUrl+"sprint/"+idProject)
     return this.http.get<any>(this.apiUrl+"sprint/"+idProject);
   }
 
@@ -55,6 +62,19 @@ export class TacheSprintService {
     //const url = `api/sous-task/${taskId}/status`; // Exemple d'URL pour l'API/
     const url = this.apiUrl+`sstache`; 
     return this.http.put(url, {id:taskId, statut: newStatus });
+  }
+
+  
+
+  updateattributeTask(credentials: {     
+    id?: string,
+    priorite?: number,
+    id_employe_assigne?: string,
+    id_sprint?: string
+  }) {
+    //const url = `api/sous-task/${taskId}/status`; // Exemple d'URL pour l'API/
+    const url = this.apiUrl+`attributeTask`; 
+    return this.http.put(url, credentials);
   }
 
 //   updateSousTaskStatus(credentials: { 

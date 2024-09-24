@@ -6,6 +6,7 @@ import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap'
 import { Store } from '@ngrx/store'
 import { SimplebarAngularModule } from 'simplebar-angular'
 import { TabItems } from './data'
+import { User } from '@/app/CRMinterface/user'
 
 @Component({
   selector: 'app-topbar',
@@ -24,7 +25,16 @@ export class TopbarComponent {
   store = inject(Store)
   scrollY = 0
   @Output() mobileMenuButtonClicked = new EventEmitter()
+
+  userPrenom!:User;
   
+  ngOnInit(): void {
+    const userString = localStorage.getItem('user');
+    const userObject = userString ? JSON.parse(userString) : null;
+    const tabTemp = userObject.nom.split(" ");
+    this.userPrenom = tabTemp[1]; 
+
+  }
 
   constructor(private router: Router) {
     window.addEventListener('scroll', this.handleScroll, { passive: true })

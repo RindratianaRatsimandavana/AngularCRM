@@ -18,7 +18,7 @@
           </button>
         </li>
         <li class="mx-3 welcome-text">
-          <h3 class="mb-0 fw-bold text-truncate">Good Morning, James!</h3>
+          <h3 class="mb-0 fw-bold text-truncate">Bienvenue, {{userPrenom}}!</h3>
         </li>
       </ul>
       <ul
@@ -111,7 +111,10 @@
             aria-expanded="false"
           >
             <i class="icofont-bell-alt"></i>
-            <span class="alert-badge"></span>
+            <!-- <span class="alert-badge"></span> -->
+            <span class="badge bg-primary-subtle text-primary badge-pill ms-1">
+              24 <!--(NbreNotif)-->
+            </span>
           </a>
           <div
             class="dropdown-menu stop dropdown-menu-end dropdown-lg py-0"

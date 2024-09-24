@@ -13,7 +13,7 @@
   <div class="card-header">
     <div class="row align-items-center">
       <div class="col">
-        <h4 class="card-title">{{ sprint.key }}</h4>
+        <h4 class="card-title">Sprint:{{ sprint.key }}</h4>
       </div>
       <!--end col--> 
     </div>
@@ -190,83 +190,90 @@
 
 
 <!-- pour backlog -->
+
+
 <div class="card">
-  <card-title title="Popular Products" selected="This Year" />
+  <card-title title="Backlog" />
   <div class="card-body pt-0">
     <div class="table-responsive">
-      <table class="table mb-0">
-        <thead class="table-light">
-          <tr>
-            <th class="border-top-0"></th>
-            <th class="border-top-0">Tâche</th>
-            <th class="border-top-0">Description</th>
-            <th class="border-top-0">Priorité</th>
-            <th class="border-top-0">Sprint</th>
-            <th class="border-top-0">Assigné à</th>
-            <th class="border-top-0"></th>
-          </tr>
-          <!--end tr-->
-        </thead>
-        <tbody>
-          @for (tache of tacheBacklog; track $id) {
-            <tr>
-              <td>
-                <div class="d-flex align-items-center">
-                  <img
-                    src=""
-                    height="40"
-                    class="me-3 align-self-center rounded"
-                    alt="..."
-                  />
-                  <!-- <div class="flex-grow-1 text-truncate">
-                    <h6 class="m-0"></h6>
-                    <a href="javascript:void(0);" class="fs-12 text-primary"
-                      >ID: {{ product.productID }}</a
-                    >
-                  </div> -->
-                  <!--end media body-->
-                </div>
-              </td>
-              <td>
-                {{ tache.nom }}
-                <!-- <del class="text-muted fs-10"
-                  >{{ currency }}{{ product.originalPrice }}</del
-                > -->
-              </td>
-              <td>
-                {{ tache.descTache }}
-                
-              </td>
-              <td>
-                <select id="priorite" name="priorite">
-                  <option value="1">Haute</option>
-                  <option value="2">Moyenne</option>
-                  <option value="3">Faible</option>
-                </select>
-                
-              </td>
-              <td>
-                <select id="priorite" name="priorite">
-                  @for(sp of listeSprint; track $id)
-                  {
-                    <option value="sp.id">{{sp.nom}}</option>
-                  }
-                </select>
-              </td>
-              <td>
-                @for(emp of listeEmployeInfo; track $id)
-                {
-                  <option value="sp.id">{{emp.nom}}</option>
-                }
-              </td>
-              <td>
-                {{ tache.stockQuantity }}
-              </td>
-            </tr>
-            <!--end tr-->
-          }
-        </tbody>
-      </table>
+      
+          <table class="table mb-0">
+            <thead class="table-light">
+              <tr>
+                <th class="border-top-0"></th>
+                <th class="border-top-0">Tâche</th>
+                <th class="border-top-0">Description</th>
+                <th class="border-top-0">Priorité</th>
+                <th class="border-top-0">Sprint</th>
+                <th class="border-top-0"></th>
+                <th class="border-top-0"></th>
+              </tr>
+              <!--end tr-->
+            </thead>
+            <tbody>
+              @for (tache of tacheBacklog; track tache.id) {
+                    <tr>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <img
+                            src=""
+                            height="40"
+                            class="me-3 align-self-center rounded"
+                            alt="..."
+                          />
+                          <!-- <div class="flex-grow-1 text-truncate">
+                            <h6 class="m-0"></h6>
+                            <a href="javascript:void(0);" class="fs-12 text-primary"
+                              >ID: {{ product.productID }}</a
+                            >
+                          </div> -->
+                          <!--end media body-->
+                        </div>
+                      </td>
+                      <td>
+                        {{ tache.nom }}
+                        <!-- <del class="text-muted fs-10"
+                          >{{ currency }}{{ product.originalPrice }}</del
+                        > -->
+                      </td>
+                      <td>
+                        {{ tache.descTache }}
+                        
+                      </td>
+                      <td>
+                        <!-- <select id="priorite" formControlName="priorite">
+                          <option value="">Sélectionner la priorité</option>
+                          <option value="1">Haute</option>
+                          <option value="2">Moyenne</option>
+                          <option value="3">Faible</option>
+                        </select> -->
+                        
+                      </td>
+                      <td>
+                        <!-- For sprint list -->
+                        <!-- <select id="id_sprint" formControlName="id_sprint">
+                          <option value="">Sélectionner un sprint pour le projet</option>
+                          <option *ngFor="let sp of listeSprint" [value]="sp.id">{{ sp.nom }}</option>
+                        </select> -->
+                      </td>
+                      <td>
+                        <!-- For employee list -->
+                        <!-- <select id="id_employe_assigne" formControlName="id_employe_assigne">
+                          <option value="">Sélectionner un employé</option>
+                          <option *ngFor="let emp of listeEmployeInfo" [value]="emp.id">{{ emp.nom }}</option>
+                        </select> -->
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-primary btn-sm" (click)="openModal(exampleModalCenter, { centered: true })">
+                          Attribuer la tâche
+                        </button>
+                      </td>
+                    </tr>
+                <!--end tr-->
+              }
+            </tbody>
+          </table>
+      
       <!--end table-->
     </div>
     <!--end /div-->
@@ -274,3 +281,67 @@
   <!--end card-body-->
 </div>
 <!--end card-->
+
+
+
+<ng-template
+          #exampleModalCenter
+          let-modal
+          class="modal fade"
+          id="exampleModalCenter"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalCenterTitle"
+          aria-hidden="true"
+        >
+          <div class="modal-header">
+            <h6 class="modal-title m-0" id="exampleModalCenterTitle">
+              Center Modal
+            </h6>
+            <button
+              type="button"
+              class="btn-close"
+              (click)="modal.dismiss()"
+              aria-label="Close"
+            ></button>
+          </div>
+          <!--end modal-header-->
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-lg-3 text-center align-self-center">
+                <img
+                  src="assets/images/extra/card/btc.png"
+                  alt=""
+                  class="img-fluid"
+                />
+              </div>
+              <!--end col-->
+              <div class="col-lg-9">
+                <h5>Crypto Market Services</h5>
+                <span class="badge bg-light text-dark">Disable Services</span>
+                <small class="text-muted ms-2">07 Oct </small>
+                <ul class="mt-2 mb-0">
+                  <li>Lorem Ipsum is dummy text.</li>
+                  <li>It is a long established reader.</li>
+                  <li>Contrary to popular belief, Lorem simply.</li>
+                </ul>
+              </div>
+              <!--end col-->
+            </div>
+            <!--end row-->
+          </div>
+          <!--end modal-body-->
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm"
+              (click)="modal.dismiss()"
+            >
+              Fermer
+            </button>
+            <button type="button" class="btn btn-primary btn-sm">
+              Attribuer
+            </button>
+          </div>
+          <!--end modal-footer--> </ng-template
+        ><!--end modal-->

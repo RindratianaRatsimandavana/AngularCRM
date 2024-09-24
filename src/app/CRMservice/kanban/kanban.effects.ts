@@ -20,6 +20,8 @@ import {
   fetchKanbanTask,
   fetchKanbanTaskFailure,
   fetchKanbanTaskSuccess,
+  moveTaskKanban,
+  moveTaskKanbanSuccess,
   updateKanban,
   updateKanbanFailure,
   updateKanbanSuccess,
@@ -122,6 +124,25 @@ export class KanbanEffects {
           catchError((error) => {
             return of(fetchKanbanTaskFailure({ error }));
           })
+        );
+      })
+    )
+  );
+
+  moveTask$ = createEffect(() => 
+    this.actions$.pipe(
+      ofType(moveTaskKanban),
+      mergeMap((action) => {
+        // Utiliser action.projectID comme paramètre
+        return this.CrudService.moveTask(action.taskId, action.statut,action.projectID, action.permission).pipe(
+          // Mapper la réponse de l'API vers une action success
+          map((tasks) => {
+            return moveTaskKanbanSuccess({ tasks });
+          }),
+          // // Gestion d'erreur en cas de problème
+          // catchError((error) => {
+          //   return of(fetchKanbanTaskFailure({ error }));
+          // })
         );
       })
     )
