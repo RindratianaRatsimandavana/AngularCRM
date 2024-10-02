@@ -1,11 +1,20 @@
-<ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link" href="javascript:void(0);" routerLink="/pages/projectDetail/{{idProjet}}/{{permission}}">Liste</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="javascript:void(0);" routerLink="/pages/kanban/{{idProjet}}/{{permission}}">Kanban</a>
-  </li>
-</ul>
+<div> 
+ <h4 class="card-title">{{ title }} </h4> 
+
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link" href="javascript:void(0);" routerLink="/pages/projectDetail/{{idProjet}}/{{permission}}">Liste</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="javascript:void(0);" routerLink="/pages/kanban/{{idProjet}}/{{permission}}">Kanban</a>
+    </li>
+  </ul>
+
+</div>
+
+<div>
+  <button (click)="openModal(addTask, { centered: true })">Ajouter une tâche></button>
+</div>
 
 <!-- debut corps liste -->
 
@@ -13,7 +22,21 @@
   <div class="card-header">
     <div class="row align-items-center">
       <div class="col">
-        <h4 class="card-title">Sprint:{{ sprint.key }}</h4>
+
+        <div class="col-lg-6"> 
+          <h4 class="card-title">Sprint:{{ sprint.key }}</h4>
+          <h5>{{ sprint.value[0].sprint_date_debut | date:'MMM d, y' }} - {{ sprint.value[0].sprint_date_fin | date:'MMM d, y'  }}</h5>
+        </div>
+        <div class="col-lg-6"> 
+          @if(sprint.value[0].sprint_active === 1 )
+          {
+            <h5 style="color: green;">Active</h5>
+          }
+          
+        </div>
+
+
+        
       </div>
       <!--end col--> 
     </div>
@@ -27,7 +50,13 @@
       class="accordion card-bg"
     >
       @for (task of sprint.value; track task.id; let last = $last) {
-        <div
+        @if(!task.id)
+        {
+            <p>Pas encore de tâche pour ce sprint</p>
+        }
+        @else
+        {
+          <div
           ngbAccordionItem
           [collapsed]="task.id == 'CRMTCH_10' ? false : true"
           class="task-accordion rounded border-dashed border-theme-color p-2"
@@ -53,20 +82,16 @@
                             {{ task.nom }}
                           </h6>
                           <div class="fw-semibold">
-                            <span>{{ task.sprint_date_debut }}</span> -
+                            <!--<span>{{ task.sprint_date_debut }}</span> --->
                             <span class="text-danger">
-                              {{ task.sprint_date_fin }}</span
+                              <!--{{ task.sprint_date_fin }}--></span
                             >
                           </div>
                         </div>
                         <!--end media body-->
                       </div>
                     </td>
-                    <td class="text-start">
-                      <h6 class="m-0 mb-1 fw-semibold">Task</h6>
-                      <!-- <span class="fs-13 fw-semibold">{{ task.task }}</span> -->
-                    </td>
-                    <td class="text-start">
+                    <td class="text-end">
                       <h6 class="m-0 mb-1 fw-semibold">Priorité</h6>
                       <span
                         [class]="{
@@ -75,17 +100,58 @@
                           'text-info': task.priorite == 3,
                         }"
                         ><i class="fa-solid fa-stop fs-10"></i>
-                        {{ task.priorite }}</span
+                        {{ task.priorite == 1 ? 'Élevé' : task.priorite == 2 ? 'Moyen' : 'Bas' }}</span
                       >
                     </td>
-
-                    <!-- <td class="text-start">
-                      <h6 class="m-0 mb-1 fw-semibold">Employé assigné</h6>
-                      <span class="text-secondary">{{ task.employe_nom }}</span>
+                    <td class="text-end">
+                      <h6 class="m-0 mb-1 fw-semibold">Statut</h6>
+                      <span
+                      class="badge rounded bg-transparent border p-1"
+                      [ngClass]="{
+                        'text-purple border-purple': task.sprint_statut == 0, 
+                        'text-blue border-blue': task.sprint_statut == 1,  
+                        'text-warning border-warning': task.sprint_statut == 2,
+                        'text-green border-green': task.sprint_statut == 3 
+                      }"
+                    >
+                      {{ task.statut == 0 ? 'À faire' : task.statut == 1 ? 'En cours' : task.statut == 2 ? 'Revue' : 'Terminé' }}
+                    </span>
+                    
+                    </td>
+                    <!-- <td class="text-start"></td>
+                      <h6 class="m-0 mb-1 fw-semibold">Priorité</h6>
+                       <span class="fs-13 fw-semibold">{{ task.task }}a</span> 
                     </td> -->
 
                     <td class="text-end">
-                      <h6 class="m-0 mb-1 fw-semibold">Statut</h6>
+                      <h6 class="m-0 mb-1 fw-semibold">Temps estimé</h6>
+                      <span class="text-secondary">{{ task.temps_estime }} j</span>
+                    </td>
+
+                    <td class="text-end">
+                      <h6 class="m-0 mb-1 fw-semibold">Temps actuel</h6>
+                      <span class="text-secondary">{{ task.temps_actuel_dyn }} j</span> <!--eto mbola asiana couleur correspondant-->
+                    </td>
+
+                    @if(permission === 'admin' && task.statut === 3)
+                    {
+                      <td class="text-end">
+                      <h6 class="m-0 mb-1 fw-semibold"></h6>
+                      <span class="text-secondary" (click)="openModal(rating, { centered: true })">Noter</span> <!--eto mbola asiana couleur correspondant-->
+                      </td>
+                    }
+                    @else
+                    {
+                      <td class="text-end">
+                        <h6 class="m-0 mb-1 fw-semibold"></h6>
+                        <span class="text-secondary"></span> <!--eto mbola asiana couleur correspondant-->
+                        </td>
+                    }
+                    
+
+                    <!-- afaka atao avy eto iany le fasiana note refaveo -->
+                    <!-- <td class="text-end">
+                      <h6 class="m-0 mb-1 fw-semibold">Temps actuel</h6>
                       <span
                         class="badge rounded bg-transparent border p-1"
                         [ngClass]="{
@@ -96,7 +162,7 @@
                         }"
                         >{{ task.sprint_statut }}</span
                       >
-                    </td>
+                    </td> -->
                   </tr>
                 </tbody>
               </table>
@@ -118,31 +184,34 @@
               <div class="row row-cols-auto g-3">
                 <div class="col col-md-3">
                   <div class="d-flex align-items-center">
-                    <!-- <img
-                      [src]="task.client.avatar"
+                    <img
+                      [src]=""
                       class="thumb-md align-self-center rounded-circle"
                       alt="..."
-                    /> -->
-                    <!-- <div class="flex-grow-1 ms-2">
+                    />
+                    <div class="flex-grow-1 ms-2">
                       <h6 class="m-0 mb-1 fw-semibold">
-                        {{ task.client.name }}
+                        Nom client
                       </h6>
-                      <p class="text-muted mb-0">{{ task.client.role }}</p>
-                    </div> -->
+                      <p class="text-muted mb-0">Client</p>
+                    </div>
                   </div>
                 </div>
                 <!--end col-->
-                <div class="col col-md-3">
-                  <h6 class="m-0 mb-1 fw-semibold">Type de projet</h6>
-                  <p class="text-muted mb-0">{{ task.id_projet }}</p>
-                </div>
+                <!-- <div class="col col-md-3">
+                  <h6 class="m-0 mb-1 fw-semibold">Suivi</h6>
+                  <p class="text-muted mb-0">Sprint</p>
+                </div> -->
                 <!--end col-->
                 <div class="col col-md-2 text-end align-self-center">
                   <div class="d-flex justify-content-between">
-                    <h6 class="m-0 mb-1 fw-semibold">Progress</h6>
-                    <small class="text-end">5%</small>
+                    <h6 class="m-0 mb-1 fw-semibold">Avancement</h6>
+                    <small class="text-end">{{task.progresDyn!}}%</small>
                   </div>
-                  <ngb-progressbar-stacked
+                  <ngb-progressbar type="secondary" class="mb-3" [value]="task.progresDyn!"
+                    ></ngb-progressbar
+                  >
+                  <!-- <ngb-progressbar-stacked
                     class="progress bg-secondary-subtle"
                     style="height: 5px"
                   >
@@ -161,18 +230,34 @@
                       [value]="service.dividePercentage(5)"
                       style="margin-right: 2px; height: 5px"
                     ></ngb-progressbar>
-                  </ngb-progressbar-stacked>
+                  </ngb-progressbar-stacked> -->
                 </div>
                 <!--end col-->
-                <!-- <div class="col col-md-2">
-                  <h6 class="m-0 mb-1 fw-semibold">Total Report</h6>
-                  <p class="text-muted mb-0">{{ task.total_report }}</p>
-                </div> -->
+                <div class="col col-md-2">
+                  <h6 class="m-0 mb-1 fw-semibold"></h6>
+                  <p class="text-muted mb-0"></p>
+                </div>
                 <!--end col-->
-                <div class="col col-md-2 ms-auto">
+
+                <!-- <div class="col col-md-2 ms-auto">
                   <h6 class="m-0 mb-1 fw-semibold">Employé assigné</h6>
                   <p class="text-muted mb-0">{{ task.employe_nom }}</p>
+                </div> -->
+
+                <div class="d-flex align-items-center">
+                  <img
+                    [src]=""
+                    class="thumb-md align-self-center rounded-circle"
+                    alt="..."
+                  />
+                  <div class="flex-grow-1 ms-2">
+                    <h6 class="m-0 mb-1 fw-semibold">
+                      Employé assigné
+                    </h6>
+                    <p class="text-muted mb-0">{{ task.employe_nom }}</p>
+                  </div>
                 </div>
+
                 <!--end col-->
               </div>
               <!--end row-->
@@ -182,6 +267,7 @@
           <!--end task-->
         </div>
         <!--end -->
+        }
       }
     </div>
     <!--end accordion-->
@@ -190,113 +276,113 @@
 
 
 <!-- pour backlog -->
-
-
-<div class="card">
-  <card-title title="Backlog" />
-  <div class="card-body pt-0">
-    <div class="table-responsive">
-      
-          <table class="table mb-0">
-            <thead class="table-light">
-              <tr>
-                <th class="border-top-0"></th>
-                <th class="border-top-0">Tâche</th>
-                <th class="border-top-0">Description</th>
-                <th class="border-top-0">Priorité</th>
-                <th class="border-top-0">Sprint</th>
-                <th class="border-top-0"></th>
-                <th class="border-top-0"></th>
-              </tr>
-              <!--end tr-->
-            </thead>
-            <tbody>
-              @for (tache of tacheBacklog; track tache.id) {
-                    <tr>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <img
-                            src=""
-                            height="40"
-                            class="me-3 align-self-center rounded"
-                            alt="..."
-                          />
-                          <!-- <div class="flex-grow-1 text-truncate">
-                            <h6 class="m-0"></h6>
-                            <a href="javascript:void(0);" class="fs-12 text-primary"
-                              >ID: {{ product.productID }}</a
-                            >
-                          </div> -->
-                          <!--end media body-->
-                        </div>
-                      </td>
-                      <td>
-                        {{ tache.nom }}
-                        <!-- <del class="text-muted fs-10"
-                          >{{ currency }}{{ product.originalPrice }}</del
-                        > -->
-                      </td>
-                      <td>
-                        {{ tache.descTache }}
-                        
-                      </td>
-                      <td>
-                        <!-- <select id="priorite" formControlName="priorite">
-                          <option value="">Sélectionner la priorité</option>
-                          <option value="1">Haute</option>
-                          <option value="2">Moyenne</option>
-                          <option value="3">Faible</option>
-                        </select> -->
-                        
-                      </td>
-                      <td>
-                        <!-- For sprint list -->
-                        <!-- <select id="id_sprint" formControlName="id_sprint">
-                          <option value="">Sélectionner un sprint pour le projet</option>
-                          <option *ngFor="let sp of listeSprint" [value]="sp.id">{{ sp.nom }}</option>
-                        </select> -->
-                      </td>
-                      <td>
-                        <!-- For employee list -->
-                        <!-- <select id="id_employe_assigne" formControlName="id_employe_assigne">
-                          <option value="">Sélectionner un employé</option>
-                          <option *ngFor="let emp of listeEmployeInfo" [value]="emp.id">{{ emp.nom }}</option>
-                        </select> -->
-                      </td>
-                      <td>
-                        <button type="button" class="btn btn-primary btn-sm" (click)="openModal(exampleModalCenter, { centered: true })">
-                          Attribuer la tâche
-                        </button>
-                      </td>
-                    </tr>
+@if(permission === 'admin')
+{
+  <div class="card">
+    <card-title title="Backlog" />
+    <div class="card-body pt-0">
+      <div class="table-responsive">
+        
+            <table class="table mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th class="border-top-0"></th>
+                  <th class="border-top-0">Tâche</th>
+                  <th class="border-top-0">Description</th>
+                  <!-- <th class="border-top-0">Priorité</th>
+                  <th class="border-top-0">Sprint</th> -->
+                  <th class="border-top-0"></th>
+                  <th class="border-top-0"></th>
+                </tr>
                 <!--end tr-->
-              }
-            </tbody>
-          </table>
-      
-      <!--end table-->
+              </thead>
+              <tbody>
+                @for (tache of tacheBacklog; track tache.id) {
+                      <tr>
+                        <td>
+                          <div class="d-flex align-items-center">
+                            <img
+                              src="assets/images/minitask.jpg"
+                              height="40"
+                              class="me-3 align-self-center rounded"
+                              alt="..."
+                            />
+                            <!-- <div class="flex-grow-1 text-truncate">
+                              <h6 class="m-0"></h6>
+                              <a href="javascript:void(0);" class="fs-12 text-primary"
+                                >ID: {{ product.productID }}</a
+                              >
+                            </div> -->
+                            <!--end media body-->
+                          </div>
+                        </td>
+                        <td>
+                          {{ tache.nom }}
+                          <!-- <del class="text-muted fs-10"
+                            >{{ currency }}{{ product.originalPrice }}</del
+                          > -->
+                        </td>
+                        <td>
+                          {{ tache.descTache }}
+                          
+                        </td>
+                        <!-- <td>
+                          <select id="priorite" formControlName="priorite">
+                            <option value="">Sélectionner la priorité</option>
+                            <option value="1">Haute</option>
+                            <option value="2">Moyenne</option>
+                            <option value="3">Faible</option>
+                          </select>
+                          
+                        </td>
+                        <td>
+                          For sprint list
+                          <select id="id_sprint" formControlName="id_sprint">
+                            <option value="">Sélectionner un sprint pour le projet</option>
+                            <option *ngFor="let sp of listeSprint" [value]="sp.id">{{ sp.nom }}</option>
+                          </select>
+                        </td>
+                        <td>
+                          For employee list
+                          <select id="id_employe_assigne" formControlName="id_employe_assigne">
+                            <option value="">Sélectionner un employé</option>
+                            <option *ngFor="let emp of listeEmployeInfo" [value]="emp.id">{{ emp.nom }}</option>
+                          </select>
+                        </td> -->
+                        <td>
+                          <button type="button" class="btn btn-primary btn-sm" (click)="openModal(exampleModalScrollable, { centered: true })">
+                            Attribuer
+                          </button>
+                        </td>
+                      </tr>
+                  <!--end tr-->
+                }
+              </tbody>
+            </table>
+        
+        <!--end table-->
+      </div>
+      <!--end /div-->
     </div>
-    <!--end /div-->
+    <!--end card-body-->
   </div>
-  <!--end card-body-->
-</div>
-<!--end card-->
-
+  <!--end card-->
+}
 
 
 <ng-template
-          #exampleModalCenter
-          let-modal
-          class="modal fade"
-          id="exampleModalCenter"
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby="exampleModalCenterTitle"
-          aria-hidden="true"
+#exampleModalScrollable
+let-modal
+class="modal fade"
+id="exampleModalScrollable"
+tabindex="-1"
+role="dialog"
+aria-labelledby="exampleModalScrollableTitle"
+aria-hidden="true"
         >
           <div class="modal-header">
-            <h6 class="modal-title m-0" id="exampleModalCenterTitle">
-              Center Modal
+            <h6 class="modal-title m-0" id="exampleModalScrollableTitle">
+              Attribution de tâche
             </h6>
             <button
               type="button"
@@ -307,28 +393,109 @@
           </div>
           <!--end modal-header-->
           <div class="modal-body">
-            <div class="row">
-              <div class="col-lg-3 text-center align-self-center">
-                <img
-                  src="assets/images/extra/card/btc.png"
-                  alt=""
-                  class="img-fluid"
-                />
+            <form (ngSubmit)="getPrediction()">
+              <div class="input-group">
+                <select
+                  class="form-select"
+                  id="inputGroupSelect04"
+                  aria-label="Example select with button addon"
+                >
+                  <option selected>Priorité</option>
+                  <option value="1">Elevé</option>
+                  <option value="2">Moyen</option>
+                  <option value="3">Bas</option>
+                </select>
+                
               </div>
-              <!--end col-->
-              <div class="col-lg-9">
-                <h5>Crypto Market Services</h5>
-                <span class="badge bg-light text-dark">Disable Services</span>
-                <small class="text-muted ms-2">07 Oct </small>
-                <ul class="mt-2 mb-0">
-                  <li>Lorem Ipsum is dummy text.</li>
-                  <li>It is a long established reader.</li>
-                  <li>Contrary to popular belief, Lorem simply.</li>
+              <div class="row mb-3">
+                <label class="col-md-3 my-2 my-md-0 control-label"
+                  >Compétence requises</label
+                >
+                <div class="col-md-9">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="express js" (change)="onCheckboxChange($event)"
+                    />
+                    <label class="form-check-label" for="inlineCheckbox1"
+                      >Express Js</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="Angular" (change)="onCheckboxChange($event)"
+                    />
+                    <label class="form-check-label" for="inlineCheckbox1"
+                      >Angular</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="React" (change)="onCheckboxChange($event)"
+                    />
+                    <label class="form-check-label" for="inlineCheckbox1"
+                      >React</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="mongoDB" (change)="onCheckboxChange($event)"
+                    />
+                    <label class="form-check-label" for="inlineCheckbox1"
+                      >MongoDB</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="MySql" (change)="onCheckboxChange($event)"
+                    />
+                    <label class="form-check-label" for="inlineCheckbox1"
+                      >MariaDB</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="HTML/CSS" (change)="onCheckboxChange($event)"
+                    />
+                    <label class="form-check-label" for="inlineCheckbox1"
+                      >HTML/CSS</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="Rest API" (change)="onCheckboxChange($event)"
+                    />
+                    <label class="form-check-label" for="inlineCheckbox1"
+                      >Rest API</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="docker" (change)="onCheckboxChange($event)"
+                    />
+                    <label class="form-check-label" for="inlineCheckbox1"
+                      >Docker</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="figma" (change)="onCheckboxChange($event)"
+                    (change)="onCheckboxChange($event)"/>
+                    <label class="form-check-label" for="inlineCheckbox1"
+                      >Figma</label
+                    >
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" (change)="onCheckboxChange($event)"
+                    (change)="onCheckboxChange($event)"/>
+                    <label class="form-check-label" for="inlineCheckbox1"
+                      >PostgresSql</label
+                    >
+                  </div>
+                </div>
+                <div>
+                  <button type="submit">Suggestion d'attribution</button>
+              </div>
+              </div>
+              <div class="row mb-3">
+                <p class="form-group">Les meilleures scores de performances:</p>
+                <ul class="form-group">
+                  <li>Andriamalala Sophie: 0.92</li>
+                  <li>Rakotobe Adan: 0.89</li>
+                  <li>Ravelomanana Annie: 0.78</li>
                 </ul>
               </div>
-              <!--end col-->
-            </div>
-            <!--end row-->
+            </form>
           </div>
           <!--end modal-body-->
           <div class="modal-footer">
@@ -345,3 +512,173 @@
           </div>
           <!--end modal-footer--> </ng-template
         ><!--end modal-->
+
+
+        <ng-template
+          #rating
+          let-modal
+          class="modal fade"
+          id="rating"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalCenterTitle"
+          aria-hidden="true"
+        >
+          <div class="modal-header">
+            <h6 class="modal-title m-0" id="exampleModalCenterTitle">
+              Attribuer votre score sur cette tâche
+            </h6>
+            <button
+              type="button"
+              class="btn-close"
+              (click)="modal.dismiss()"
+              aria-label="Close"
+            ></button>
+          </div>
+          <!--end modal-header-->
+          <div class="modal-body">
+              <form class="p-4 pt-3" (ngSubmit)="submitFeedBackAndScore()">
+              
+                <div class="form-group mb-3">
+                  <!-- <input type="text" name="comment" placeholder="Entrez ici votre remarque" [(ngModel)]="commentValue"> -->
+                  <textarea
+                              class="form-control"
+                              #clipboardTextarea
+                              [(ngModel)]="commentValue"
+                              rows="3"
+                              id="clipboardTextarea"
+                              placeholder="Entrez ici votre remarque"
+                            ></textarea
+                            >
+                </div>
+                <div class="starability-basic">
+                  <input type="radio" id="rate1" name="score" value="1" [(ngModel)]="valueScore"/>
+                  <label for="rate1" title="Terrble">1 star</label>
+        
+                  <input type="radio" id="rate2" name="score" value="2" [(ngModel)]="valueScore" />
+                  <label for="rate2" title="Pas bien">2 stars</label>
+        
+                  <input type="radio" id="rate3" name="score" value="3" [(ngModel)]="valueScore" />
+                  <label for="rate3" title="Moyen">3 stars</label>
+        
+                  <input type="radio" id="rate4" name="score" value="4" [(ngModel)]="valueScore"/>
+                  <label for="rate4" title="Très bien">4 stars</label>
+        
+                  <input type="radio" id="rate5" name="score" value="5" [(ngModel)]="valueScore"/>
+                  <label for="rate5" title="Excellent">5 stars</label>
+                </div>
+                <br/>
+            <div class="form-group mb-3">
+              <button type="submit" class="btn btn-primary me-0.5">Enregistrer la revue</button>
+          </div>
+
+            </form>
+          </div>
+          <!--end modal-body-->
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm"
+              (click)="modal.dismiss()"
+            >
+              Fermer
+            </button>
+            <!-- <button type="button" class="btn btn-primary btn-sm">
+              Soumettre
+            </button> -->
+          </div>
+          <!--end modal-footer--> </ng-template>
+
+
+
+
+          <ng-template
+          #addTask
+          let-modal
+          class="modal fade"
+          id="rating"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalCenterTitle"
+          aria-hidden="true"
+        >
+          <div class="modal-header">
+            <h6 class="modal-title m-0" id="exampleModalCenterTitle">
+              Ajout de tâche 
+            </h6>
+            <button
+              type="button"
+              class="btn-close"
+              (click)="modal.dismiss()"
+              aria-label="Close"
+            ></button>
+          </div>
+          <!--end modal-header-->
+          <div class="modal-body">
+            <div class="card-body pt-0">
+              <!-- <div id="drag-drop-area">
+                <input class="form-control" type="file" name="comment" placeholder="Entrez ici votre remarque" value="Intégration de l'authentification OAuth2">
+              </div> -->
+              <div class="input-group">
+                <input
+                  type="file"
+                  class="form-control"
+                  id="inputGroupFile04"
+                  aria-describedby="inputGroupFileAddon04"
+                  aria-label="Upload"
+                />
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  id="inputGroupFileAddon04"
+                >
+                Avoir la liste des tâches
+                </button>
+              </div>
+              <!-- <div>
+                <button type="submit">Avoir la liste des tâches</button>
+            </div> -->
+            </div>
+              <form class="p-4 pt-3" >
+                  <h4>Les liste de tâches obtenus</h4>
+
+                  
+                <div class="mb-3 row">
+                  <input class="form-control" type="text" name="comment" placeholder="Entrez ici votre remarque" value="Intégration de l'authentification OAuth2">
+                  
+                </div>
+                <div class="mb-3 row">
+                  <input class="form-control" type="text" name="comment" placeholder="Entrez ici votre remarque" value="Gestion du reste de commande">
+                  
+                </div>
+                <div class="mb-3 row">
+                  <input class="form-control" type="text" name="comment" placeholder="Entrez ici votre remarque" value="Notifications en temps réel de la partie backend">
+                  <!-- <span><i class="fas fa-check-circle"></i></span>
+                  <span><i class="fas fa-prescription-bottle"></i></span> -->
+                </div>
+
+                <div class="mb-3 row">
+                  <input class="form-control" type="text" name="comment" placeholder="Entrez ici votre remarque" value="Optimisation des requêtes SQL pour la gestion des rapports">
+                  
+                </div>
+                
+            <div class="mb-3 row">
+              <button type="submit" class="btn btn-primary me-0.5">Ajouter les tâches</button>
+          </div>
+
+            </form>
+          </div>
+          <!--end modal-body-->
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm"
+              (click)="modal.dismiss()"
+            >
+              Fermer
+            </button>
+            <!-- <button type="button" class="btn btn-primary btn-sm">
+              Soumettre
+            </button> -->
+          </div>
+          <!--end modal-footer--> </ng-template>

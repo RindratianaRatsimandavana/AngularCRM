@@ -1,4 +1,4 @@
-import { Component, inject, TemplateRef } from '@angular/core';
+import { Component, inject, Input, TemplateRef } from '@angular/core';
 import { UtilsService } from '@/app/core/service/utils.service'
 import { TacheSprintService } from '@/app/CRMservice/tache-sprint.service';
 import { ActivatedRoute } from '@angular/router';
@@ -16,6 +16,8 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CardTitleComponent } from '@/app/components/card-title.component'
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { FormsModule } from '@angular/forms'; 
+
 import {
   NgbModal,
   NgbModalConfig,
@@ -27,11 +29,14 @@ import {
   selector: 'app-project-detail',
   standalone: true,
   imports: [NgbAccordionModule,NgbProgressbarModule,CommonModule,NgbAccordionModule,
-    NgbProgressbarModule,RouterLink,CardTitleComponent,ReactiveFormsModule],
+    NgbProgressbarModule,RouterLink,CardTitleComponent,ReactiveFormsModule,FormsModule],
   templateUrl: './project-detail.component.html',
   styleUrl: './project-detail.component.scss'
 })
 export class ProjectDetailComponent {
+
+  @Input() title: string = 'Liste des tâches';
+
   private modalService = inject(NgbModal)
   tacheTemp: CrmTacheLib[] = [];
   idProjet?:string;
@@ -42,6 +47,12 @@ tachesParSprint: { [sprintId: string]: CrmTacheLib[] } = {};
 
 listeSprint: CrmSprint[] = [];
 listeEmployeInfo: User[] = [];
+
+valueScore=1;
+commentValue="";
+
+
+selectedTechno: string [] = [];
   //modalService: any;
 
  // idProject=this.route.snapshot.params['id'];
@@ -144,7 +155,34 @@ listeEmployeInfo: User[] = [];
     this.modalService.open(content, options)
   }
 
+  onCheckboxChange(event: any) {
+    const value = event.target.value;
+    const isChecked = event.target.checked;
 
+    if (isChecked) {
+      this.selectedTechno.push(value); // Ajouter l'élément s'il est coché
+    } else {
+      const index = this.selectedTechno.indexOf(value);
+      if (index > -1) {
+        this.selectedTechno.splice(index, 1); // Retirer l'élément s'il est décoché
+      }
+    }
+    
+    console.log(this.selectedTechno); // Pour vérifier les valeurs sélectionnées
+  }
+
+  submitFeedBackAndScore(){
+    const object = {
+      id_tache:"iddddd",
+      scoreClient: this.valueScore,
+      commentaireClient : this.commentValue
+    }
+    console.log("Objeeeeeeeeeeect",object);
+  }
+
+   getPrediction(){
+    console.log("valueCheckBox",this.selectedTechno);
+  }
   // Méthode pour créer un FormArray dynamique basé sur les tâches du backlog
   // initTaskForms() {
   //   //const taskFormArray = this.backlogForm.get('tasks') as FormArray;

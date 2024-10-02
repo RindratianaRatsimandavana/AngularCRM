@@ -1,8 +1,16 @@
-<div class="col-auto justify-content-left">
-    <button class="btn btn-primary" (click)="openModal(exampleModalXL, { size: 'xl' })">
-      <i class="fas fa-plus me-1"></i> Nouveau dossier
-    </button>
-  </div>
+<h4 class="card-title">{{ title }} </h4> 
+
+  @if(checkCompetenceForDocument())
+  {
+    <div class="col-auto justify-content-left">
+      <button class="btn btn-primary" (click)="openModal(exampleModalXL, { size: 'xl' })">
+        <i class="fas fa-plus me-1"></i> Nouveau dossier
+      </button>
+    </div>
+
+  }
+  <br>
+  
 
   <!-- <button
                     type="button"
@@ -18,11 +26,11 @@
         @for(a of projectList; track a.projet_statut) 
         {
             <div class="col-md-6 col-lg-3">
-                <h3>Vos projets</h3>
+                <!-- <h3>Vos projets</h3> -->
                 <div class="card">
                     <img
                     class="card-img-top img-fluid bg-light-alt"
-                    src="assets/images/extra/card/img-1.jpg"
+                    src="https://c7.alamy.com/comp/PJ9PC3/file-folder-with-documents-vector-illustration-design-PJ9PC3.jpg"
                     alt="Card image cap"
                     />
                     <div class="card-header">
@@ -32,12 +40,12 @@
                         </div>
                         <!--end col-->
                         <div class="col-auto">
-                        <img
+                        <!-- <img
                             class="rounded-circle me-0.5"
                             src="assets/images/users/avatar-7.jpg"
                             alt=""
                             height="24"
-                        />
+                        /> -->
                         <!-- <span class="badge bg-primary-subtle text-primary"
                             >Permission: {{a.permission}} </span
                         > -->
@@ -49,13 +57,13 @@
                     <!--end card-header-->
                     <div class="card-body pt-0">
                     <p class="card-text text-muted">
-                        Prevision d'écheance: {{a.projet_date_echeance}}
+                        Prevision d'écheance: {{a.projet_date_echeance | date:'MMM d, y'}}
                         <!-- Afaka ampiana text -->
                         <!-- Some quick example text to build on the card title and make up the
                         bulk of the card's content. -->
                     </p>
                     <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm"
-                    routerLink="/pages/projectDetail/{{a.id_projet}}">Voir les détails</a
+                    routerLink="/pages/documentDetail/{{a.id_projet}}">Voir les détails</a
                     >
                     </div>
                     <!--end card -body-->
@@ -91,7 +99,7 @@
         >
           <div class="modal-header">
             <h6 class="modal-title m-0" id="myExtraLargeModalLabel">
-              Créer votre projet
+                Ajouter un nouveau dossier
             </h6>
             <button
               type="button"
@@ -157,7 +165,7 @@
             <!-- debut form -->
             <form class="p-4 pt-3" (ngSubmit)="onSubmit()">
               <div class="form-group mb-2 mb-lg-1">
-                <label for="projectName" class="form-label">Nom du projet :</label>
+                <label for="projectName" class="form-label">Numero du dossier :</label>
                 <input
                   type="text"
                   class="form-control"
@@ -279,7 +287,7 @@
                     <ng-autocomplete 
                     [data]="data"
                     [searchKeyword]="keyword"
-                    placeholder="Select country"
+                    placeholder="Entrez le mail du membre ici"
                     [itemTemplate]="itemTemplate"
                     [notFoundTemplate]="notFoundTemplate"
                     (selected)='selectEvent($event)'>                                 
@@ -324,11 +332,11 @@
 							  type="radio"
 							  id="permissionRadio"
                               name="permissionRadio"
-                              value="admin"
+                              value="Administrateur"
                               [(ngModel)]="selectedPermissions"
 							/>
 							<label class="form-check-label" for="inlineCheckbox2"
-							  >Admin</label
+							  >Administrateur</label
 							>
 						  </div>
 						  <div class="form-check form-check-inline">
@@ -337,19 +345,47 @@
 							  type="radio"
                               id="permissionRadio"
                               name="permissionRadio"
-                              value="membre"
+                              value="Avocat"
                               [(ngModel)]="selectedPermissions"
 							/>
 							<label class="form-check-label" for="inlineCheckbox3"
-							  >Membre</label
+							  >Avocat</label
 							>
 						  </div>
+
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  id="permissionRadio"
+                                name="permissionRadio"
+                                value="Assistant juridique"
+                                [(ngModel)]="selectedPermissions"
+                />
+                <label class="form-check-label" for="inlineCheckbox2"
+                  >Assistant juridique</label
+                >
+                </div>
+                <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                                id="permissionRadio"
+                                name="permissionRadio"
+                                value="Manager de projet"
+                                [(ngModel)]="selectedPermissions"
+                />
+                <label class="form-check-label" for="inlineCheckbox3"
+                  >Manager de projet</label
+                >
+                </div>
+
 						</div>
                   </div>
                   <!--end col-->
                   <div class="col-lg-3 col-6 mb-2 mb-lg-1">
 						<button class="btn btn-primary" type="button" (click)="ajouterMembre()">
-							Ajouter le melbre
+							Ajouter le membre
 						</button>
                   </div>
                   <!--end col-->
@@ -405,10 +441,10 @@
               class="btn btn-secondary btn-sm"
               (click)="modal.dismiss()"
             >
-              Close
+              Fermer
             </button>
             <button type="button" class="btn btn-primary btn-sm">
-              Save changes
+              Créer le dossier
             </button>
           </div>
 

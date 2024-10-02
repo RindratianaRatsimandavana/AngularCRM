@@ -15,6 +15,11 @@ import { ProjectDetailComponent } from '@/app/CRMComponent/project-detail/projec
 import { KanbanBoardComponent } from '@/app/CRMComponent/kanban-board/kanban-board.component'
 import { DocumentListComponent } from '@/app/CRMComponent/document-list/document-list.component'
 import { TestComponent } from '@/app/CRMComponent/test/test.component'
+import { DocumentDetailComponent } from '@/app/CRMComponent/document-detail/document-detail.component'
+import { ProjectClListComponent } from '@/app/CRMComponent/project-cl-list/project-cl-list.component'
+import { DocumentClListComponent } from '@/app/CRMComponent/document-cl-list/document-cl-list.component'
+import { DocumentClDetailComponent } from '@/app/CRMComponent/document-cl-detail/document-cl-detail.component'
+import { ProjectClDetailComponent } from '@/app/CRMComponent/project-cl-detail/project-cl-detail.component'
 
 export const PAGES_ROUTES: Route[] = [
   {
@@ -94,12 +99,33 @@ export const PAGES_ROUTES: Route[] = [
   },
   {
     path: 'documentDetail/:id',
-    component: ProjectDetailComponent,
+    component: DocumentDetailComponent,
     data: { title: 'Vos projets' },
   },
   {
     path: 'test',
     component: TestComponent,
     data: { title: 'Vos tests' },
+  },
+  {
+    path: 'projectClList',
+    component: ProjectClListComponent,
+    data: { title: 'Type de projet' },
+  },
+  {
+    path: 'documentClList',
+    component: DocumentClListComponent,
+    data: { title: 'Vos documents' },
+  },
+  {
+    path: 'documentClDetail/:id',
+    component: DocumentClDetailComponent,
+    data: { title: 'Vos projets' },
+  },
+  {
+    path: 'projectClDetail/:id/',
+    component: ProjectClDetailComponent,
+    data: { title: 'Vos projets' },
   }
+
 ]

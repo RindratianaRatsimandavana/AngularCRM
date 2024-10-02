@@ -54,7 +54,7 @@ export const FolderList: FolderType[] = [
 export const DocumentList: DocumentType[] = [
   {
     file_name: 'modele-DOCUMENT-SIMPLIFIE-ACCOMPAGNEMENT.pdf',
-    date: '18 Jul ' + currentYear,
+    date: '18 Juillet ' + currentYear,
     size: '2.3 MB',
     avatars: [
       'assets/images/users/avatar-2.jpg',
@@ -66,7 +66,7 @@ export const DocumentList: DocumentType[] = [
   },
   {
     file_name: 'Formulaire_demande.pdf',
-    date: '08 Dec ' + currentYear,
+    date: '18 Juillet ' + currentYear,
     size: '3.7 MB',
     avatars: [
       'assets/images/users/avatar-3.jpg',
@@ -76,7 +76,7 @@ export const DocumentList: DocumentType[] = [
   },
   {
     file_name: 'assistance-juridique.pdf',
-    date: '30 Nov ' + currentYear,
+    date: '08 Avril ' + currentYear,
     size: '1.5 MB',
     avatars: [
       'assets/images/users/avatar-7.jpg',
@@ -86,14 +86,14 @@ export const DocumentList: DocumentType[] = [
   },
   {
     file_name: 'contrat-convention.pdf',
-    date: '09 Sep ' + currentYear,
+    date: '09 Septembre ' + currentYear,
     size: '3.2 MB',
     avatars: [],
     url:urlAssetsfile+'contrat-convention.pdf'
   },
   {
     file_name: 'Reperes_STMG_SIG_Fevrier2024.pdf',
-    date: '14 Aug ' + currentYear,
+    date: '14 Août ' + currentYear,
     size: '12.7 MB',
     avatars: [
       'assets/images/users/avatar-2.jpg',
@@ -104,7 +104,7 @@ export const DocumentList: DocumentType[] = [
   },
   {
     file_name: 'FORMULAIRE_DEMANDE_AJ_2022_CERFA_16146-03.pdf',
-    date: '12 Aug ' + currentYear,
+    date: '12 Août ' + currentYear,
     size: '5.2 MB',
     avatars: [
       'assets/images/users/avatar-1.jpg',
@@ -118,7 +118,7 @@ export const DocumentList: DocumentType[] = [
 export const ImageList: DocumentType[] = [
   {
     file_name: 'img52315.jpeg',
-    date: '18 Jul ' + currentYear,
+    date: '18 Juin ' + currentYear,
     size: '2.3 MB',
     avatars: [
       'assets/images/users/avatar-2.jpg',
@@ -129,7 +129,7 @@ export const ImageList: DocumentType[] = [
   },
   {
     file_name: 'img63695.jpeg',
-    date: '08 Dec ' + currentYear,
+    date: '18 Juin ' + currentYear,
     size: '3.7 MB',
     avatars: [
       'assets/images/users/avatar-3.jpg',
@@ -139,7 +139,7 @@ export const ImageList: DocumentType[] = [
   },
   {
     file_name: 'img00021.jpeg',
-    date: '30 Nov ' + currentYear,
+    date: '18 Juin ' + currentYear,
     size: '1.5 MB',
     avatars: [
       'assets/images/users/avatar-7.jpg',
@@ -149,14 +149,14 @@ export const ImageList: DocumentType[] = [
   },
   {
     file_name: 'img36251.jpeg',
-    date: '09 Sep ' + currentYear,
+    date: '18 Juin ' + currentYear,
     size: '3.2 MB',
     avatars: [],
     url:'D:/RINDRA/Fianarana/M2/Stage/Code/me/doc/docCRM/'
   },
   {
     file_name: 'img362511.jpeg',
-    date: '14 Aug ' + currentYear,
+    date: '18 Juin ' + currentYear,
     size: '12.7 MB',
     avatars: [
       'assets/images/users/avatar-2.jpg',
@@ -167,7 +167,7 @@ export const ImageList: DocumentType[] = [
   },
   {
     file_name: 'img963852.jpeg',
-    date: '12 Aug ' + currentYear,
+    date: '18 Juin ' + currentYear,
     size: '5.2 MB',
     avatars: [
       'assets/images/users/avatar-1.jpg',

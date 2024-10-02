@@ -142,29 +142,41 @@ export class CrudService {
   private getPriorityLabel(priorite?: number): string {
     switch (priorite) {
       case 1:
-        return 'High';
+        return 'Elevé';
       case 2:
-        return 'Medium';
+        return 'Moyen';
       case 3:
-        return 'Low';
+        return 'Bas';
       default:
-        return 'Medium';
+        return 'Moyen';
     }
   }
+  // private getPriorityLabel(priorite?: number): string {
+  //   switch (priorite) {
+  //     case 1:
+  //       return 'High';
+  //     case 2:
+  //       return 'Medium';
+  //     case 3:
+  //       return 'Low';
+  //     default:
+  //       return 'Medium';
+  //   }
+  // }
 
-  // Exemple de fonction pour mapper le statut à une section (To Do, Done, etc.)
+  // Exemple de fonction pour mapper le statut à une section (A faire, Terminé, etc.)
   private getSectionIdFromStatut(statut?: number): string {
     switch (statut) {
       case 0:
-        return 'To Do';
+        return 'A faire';
       case 3:
-        return 'Done';
+        return 'Terminé';
       case 2:
-        return 'Review';
+        return 'Revue';
       case 1:
-          return 'In Progress';
+          return 'En cours';
       default:
-        return 'To Do';
+        return 'A faire';
     }
   }
 

@@ -23,6 +23,7 @@ import { basePath } from '@/app/common/constants'
   styles: ``,
 })
 export class SidebarComponent {
+
   menuItems = MENU_ITEMS
   activeMenuItems: string[] = []
   router = inject(Router)
@@ -31,6 +32,10 @@ export class SidebarComponent {
     basePath !== '' ? basePath + '/' : '',
     '/'
   )
+
+  userString = localStorage.getItem('user');
+  userObject = this.userString ? JSON.parse(this.userString) : null;
+  idUserRole= this.userObject.id_user_role;
 
   constructor() {
     this.router.events.forEach((event) => {

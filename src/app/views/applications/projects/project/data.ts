@@ -15,7 +15,7 @@ export type ProjectType = {
 }
 export const ProjectData: ProjectType[] = [
   {
-    status: 'In Progress',
+    status: 'En cours',
     logo: 'assets/images/logos/lang-logo/meta.png',
     title: 'Meta App',
     client: 'Jack Jackson',
@@ -34,7 +34,7 @@ export const ProjectData: ProjectType[] = [
     ],
   },
   {
-    status: 'In Progress',
+    status: 'En cours',
     logo: 'assets/images/logos/lang-logo/gitlab.png',
     title: 'Gitlab',
     client: 'Kevin Ewing',
@@ -51,7 +51,7 @@ export const ProjectData: ProjectType[] = [
     ],
   },
   {
-    status: 'In Progress',
+    status: 'En cours',
     logo: 'assets/images/logos/lang-logo/chatgpt.png',
     title: 'ChatGPT 5',
     client: 'Bobby Harrison',
@@ -73,7 +73,7 @@ export const ProjectData: ProjectType[] = [
     ],
   },
   {
-    status: 'In Progress',
+    status: 'En cours',
     logo: 'assets/images/logos/lang-logo/dropbox.png',
     title: 'Dropbox',
     client: 'Anthony Stockton',
@@ -95,7 +95,7 @@ export const ProjectData: ProjectType[] = [
     ],
   },
   {
-    status: 'In Progress',
+    status: 'En cours',
     logo: 'assets/images/logos/lang-logo/slack.png',
     title: 'Slack Chat',
     client: 'Gilbert Jackson',
@@ -116,7 +116,7 @@ export const ProjectData: ProjectType[] = [
     ],
   },
   {
-    status: 'In Progress',
+    status: 'En cours',
     logo: 'assets/images/logos/lang-logo/dribbble.png',
     title: 'Dribbble Shots',
     client: 'Michael Heinz',

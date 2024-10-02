@@ -50,7 +50,7 @@ export const TaskDetails: TaskType[] = [
     task: 'Add Product page',
     priority: 'Low',
     team: 'Flutter development team',
-    status: 'Done',
+    status: 'Terminé',
     description:
       'Outline common error scenarios that team members may encounter when using the APIs. Provide guidance on how to handle these errors gracefully and troubleshoot issues effectively. Offer examples of typical API requests and corresponding responses. These examples can help team members understand how to interact with the APIs and interpret the data they receive.',
     client: {

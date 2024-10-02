@@ -1,6 +1,6 @@
 import { CRMMembreProjet } from '@/app/CRMinterface/crmmembre-projet';
 import { ProjectService } from '@/app/CRMservice/project.service';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import {inject, type TemplateRef } from '@angular/core'
 import {
@@ -19,17 +19,21 @@ import { TempMembreProjet } from '@/app/CRMinterface/temp-membre-projet';
 
 import { RouterLink } from '@angular/router';
 
+import { CommonModule } from '@angular/common';
+
 
 
 
 @Component({
   selector: 'app-project-list',
   standalone: true,
-  imports: [NgbProgressbarModule,NgbAlertModule,FormsModule,AutocompleteLibModule,RouterLink],
+  imports: [NgbProgressbarModule,NgbAlertModule,FormsModule,AutocompleteLibModule,RouterLink,CommonModule],
   templateUrl: './project-list.component.html',
   styleUrl: './project-list.component.scss'
 })
 export class ProjectListComponent {
+  @Input() title: string = 'Vos projets';
+
   projectList: CRMMembreProjet[] = [];
 
   private modalService = inject(NgbModal)

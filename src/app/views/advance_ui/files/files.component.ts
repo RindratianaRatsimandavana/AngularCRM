@@ -1,4 +1,4 @@
-import { Component, inject, TemplateRef } from '@angular/core'
+import { Component, inject, Input, TemplateRef } from '@angular/core'
 import { AudioList, DocumentList, FolderList, ImageList } from './data'
 import {
   NgbDropdownModule,
@@ -22,6 +22,7 @@ import { DomSanitizer } from '@angular/platform-browser'
   styles: ``,
 })
 export class FilesComponent {
+  @Input() title: string = 'Vos documents';
   folders = FolderList
   documents = DocumentList
   images = ImageList

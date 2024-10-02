@@ -110,10 +110,10 @@ export class KanbanTasksComponent implements OnInit {
 
   getTaskVarient(title: string) {
     let variant = 'primary'
-    if (title === 'To Do') variant = 'pink'
-    else if (title === 'In Progress') variant = 'warning'
-    else if (title === 'Review') variant = 'success'
-    else if (title === 'Done') variant = 'info'
+    if (title === 'A faire') variant = 'pink'
+    else if (title === 'En cours') variant = 'warning'
+    else if (title === 'Revue') variant = 'success'
+    else if (title === 'Terminé') variant = 'info'
     return variant
   }
 
@@ -125,16 +125,16 @@ export class KanbanTasksComponent implements OnInit {
       if (task) {
         task.sectionId = targetSectionId;
         let statut=0;
-        if(targetSectionId==="501" || targetSectionId==="To Do"){
+        if(targetSectionId==="501" || targetSectionId==="A faire"){
           statut=0;
         }
-        else if(targetSectionId==="502" || targetSectionId==="In Progress"){
+        else if(targetSectionId==="502" || targetSectionId==="En cours"){
           statut=1;
         }
-        else if(targetSectionId==="503" || targetSectionId==="Review"){
+        else if(targetSectionId==="503" || targetSectionId==="Revue"){
           statut=2;
         }
-        else if(targetSectionId==="504" || targetSectionId==="Done"){
+        else if(targetSectionId==="504" || targetSectionId==="Terminé"){
           statut=3;
         }
         this.store.dispatch(moveTaskKanban({taskId: taskId, statut, permission:this.permission!, projectID:this.idProjet!}))//?????????????????

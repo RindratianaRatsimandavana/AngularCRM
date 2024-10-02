@@ -10,19 +10,19 @@ import { RouterLink } from '@angular/router'
       <a routerLink="/" class="logo">
         <span class="me-6">
           <img
-            src="assets/images/logo-sm.png"
+            src="assets/images/etantanalogosm.png"
             alt="logo-small"
             class="logo-sm"
           />
         </span>
         <span class="">
           <img
-            src="assets/images/logo-light.png"
+            src="assets/images/etantanalogodarkOff.png"
             alt="logo-large"
             class="logo-lg logo-light"
           />
           <img
-            src="assets/images/logo-dark.png"
+            src="assets/images/etantanalogodarkOff.png"
             alt="logo-large"
             class="logo-lg logo-dark"
           />

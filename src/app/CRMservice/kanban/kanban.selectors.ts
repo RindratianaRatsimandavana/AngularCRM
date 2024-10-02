@@ -21,19 +21,19 @@ export const getKanbanBoard = createSelector(
 )
 
 
-// Sélecteur pour les tâches "To Do"
+// Sélecteur pour les tâches "A faire"
 export const getTodoTasks = createSelector(
   selectDataState,
   (state: KanbanState) => state.todo
 );
 
-// Sélecteur pour les tâches "In Progress"
+// Sélecteur pour les tâches "En cours"
 export const getInProgressTasks = createSelector(
   selectDataState,
   (state: KanbanState) => state.inProgress
 );
 
-// Sélecteur pour les tâches "Done"
+// Sélecteur pour les tâches "Terminé"
 export const getDoneTasks = createSelector(
   selectDataState,
   (state: KanbanState) => state.done

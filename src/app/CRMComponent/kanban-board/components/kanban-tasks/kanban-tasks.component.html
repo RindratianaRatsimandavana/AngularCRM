@@ -9,9 +9,9 @@
         >
           <div>
             <h6 class="fw-semibold fs-16 text-muted mb-1">{{ data.title }}</h6>
-            <h6 class="fs-13 fw-semibold">
+            <!-- <h6 class="fs-13 fw-semibold">
               {{ getTaskPerSection(data.id).length }} Tasks
-            </h6>
+            </h6> -->
           </div>
           <div ngbDropdown>
             <a
@@ -36,11 +36,11 @@
               data-popper-placement="bottom-end"
             >
               <a class="dropdown-item" href="javascript:void(0);" 
-                ><i class="las la-pen fs-16 me-1 align-text-bottom"></i> Edit</a
+                ><i class="las la-pen fs-16 me-1 align-text-bottom"></i> Modifier</a
               >
               <a class="dropdown-item text-danger" (click)="deleteTask(data.id)"
                 ><i class="las la-trash fs-16 me-1 align-text-bottom"></i>
-                Delete</a
+                Supprimer</a
               >
             </div>
           </div>
@@ -69,7 +69,7 @@
         class="btn btn-outline-primary w-100"
         (click)="OpenTaskModel(addtask, data.id)"
       >
-        <i class="fa-solid fa-plus me-1"></i> Add New Task</a
+        <i class="fa-solid fa-plus me-1"></i> Ajouter nouvelle tâche</a
       >
     </div>
     <!--end kanban-col-->
@@ -79,7 +79,7 @@
 
 <ng-template #addtask let-modal>
   <div class="modal-header">
-    <h6 class="modal-title m-0">Add New Task</h6>
+    <h6 class="modal-title m-0">Ajouter nouvelle tâche</h6>
     <button
       type="button"
       class="btn-close"

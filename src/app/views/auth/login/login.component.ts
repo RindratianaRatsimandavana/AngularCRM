@@ -63,10 +63,22 @@ export class LoginComponent implements OnInit {
           if (response.data) {
             const jsonString = JSON.stringify(response.data[0]);
             localStorage.setItem('user', jsonString);
+            const idUserRole= response.data[0].id_user_role;
+            // console.log("response.data",response.data)
+            // console.log("id_user_role",response.data.id_user_role)
+            if(idUserRole==='FWUR1'){
+              console.log("employe")
+              this.router.navigate(['/pages/projectList']).then(() => {
+                //window.location.reload();
+              }); 
+            }
+            else if(idUserRole==='FWUR2'){
+              console.log("client")
+              this.router.navigate(['/pages/projectClList']).then(() => {
+                //window.location.reload();
+              }); 
+            }
             //localStorage.setItem('id_matiere', response.id_matiere);
-            this.router.navigate(['/pages/projectList']).then(() => {
-              //window.location.reload();
-            });
           }
 
         },

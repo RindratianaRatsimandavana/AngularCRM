@@ -1,6 +1,6 @@
 import { CRMMembreProjet } from '@/app/CRMinterface/crmmembre-projet';
 import { ProjectService } from '@/app/CRMservice/project.service';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import {inject, type TemplateRef } from '@angular/core'
 import {
@@ -18,38 +18,41 @@ import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import { TempMembreProjet } from '@/app/CRMinterface/temp-membre-projet';
 
 import { RouterLink } from '@angular/router';
+import { GeneralService } from '@/app/CRMservice/general.service';
+import { User } from '@/app/CRMinterface/user';
+import { CrmEmployeCompetence } from '@/app/CRMinterface/crm-employe-competence';
 
-
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-document-list',
   standalone: true,
-  imports: [NgbProgressbarModule,NgbAlertModule,FormsModule,AutocompleteLibModule,RouterLink],
+  imports: [NgbProgressbarModule,NgbAlertModule,FormsModule,AutocompleteLibModule,RouterLink,CommonModule],
   templateUrl: './document-list.component.html',
   styleUrl: './document-list.component.scss'
 })
 export class DocumentListComponent {
+
+  @Input() title: string = 'Vos dossiers';
+
   projectList: CRMMembreProjet[] = [];
 
   private modalService = inject(NgbModal)
+  private generalService = inject(GeneralService)
+
+  user!: User
+  listCompetenceEmp: CrmEmployeCompetence[] = [];
 
   newMembre: string = ''; // Temp input for adding new members
   membres: TempMembreProjet[] = []; // Array for TempMembreProjet objects
 
   selectedPermissions: string = '';
 
-  // Sample data from your database (replace this with real data from your service)
   data = [
-    { id: 'FWU1', email: 'rak@gmail.com' },
-    { id: 'FWU2', email: 'clara@gmail.com' },
-    { id: 'FWU3', email: 'jean@gmail.com' },
-    { id: 'FWU4', email: 'sophie@gmail.com' },
-    { id: 'FWU5', email: 'thierry@gmail.com' },
-    { id: 'FWU6', email: 'marie@gmail.com' },
-    { id: 'FWU7', email: 'eric@gmail.com' },
-    { id: 'FWU8', email: 'julie@gmail.com' },
-    { id: 'FWU9', email: 'patrick@gmail.com' },
-    { id: 'FWU10', email: 'anna@gmail.com' }
+    { id: 'FWU13', email: 'jane@gmail.com' },
+    { id: 'FWU14', email: 'claude@gmail.com' },
+    { id: 'FWU15', email: 'smarthe@gmail.com' },
+    { id: 'FWU16', email: 'harry@gmail.com' }
   ];
 
   public keyword = "email"; // Search by email
@@ -71,9 +74,9 @@ export class DocumentListComponent {
   ){ }
 
   getAllUserProject(){
-    const userString = localStorage.getItem('user');
-    const userObject = userString ? JSON.parse(userString) : null;
-    this.projectService.getAllUserProject(userObject.id,"CRMTP2")
+    // const userString = localStorage.getItem('user');
+    // const userObject = userString ? JSON.parse(userString) : null; // decommentenca au cas où
+    this.projectService.getAllUserProject(this.user.id,"CRMTP2")
     .subscribe(result => {
       console.log("hi log resultat");
       console.log(result);
@@ -83,15 +86,43 @@ export class DocumentListComponent {
     });    
   }
 
+  getAllEmplCompetence(){
+    this.generalService.getEmpCompetence(this.user.id)
+    .subscribe(result => {
+      console.log("Liste compétence");
+      console.log(result);
+      console.log(result.data);
+      this.listCompetenceEmp = result.data;
+    });    
+  }
+
   
   ngOnInit() {
-    this.getAllUserProject()
+    const userString = localStorage.getItem('user');
+    const userObject = userString ? JSON.parse(userString) : null;
+    this.user=userObject;
+    this.getAllUserProject();
+    this.getAllEmplCompetence()
     // const id = this.route.snapshot.params['id'];
     // this.gene.getAssignmentByProf()
     // .subscribe(assignment => {
     //   this.assignments = assignment;
     // });
   }
+
+  checkCompetenceForDocument() {
+    const competenceRecherchees = ['CRMCOMP30','CRMCOMP31'];
+    const trouve = this.listCompetenceEmp.some(item => 
+      competenceRecherchees.includes(item.id_competence ?? '')
+    );
+  
+    if (trouve) {
+      return true
+    } else {
+      return false
+    }
+  }
+  
 
   
   // Handle the event when a user is selected from autocomplete
@@ -179,5 +210,6 @@ export class DocumentListComponent {
       this.membres[i].id_projet=idProjet;
     }
   }
+
 
 }

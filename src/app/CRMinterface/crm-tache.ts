@@ -13,4 +13,6 @@ export interface CrmTache {
         id_tache_parent?: string;
         date_creation?: Date;
         progres?: number;
+        date_debutEnCours?: Date; 
+        date_termineTache?: Date;
 }

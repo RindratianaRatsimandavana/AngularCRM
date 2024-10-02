@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, Input } from '@angular/core'
 import { InviteMemberComponent } from './components/invite-member/invite-member.component';
 import { KanbanTasksComponent } from './components/kanban-tasks/kanban-tasks.component';
 import { Observable } from 'rxjs';
@@ -18,6 +18,8 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
   styles: ``,
 })
 export class KanbanBoardComponent {
+  @Input() title: string = 'Vue Kanban des tâches';
+
   todoTasks$: Observable<KanbanTaskType[]>;
   inProgressTasks$: Observable<KanbanTaskType[]>;
   doneTasks$: Observable<KanbanTaskType[]>;

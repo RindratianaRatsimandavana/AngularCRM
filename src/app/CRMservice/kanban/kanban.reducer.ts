@@ -22,9 +22,9 @@ import {
 export type KanbanState = {
   board: KanbanSectionType[],  // Gère les différentes colonnes du Kanban
   tasks: KanbanTaskType[],     // Toutes les tâches récupérées
-  todo: KanbanTaskType[],      // Tâches à faire (To Do)
-  inProgress: KanbanTaskType[],// Tâches en cours (In Progress)
-  done: KanbanTaskType[],      // Tâches terminées (Done)
+  todo: KanbanTaskType[],      // Tâches à faire (A faire)
+  inProgress: KanbanTaskType[],// Tâches en cours (En cours)
+  done: KanbanTaskType[],      // Tâches terminées (Terminé)
 }
 
 //initial
@@ -111,10 +111,10 @@ export const KanbanReducer = createReducer(
     return { ...state }
   }),
   on(fetchKanbanTaskSuccess, (state, { tasks }: { tasks: KanbanTaskType[] }) => {
-    const todo = tasks.filter(task => task.sectionId === 'To Do');
-    const inProgress = tasks.filter(task => task.sectionId === 'In Progress');
-    const done = tasks.filter(task => task.sectionId === 'Done');
-    const review = tasks.filter(task => task.sectionId === 'Review');
+    const todo = tasks.filter(task => task.sectionId === 'A faire');
+    const inProgress = tasks.filter(task => task.sectionId === 'En cours');
+    const done = tasks.filter(task => task.sectionId === 'Terminé');
+    const review = tasks.filter(task => task.sectionId === 'Revue');
     
     return { 
       ...state, 
@@ -130,10 +130,10 @@ export const KanbanReducer = createReducer(
     return { ...state }
   }),
   on(moveTaskKanbanSuccess, (state, { tasks }: { tasks: KanbanTaskType[] }) => {
-    const todo = tasks.filter(task => task.sectionId === 'To Do');
-    const inProgress = tasks.filter(task => task.sectionId === 'In Progress');
-    const done = tasks.filter(task => task.sectionId === 'Done');
-    const review = tasks.filter(task => task.sectionId === 'Review');
+    const todo = tasks.filter(task => task.sectionId === 'A faire');
+    const inProgress = tasks.filter(task => task.sectionId === 'En cours');
+    const done = tasks.filter(task => task.sectionId === 'Terminé');
+    const review = tasks.filter(task => task.sectionId === 'Revue');
     
     return { 
       ...state, 

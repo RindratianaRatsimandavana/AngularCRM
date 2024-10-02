@@ -34,6 +34,9 @@ export class VerticalComponent {
   private store = inject(Store)
   private renderer = inject(Renderer2)
 
+  // Propriété pour recevoir le titre
+  title: string = 'Default Title';
+
     ngOnInit(): void {
       this.onResize()
     }

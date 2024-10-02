@@ -87,4 +87,7 @@ export class TacheSprintService {
 // }): Observable<any> {
 //   return this.http.post<any>(this.apiUrl, credentials);
 // }
+  getTachesJur(idProject?:string): Observable<any> {
+    return this.http.get<any>(this.apiUrl+"taskJur/"+idProject+"/");
+  }
 }

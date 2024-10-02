@@ -1,4 +1,6 @@
 <div class="col-auto justify-content-left">
+  <h4 class="card-title">{{ title }} </h4> 
+
     <button class="btn btn-primary" (click)="openModal(exampleModalXL, { size: 'xl' })">
       <i class="fas fa-plus me-1"></i> Nouveau projet
     </button>
@@ -18,11 +20,11 @@
         @for(a of projectList; track a.projet_statut) 
         {
             <div class="col-md-6 col-lg-3">
-                <h3>Vos projets</h3>
+                <!-- <h3>Vos projets</h3> -->
                 <div class="card">
                     <img
                     class="card-img-top img-fluid bg-light-alt"
-                    src="assets/images/extra/card/img-1.jpg"
+                    src="https://www.yeeply.com/fr/wp-content/uploads/2019/07/outils-projet-web.jpg"
                     alt="Card image cap"
                     />
                     <div class="card-header">
@@ -32,7 +34,7 @@
                         </div>
                         <!--end col-->
                         <div class="col-auto">
-                        <img
+                        <!-- <img
                             class="rounded-circle me-0.5"
                             src="assets/images/users/avatar-7.jpg"
                             alt=""
@@ -40,7 +42,7 @@
                         />
                         <span class="badge bg-primary-subtle text-primary"
                             >Permission: {{a.permission}} </span
-                        >
+                        > -->
                         </div>
                         <!--end col-->
                     </div>
@@ -49,7 +51,7 @@
                     <!--end card-header-->
                     <div class="card-body pt-0">
                     <p class="card-text text-muted">
-                        Date d'écheance: {{a.projet_date_echeance}}
+                        Echeance: {{a.projet_date_echeance | date:'MMM d, y'}}
                         <!-- Afaka ampiana text -->
                         <!-- Some quick example text to build on the card title and make up the
                         bulk of the card's content. -->
@@ -106,7 +108,7 @@
           <!-- Insertion du progressbar -->
 
 
-          <div class="position-relative m-4">
+          <!-- <div class="position-relative m-4">
             <ngb-progressbar [value]="50" style="height: 1px"></ngb-progressbar>
             <div
               class="position-absolute top-0 start-0 translate-middle bg-primary text-white rounded-pill thumb-md"
@@ -144,7 +146,7 @@
                  01:00 PM
               </p>
             </div>
-          </div>
+          </div> -->
 
 
 
@@ -152,7 +154,7 @@
 
 
           <div class="modal-body">
-            <h5 class="mt-0">Titre </h5>
+            <!-- <h5 class="mt-0">Titre </h5> -->
             <!-- <h4 class="card-title fs-16 mb-0 pt-3 ps-4">Create Project</h4> -->
             <!-- debut form -->
             <form class="p-4 pt-3" (ngSubmit)="onSubmit()">
@@ -279,7 +281,7 @@
                     <ng-autocomplete 
                     [data]="data"
                     [searchKeyword]="keyword"
-                    placeholder="Select country"
+                    placeholder="Entrez le mail du membre ici"
                     [itemTemplate]="itemTemplate"
                     [notFoundTemplate]="notFoundTemplate"
                     (selected)='selectEvent($event)'>                                 

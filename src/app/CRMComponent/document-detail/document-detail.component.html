@@ -1,1 +1,266 @@
-<p>document-detail works!</p>
+<div class="row justify-content-center">
+  <h4 class="card-title">{{ title }} </h4>
+    <button type="button" class="btn btn-primary btn-sm"(click)="openModal(modalAddEvents, { scrollable: true })">
+                    Ajouter un évenement
+    </button>
+    <!--end col-->
+    <div class="col-md-12 col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="row align-items-center">
+            <div class="col">
+              <h4 class="card-title" style="text-align: center;">{{listTask[0].projet_nom}}</h4>
+              <p class="text-muted mt-3" style="text-align: center;">{{listTask[0].projet_description}}</p>
+            </div>
+            <!--end col-->
+          </div>
+          <!--end row-->
+        </div>
+        <!--end card-header-->
+        <div class="card-body pt-0">
+          <div class="tracking-list">
+            @for (task of listTask; track task.id) 
+            {
+              <div class="tracking-item">
+                <div class="tracking-icon icon-inner">
+                  <!-- <i class="fas fa-circle"></i> -->
+                  <i class="las la-check-circle text-primary"></i>
+                </div>
+
+                <!-- <div class="icon-info-activity">
+                    <i class="las la-check-circle text-primary"></i> 
+                  </div> -->
+                
+                <div class="tracking-date">
+                    {{task.date_debutEnCours | date:'MMM d, y'}}<span class="d-block fs-12 text-muted">{{ task.date_debutEnCours | date:'hh:mm a' }}</span>
+                </div>
+
+                <!-- <p>TEST{{}}</p> -->
+
+                <!-- <p class="mb-0 text-muted">Nom tache</p> -->
+                <div class="activity-info-text">
+                    @if(isSameDateWithoutTime(task.sprint_date_debut, task.date_debutEnCours)) 
+                    {
+                        <h5 class="m-0 w-75">Etape: {{task.sprint_nom}}</h5>
+                    }
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="m-0 w-75">{{task.nom}}</h6>
+                      <span class="text-muted d-block" (click)="marqueFini(task.id)"><i class="fas fa-check-circle">Terminer</i></span>
+                      <span class="text-muted d-block" (click)="openModal(exampleModalScrollable, { scrollable: true },task.nom,task.date_debutEnCours,task.statut)"><i class="las la-pen fs-16 me-1 align-text-bottom">Modifier</i></span>
+                    </div>
+                    <p class="text-muted mt-3">
+                        {{task.descTache}}
+                    </p>
+                        
+                                                <!-- Vérification de statut -->
+                        <!-- <p *ngIf="task?.statut === 3">
+                            Statut: Terminé 
+                        </p> -->
+
+                        <a style="color: blue;" *ngIf="isTaskInFuture(task?.date_debutEnCours)">
+                            Statut: A venir
+                        </a>
+                        
+                        <a  style="color: rgb(255, 217, 0);"*ngIf="isTaskInPast(task?.date_debutEnCours) && task?.statut !=3">
+                            Statut: En cours
+                        </a>
+
+                         <a *ngIf="task?.statut === 3" href="javascript:void(0);" class="text-primary"
+                        >Terminé le {{task.date_termineTache | date:'MMM d, y'}}</a
+                      >
+                        
+                        
+
+
+
+                      <!-- <a href="javascript:void(0);" class="text-primary"
+                        >[more info]</a
+                      > -->
+                   
+                    <!-- @for (data of item.badges; track $index) {
+                      <span class="badge badge-soft-secondary me-0.5">{{
+                        data
+                      }}</span>
+                    } -->
+                  </div>
+              </div>
+            }
+          </div>
+        </div>
+        <!--end card-body-->
+      </div>
+      <!--end card-->
+    </div>
+    <!--end col-->
+  </div>
+  <!--end row-->
+
+
+  <!-- modal modifier -->
+  <ng-template
+  #exampleModalScrollable
+  let-modal
+  class="modal fade"
+  id="exampleModalScrollable"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalScrollableTitle"
+  aria-hidden="true"
+>
+  <div class="modal-header"> formnameTask formdateDebutEnCours formstatut
+    <h6 class="modal-title m-0" id="exampleModalScrollableTitle"> modalnameTask modaldateDebutEnCours modalstatut
+      Modifier une tâche
+    </h6>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="modal.dismiss()"
+      aria-label="Close"
+    ></button>
+  </div>
+  <!--end modal-header-->
+  <div class="modal-body">
+    <form class="p-4 pt-3" (ngSubmit)="modifierTache()">
+        <div class="form-group mb-2 mb-lg-1">
+          <label for="projectName" class="form-label">Nom du projet : {{modalnameTask}}</label>
+          <input
+            type="text"
+            class="form-control"
+            id="nomProjet"
+            aria-describedby="emailHelp"
+            placeholder="Entrez le nom du projet"
+            [(ngModel)]="modalnameTask" name="modalnameTask"
+          />
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+              <label class="form-label mt-2" for="pro-start-date">Date de debut</label>
+              <input
+                type="datetime-local"
+                class="form-control"
+                name="modaldateDebutEnCours"
+                appDatepicker
+                #startDateInput
+                id="pro-start-date"
+                placeholder="Enter start date"
+                [(ngModel)]="modaldateDebutEnCours" 
+              />
+            </div>
+            <!--end col-->
+            <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+                <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+                    <label class="form-label mt-2" for="pro-rate">Type de projet</label>
+                    <select class="form-select" [(ngModel)]="modalstatut" name="modalstatut">
+                        <option value="modalstatut">modalstatut</option>
+                        <option value="CRMTP2">Judiciaire</option>
+                        <option value="CRMTP3">Marketing</option>
+                      </select>
+                  </div>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary me-0.5">Creer le projet</button>
+        <button type="button" class="btn btn-danger">Annuler</button>
+      </form>
+  </div>
+  <!--end modal-body-->
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      (click)="modal.dismiss()"
+    >
+      Fermer
+    </button>
+    <button type="button" class="btn btn-primary btn-sm">
+      Modifier
+    </button>
+  </div>
+  <!--end modal-footer--> </ng-template>
+
+
+
+  <!-- modal modifier -->
+  <ng-template
+  #modalAddEvents
+  let-modal
+  class="modal fade"
+  id="exampleModalScrollable"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalScrollableTitle"
+  aria-hidden="true"
+>
+  <div class="modal-header"> formnameTask formdateDebutEnCours formstatut
+    <h6 class="modal-title m-0" id="exampleModalScrollableTitle"> modalnameTask modaldateDebutEnCours modalstatut
+      Modifier une tâche
+    </h6>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="modal.dismiss()"
+      aria-label="Close"
+    ></button>
+  </div>
+  <!--end modal-header-->
+  <div class="modal-body">
+    <form class="p-4 pt-3" (ngSubmit)="modifierTache()">
+        <div class="form-group mb-2 mb-lg-1">
+          <label for="projectName" class="form-label">Nom du projet : {{modalnameTask}}</label>
+          <input
+            type="text"
+            class="form-control"
+            id="nomProjet"
+            aria-describedby="emailHelp"
+            placeholder="Entrez le nom du projet"
+            [(ngModel)]="modalnameTask" name="modalnameTask"
+          />
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+              <label class="form-label mt-2" for="pro-start-date">Date de debut</label>
+              <input
+                type="datetime-local"
+                class="form-control"
+                name="modaldateDebutEnCours"
+                appDatepicker
+                #startDateInput
+                id="pro-start-date"
+                placeholder="Enter start date"
+                [(ngModel)]="modaldateDebutEnCours" 
+              />
+            </div>
+            <!--end col-->
+            <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+                <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+                    <label class="form-label mt-2" for="pro-rate">Type de projet</label>
+                    <select class="form-select" [(ngModel)]="modalstatut" name="modalstatut">
+                        <option value="modalstatut">modalstatut</option>
+                        <option value="CRMTP2">Judiciaire</option>
+                        <option value="CRMTP3">Marketing</option>
+                      </select>
+                  </div>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary me-0.5">Creer le projet</button>
+        <button type="button" class="btn btn-danger">Annuler</button>
+      </form>
+  </div>
+  <!--end modal-body-->
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      (click)="modal.dismiss()"
+    >
+      Fermer
+    </button>
+    <button type="button" class="btn btn-primary btn-sm">
+      Modifier
+    </button>
+  </div>
+  <!--end modal-footer--> </ng-template>
+  

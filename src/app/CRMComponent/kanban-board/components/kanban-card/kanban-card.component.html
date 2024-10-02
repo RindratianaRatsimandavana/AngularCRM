@@ -19,10 +19,10 @@
         <a class="dropdown-item" href="javascript:void(0);" (click)="
         openModal(exampleModalXL, { size: 'xl' },task.id)
       "
-          ><i class="las la-pen fs-16 me-1 align-text-bottom"></i> Edit</a
+          ><i class="las la-pen fs-16 me-1 align-text-bottom"></i> Voir les détails</a
         >
         <a class="dropdown-item text-danger"
-          ><i class="las la-trash fs-16 me-1 align-text-bottom"></i> Delete</a
+          ><i class="las la-trash fs-16 me-1 align-text-bottom"></i> Supprimer</a
         >
       </div>
     </div>
@@ -31,9 +31,9 @@
       class="badge rounded fw-normal mb-1"
       [ngClass]="{
         'text-success bg-success-subtle px-2': task.priority == 'Completed',
-        'text-info bg-info-subtle px-1': task.priority == 'Medium',
-        'text-warning bg-warning-subtle px-2': task.priority == 'Low',
-        'text-danger bg-danger-subtle px-1': task.priority == 'High',
+        'text-info bg-info-subtle px-1': task.priority == 'Moyen',
+        'text-warning bg-warning-subtle px-2': task.priority == 'Bas',
+        'text-danger bg-danger-subtle px-1': task.priority == 'Elevé',
       }"
       >{{ task.priority }}</span
     >
@@ -52,7 +52,7 @@
     }
 
     @if (task.completedTasks > 0) {
-      <div
+      <!-- <div
         class="d-flex justify-content-between fw-semibold align-items-center"
       >
         <p class="mb-1 d-inline-flex align-items-center">
@@ -85,7 +85,7 @@
           [value]="service.dividePercentage(progress)"
           style="margin-right: 2px; height: 5px"
         ></ngb-progressbar>
-      </ngb-progressbar-stacked>
+      </ngb-progressbar-stacked> -->
     }
     @if (task.tags) {
       <div>
@@ -106,19 +106,19 @@
     <div class="row justify-content-center">
       <div class="col-auto align-self-center">
         <ul class="list-inline mb-0">
-          <li class="list-item d-inline-block me-2">
+          <!-- <li class="list-item d-inline-block me-2">
             <a class="" href="javascript:void(0);">
               <i class="fa-solid fa-list-check text-muted"></i>
               <span class="text-muted font-weight-bold">
                 {{ task.completedTasks }}/{{ task.totalTasks }} Tasks</span
               >
             </a>
-          </li>
+          </li> -->
           <li class="list-item d-inline-block">
             <a class="" href="javascript:void(0);">
               <i class="fa-regular fa-message text-muted"></i>
               <span class="text-muted font-weight-bold">
-                {{ task.commentsCount }} Comments</span
+                {{ task.commentsCount }} Commentaires</span
               >
             </a>
           </li>

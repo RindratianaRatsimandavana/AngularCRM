@@ -59,42 +59,72 @@
             <span>MENU</span>
           </li>
           <!-- Menu Item 2 -->
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              routerLink="/pages/projectList"
-              ngClass="menu-label mt-2 "
-            >
-              <i class="menu-icon icon-class3"></i>
-              <span class="nav-text">Vos projets</span>
-            </a>
-            <a
-              class="nav-link"
-              routerLink="/pages/documentList"
-              ngClass="menu-label mt-2 "
-            >
-              <i class="menu-icon icon-class3"></i>
-              <span class="nav-text">Vos documents</span>
-            </a>
-
-            <a
-              class="nav-link"
-              routerLink="/pages/kanban/CRMPJ1"
-              ngClass="menu-label mt-2 "
-            >
-              <i class="menu-icon icon-class3"></i>
-              <span class="nav-text">Kanban</span>
-            </a>
-
-            <a
-              class="nav-link"
-              routerLink="/pages/test"
-              ngClass="menu-label mt-2 "
-            >
-              <i class="menu-icon icon-class3"></i>
-              <span class="nav-text">test</span>
-            </a>
-          </li>
+          
+          <div *ngIf="idUserRole === 'FWUR1'">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                routerLink="/pages/projectList"
+                ngClass="menu-label mt-2 "
+              >
+                <i class="iconoir-view-grid menu-icon"></i>
+                <span class="nav-text">Vos projets</span>
+              </a>
+              <a
+                class="nav-link"
+                routerLink="/pages/documentList"
+                ngClass="menu-label mt-2 "
+              >
+                <i class="iconoir-view-grid menu-icon"></i>
+                <span class="nav-text">Vos documents</span>
+              </a>
+  
+              <!-- <a
+                class="nav-link"
+                routerLink="/pages/kanban/CRMPJ1"
+                ngClass="menu-label mt-2 "
+              >
+                <i class="menu-icon icon-class3"></i>
+                <span class="nav-text">Kanban</span>
+              </a>
+  
+              <a
+                class="nav-link"
+                routerLink="/pages/test"
+                ngClass="menu-label mt-2 "
+              >
+                <i class="menu-icon icon-class3"></i>
+                <span class="nav-text">test</span>
+              </a> -->
+            </li>
+  
+  
+  
+          </div>
+        
+          <!-- Afficher une version simplifiée pour les clients -->
+          <div *ngIf="idUserRole === 'FWUR2'">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                routerLink="/pages/projectList"
+                ngClass="menu-label mt-2 "
+              >
+                <i class="menu-icon icon-class3"></i>
+                <span class="nav-text">Vos projets client</span>
+              </a>
+              <a
+                class="nav-link"
+                routerLink="/pages/documentList"
+                ngClass="menu-label mt-2 "
+              >
+                <i class="menu-icon icon-class3"></i>
+                <span class="nav-text">Vos documents clients</span>
+              </a>
+  
+              
+            </li>
+          </div>
           
 
         </ul> 

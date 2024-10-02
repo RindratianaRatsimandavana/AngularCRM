@@ -7,6 +7,10 @@ import { Store } from '@ngrx/store'
 import { SimplebarAngularModule } from 'simplebar-angular'
 import { TabItems } from './data'
 import { User } from '@/app/CRMinterface/user'
+import { GeneralService } from '@/app/CRMservice/general.service'
+import { CrmNotification } from '@/app/CRMinterface/crm-notification'
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-topbar',
@@ -16,6 +20,7 @@ import { User } from '@/app/CRMinterface/user'
     SimplebarAngularModule,
     NgbNavModule,
     RouterModule,
+    CommonModule
   ],
   templateUrl: './topbar.component.html',
   styles: ``,
@@ -26,6 +31,11 @@ export class TopbarComponent {
   scrollY = 0
   @Output() mobileMenuButtonClicked = new EventEmitter()
 
+  generalService = inject(GeneralService)
+
+  listNotif: CrmNotification[] = [];
+  coutNotif=100;
+
   userPrenom!:User;
   
   ngOnInit(): void {
@@ -33,6 +43,17 @@ export class TopbarComponent {
     const userObject = userString ? JSON.parse(userString) : null;
     const tabTemp = userObject.nom.split(" ");
     this.userPrenom = tabTemp[1]; 
+
+    this.generalService.getNotification(userObject.id)
+    .subscribe(result => {
+      console.log("Liste Notif");
+      console.log(result);
+      console.log(result.data);
+      console.log("fin log resultat");
+      this.listNotif = result.data;
+      this.coutNotif=  result.data.length
+
+    }); 
 
   }
 

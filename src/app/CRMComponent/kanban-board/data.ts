@@ -22,19 +22,19 @@ export type KanbanTaskType = {
 export const kanbanSectionsData: KanbanSectionType[] = [
   {
     id: '501',
-    title: 'To Do',
+    title: 'A faire',
   },
   {
     id: '502',
-    title: 'In Progress',
+    title: 'En cours',
   },
   {
     id: '503',
-    title: 'Review',
+    title: 'Revue',
   },
   {
     id: '504',
-    title: 'Done',
+    title: 'Terminé',
   },
 ]
 export const kanbanTasksData: KanbanTaskType[] = [
