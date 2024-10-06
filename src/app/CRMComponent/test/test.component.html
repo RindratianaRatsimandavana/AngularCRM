@@ -1,4 +1,161 @@
 <p>test works!</p>
+
+
+<div class="card">
+  <div class="card-body pb-0">
+    <div class="row">
+      <div class="col">
+        <p class="text-dark fw-semibold mb-0">Comments (205)</p>
+      </div>
+      <!--end col-->
+    </div>
+    <!--end row-->
+  </div>
+  <!--end card-body-->
+  <div class="card-body border-bottom-dashed">
+    <ul class="list-unstyled mb-0">
+     
+        <li ngClass="mt-3">
+          <div class="row">
+            <div class="col-auto">
+              <img
+                src=""
+                alt=""
+                class="thumb-md rounded-circle"
+              />
+            </div>
+            <!--end col-->
+            <div class="col">
+              <div class="bg-light rounded ms-n2 bg-light-alt p-3">
+                <div class="row">
+                  <div class="col">
+                    <p class="text-dark fw-semibold mb-2">
+                      Author 
+                    </p>
+                  </div>
+                  <!--end col-->
+                  <div class="col-auto">
+                    <span class="text-muted"
+                      ><i class="far fa-clock me-1"></i
+                      >Time</span
+                    >
+                  </div>
+                  <!--end col-->
+                </div>
+                <!--end row-->
+                <p>Text</p>
+                <!-- <a href="javascript:void(0);" class="text-primary"
+                  ><i class="fas fa-reply me-1"></i>Replay</a
+                > -->
+              </div>
+            </div>
+            <!--end col-->
+          </div>
+          <!--end row-->
+        </li> 
+        <!-- end partie gauche -->
+    </ul>
+
+
+     <!-- debut partie droite  -->
+         
+     <ul class="list-unstyled ms-5">
+      <li>
+        <div class="row mt-3">
+          <div class="col-auto">
+            <img
+              src=""
+              alt=""
+              class="thumb-md rounded-circle"
+            />
+          </div>
+          <!--end col-->
+          <div class="col">
+            <div
+              class="bg-light rounded ms-n2 bg-light-alt p-3"
+            >
+              <div class="row">
+                <div class="col">
+                  <p class="text-dark fw-semibold mb-2">
+                    aUTHOR REPLY
+                  </p>
+                </div>
+                <!--end col-->
+                <div class="col-auto">
+                  <span class="text-muted"
+                    ><i class="far fa-clock me-1"></i
+                    >TIME</span
+                  >
+                </div>
+                <!--end col-->
+              </div>
+              <!--end row-->
+              <p>text contenu</p>
+              <p class="mb-0">Thank you</p>
+            </div>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </li>
+    </ul>
+  
+
+
+
+
+  </div>
+  <!--end card-body-->
+  <div class="card-body">
+    <div class="row">
+      <div class="col">
+        <p class="text-dark fw-semibold mb-0">Leave a comment</p>
+      </div>
+      <!--end col-->
+    </div>
+    <!--end row-->
+  </div>
+  <!--end card-body-->
+  <div class="card-body pt-0">
+    <form>
+      <div class="form-group mb-3">
+        <textarea
+          class="form-control"
+          rows="5"
+          id="leave_comment"
+          placeholder="Message"
+        ></textarea>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 text-end">
+          <button type="submit" class="btn btn-primary px-4">
+            Send Message
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!--end card-body-->
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <div class="card">
     <div class="card-header">
       <div class="row align-items-center">
@@ -34,6 +191,140 @@
         <div class="form-group mb-3">
           <button type="submit" class="btn btn-primary me-0.5">Enregistrer la revue</button>
       </div>
+      </form>
+    </div>
+    <!--end card-body-->
+  </div>
+
+
+
+  <!-- commentaires -->
+  <div class="card">
+    <div class="card-body pb-0">
+      <div class="row">
+        <div class="col">
+          <p class="text-dark fw-semibold mb-0">Comments (205)</p>
+        </div>
+        <!--end col-->
+      </div>
+      <!--end row-->
+    </div>
+    <!--end card-body-->
+    <div class="card-body border-bottom-dashed">
+      <ul class="list-unstyled mb-0">
+        @for (item of listeCommentaire; track item.id) {
+          <!-- <li [ngClass]="{ 'mt-3': !item.id }"> -->
+            <li ngClass="mt-3">
+            <div class="row">
+              <div class="col-auto">
+                <img
+                  src=""
+                  alt=""
+                  class="thumb-md rounded-circle"
+                />
+              </div>
+              <!--end col-->
+              <div class="col">
+                <div class="bg-light rounded ms-n2 bg-light-alt p-3">
+                  <div class="row">
+                    <div class="col">
+                      <p class="text-dark fw-semibold mb-2">
+                        {{ item.exp_nom }}
+                      </p>
+                    </div>
+                    <!--end col-->
+                    <div class="col-auto">
+                      <span class="text-muted"
+                        ><i class="far fa-clock me-1"></i
+                        >{{ item.date_envoi }}</span
+                      >
+                    </div>
+                    <!--end col-->
+                  </div>
+                  <!--end row-->
+                  <p>{{ item.contenu }}</p>
+                  <!-- <a href="javascript:void(0);" class="text-primary"
+                    ><i class="fas fa-reply me-1"></i>Replay</a
+                  > -->
+                </div>
+              </div>
+              <!--end col-->
+            </div>
+            <!--end row-->
+            @for (data of listeCommentaire; track data.id) {
+              <ul class="list-unstyled ms-5">
+                <li>
+                  <div class="row mt-3">
+                    <div class="col-auto">
+                      <img
+                        src=""
+                        alt=""
+                        class="thumb-md rounded-circle"
+                      />
+                    </div>
+                    <!--end col-->
+                    <div class="col">
+                      <div
+                        class="bg-light rounded ms-n2 bg-light-alt p-3"
+                      >
+                        <div class="row">
+                          <div class="col">
+                            <p class="text-dark fw-semibold mb-2">
+                              {{ data.dest_nom }}
+                            </p>
+                          </div>
+                          <!--end col-->
+                          <div class="col-auto">
+                            <span class="text-muted"
+                              ><i class="far fa-clock me-1"></i
+                              >{{ data.date_envoi }}</span
+                            >
+                          </div>
+                          <!--end col-->
+                        </div>
+                        <!--end row-->
+                        <p>{{ data.contenu }}</p>
+                        <p class="mb-0">Thank you</p>
+                      </div>
+                    </div>
+                    <!--end col-->
+                  </div>
+                  <!--end row-->
+                </li>
+              </ul>
+            }
+          </li>
+        }
+      </ul>
+    </div>
+    <!--end card-body-->
+    <div class="card-body">
+      <div class="row">
+        <div class="col">
+          <p class="text-dark fw-semibold mb-0">Leave a comment</p>
+        </div>
+        <!--end col-->
+      </div>
+      <!--end row-->
+    </div>
+    <!--end card-body-->
+    <div class="card-body pt-0">
+      <form>
+        <div class="form-group mb-3">
+          <textarea
+            class="form-control"
+            rows="5"
+            id="leave_comment"
+            placeholder="Message"
+          ></textarea>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 text-end">
+            <button type="submit" class="btn btn-primary px-4">
+              Send Message
+            </button>
+          </div>
+        </div>
       </form>
     </div>
     <!--end card-body-->

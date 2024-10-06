@@ -1,0 +1,218 @@
+
+<p>nom tâche:</p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<div class="card">
+  <div class="card-body pb-0">
+    <div class="row">
+      <div class="col">
+        <p class="text-dark fw-semibold mb-0">Commentaires ({{listeCommentsTask.length}})</p>
+      </div>
+      <!--end col-->
+    </div>
+    <!--end row-->
+  </div>
+  <!--end card-body-->
+  <div class="card-body border-bottom-dashed">
+    @for (item of listeCommentsTask; track item.id) 
+    {
+        @if(item.exp_id != userObject.id)
+        {
+            <ul class="list-unstyled mb-0">
+
+                <li ngClass="mt-3">
+                  <div class="row">
+                    <div class="col-auto">
+                      <img
+                        src=""
+                        alt=""
+                        class="thumb-md rounded-circle"
+                      />
+                    </div>
+                    <!--end col-->
+                    <div class="col">
+                      <div class="bg-light rounded ms-n2 bg-light-alt p-3">
+                        <div class="row">
+                          <div class="col">
+                            <p class="text-dark fw-semibold mb-2">
+                              {{item.exp_nom}} 
+                            </p>
+                          </div>
+                          <!--end col-->
+                          <div class="col-auto">
+                            <span class="text-muted"
+                              ><i class="far fa-clock me-1"></i
+                              >{{item.date_envoi}} </span
+                            >
+                          </div>
+                          <!--end col-->
+                        </div>
+                        <!--end row-->
+                        <p>{{item.contenu}}</p>
+                        <!-- <a href="javascript:void(0);" class="text-primary"
+                          ><i class="fas fa-reply me-1"></i>Replay</a
+                        > -->
+                      </div>
+                    </div>
+                    <!--end col-->
+                  </div>
+                  <!--end row-->
+                </li> 
+                <!-- end partie gauche -->
+            </ul>
+
+        }
+        @else
+        {
+                 <!-- debut partie droite  -->
+            <ul class="list-unstyled ms-5">
+                <li>
+                <div class="row mt-3">
+                    <div class="col-auto">
+                    <img
+                        src=""
+                        alt=""
+                        class="thumb-md rounded-circle"
+                    />
+                    </div>
+                    <!--end col-->
+                    <div class="col">
+                    <div
+                        class="bg-light rounded ms-n2 bg-light-alt p-3"
+                    >
+                        <div class="row">
+                        <div class="col">
+                            <p class="text-dark fw-semibold mb-2">
+                                {{item.exp_nom}} 
+                            </p>
+                        </div>
+                        <!--end col-->
+                        <div class="col-auto">
+                            <span class="text-muted"
+                            ><i class="far fa-clock me-1"></i
+                            >{{item.date_envoi}} </span
+                            >
+                        </div>
+                        <!--end col-->
+                        </div>
+                        <!--end row-->
+                        <p>{{item.contenu}} </p>
+                        <!-- <p class="mb-0">Thank you</p> -->
+                    </div>
+                    </div>
+                    <!--end col-->
+                </div>
+                    <!--end row-->
+             </li>
+            </ul>
+    
+
+        }
+
+    }
+    
+
+
+    
+
+    <div class="card-body">
+        <div class="row">
+          <div class="col">
+            <p class="text-dark fw-semibold mb-0">Ajouter un commentaire</p>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-body-->
+      <div class="card-body pt-0">
+        <form (ngSubmit)="onSubmit()">
+          <div class="form-group mb-3">
+            <textarea [(ngModel)]="contenu" name="contenu"
+              class="form-control"
+              rows="5"
+              id="leave_comment"
+              placeholder="Message"
+            ></textarea>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 text-end">
+              <button type="submit" class="btn btn-primary px-4">
+               Poster
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!--end card-body-->
+
+
+
+  </div>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+<div class="card">
+    <div class="card-header">
+      <div class="row align-items-center">
+        <div class="col">
+          <h4 class="card-title">Default star rating</h4>
+        </div>
+       
+      </div>
+      
+    </div>
+    
+    <div class="card-body pt-0">
+      <form (ngSubmit)="submitFeedBackAndScore()">
+        <div class="form-group mb-3">
+            <input type="text" name="comment" [(ngModel)]="commentValue">
+        </div>
+        <div class="starability-basic">
+          <input type="radio" id="rate1" name="score" value="1" [(ngModel)]="valueScore"/>
+          <label for="rate1" title="Terrble">1 star</label>
+
+          <input type="radio" id="rate2" name="score" value="2" [(ngModel)]="valueScore" />
+          <label for="rate2" title="Pas bien">2 stars</label>
+
+          <input type="radio" id="rate3" name="score" value="3" [(ngModel)]="valueScore" />
+          <label for="rate3" title="Moyen">3 stars</label>
+
+          <input type="radio" id="rate4" name="score" value="4" [(ngModel)]="valueScore"/>
+          <label for="rate4" title="Très bien">4 stars</label>
+
+          <input type="radio" id="rate5" name="score" value="5" [(ngModel)]="valueScore"/>
+          <label for="rate5" title="Excellent">5 stars</label>
+        </div>
+        <div class="form-group mb-3">
+          <button type="submit" class="btn btn-primary me-0.5">Enregistrer la revue</button>
+      </div>
+      </form>
+    </div>
+   
+  </div>
+
+
+
+  
+  </div> -->

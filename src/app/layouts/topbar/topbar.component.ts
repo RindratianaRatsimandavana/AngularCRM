@@ -88,4 +88,27 @@ export class TopbarComponent {
     console.log("ni deconexte");
     this.router.navigate(['/auth/log-in']);
   }
+
+  getAvatarUserConnected(){
+    const userString = localStorage.getItem('user');
+    const userObject = userString ? JSON.parse(userString) : null;
+    return userObject.nom
+        .split(' ')          // Divise la chaîne en un tableau de mots
+        .map((word: string) => word[0]) // Prend la première lettre de chaque mot
+        .join('')                     // Recombine les lettres en une seule chaîne
+        .toUpperCase();    
+
+  }
+
+  getAvatarUserConnectedOtherUser(nom: string | undefined) {
+    if (!nom) {
+        return ''; // ou toute autre valeur par défaut
+    }
+
+    return nom
+        .split(' ')
+        .map((word: string) => word[0])
+        .join('')
+        .toUpperCase();
+  }
 }

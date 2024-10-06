@@ -184,16 +184,20 @@
               <div class="row row-cols-auto g-3">
                 <div class="col col-md-3">
                   <div class="d-flex align-items-center">
-                    <img
+                    <!-- <img
                       [src]=""
                       class="thumb-md align-self-center rounded-circle"
                       alt="..."
-                    />
+                    /> -->
+                    <span
+                      class="thumb-lg justify-content-center d-flex align-items-center bg-success-subtle text-success rounded-circle me-2"
+                      >{{getAvatarUserConnectedOtherUser(task.client_nom)}}
+                    </span>
                     <div class="flex-grow-1 ms-2">
                       <h6 class="m-0 mb-1 fw-semibold">
-                        Nom client
+                        Nom du client:
                       </h6>
-                      <p class="text-muted mb-0">Client</p>
+                      <p class="text-muted mb-0">{{task.client_nom}}</p>
                     </div>
                   </div>
                 </div>
@@ -206,11 +210,14 @@
                 <div class="col col-md-2 text-end align-self-center">
                   <div class="d-flex justify-content-between">
                     <h6 class="m-0 mb-1 fw-semibold">Avancement</h6>
-                    <small class="text-end">{{task.progresDyn!}}%</small>
+                    <!-- <small class="text-end">{{task.progresDyn!}}%</small> -->
                   </div>
                   <ngb-progressbar type="secondary" class="mb-3" [value]="task.progresDyn!"
-                    ></ngb-progressbar
+                    >
+                    <small style="color: rgb(249, 247, 252);" class="text-end">{{task.progresDyn!}}%</small>
+                    </ngb-progressbar
                   >
+                  
                   <!-- <ngb-progressbar-stacked
                     class="progress bg-secondary-subtle"
                     style="height: 5px"
@@ -245,11 +252,15 @@
                 </div> -->
 
                 <div class="d-flex align-items-center">
-                  <img
+                  <!-- <img
                     [src]=""
                     class="thumb-md align-self-center rounded-circle"
                     alt="..."
-                  />
+                  /> -->
+                  <span
+                    class="thumb-lg justify-content-center d-flex align-items-center bg-success-subtle text-success rounded-circle me-2"
+                    >{{getAvatarUserConnectedOtherUser(task.employe_nom)}}
+                  </span>
                   <div class="flex-grow-1 ms-2">
                     <h6 class="m-0 mb-1 fw-semibold">
                       Employé assigné

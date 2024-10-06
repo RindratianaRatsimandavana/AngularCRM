@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CRMMembreProjet } from '../CRMinterface/crmmembre-projet';
+import { CrmProjet } from '../CRMinterface/crm-projet';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +38,13 @@ export class ProjectService {
 
   saveMembers(data: any[]): Observable<any> {
     return this.http.post(this.uri +'CRMMembreProjet/saveMembersProject', data);  // Envoie tous les membres en une seule requête
+  }
+
+  getAllClientProject(idCLient?:string,idTypeProjet?:string): Observable<any> {
+    const offUrl=this.uri +"CRMMembreProjet/client/"+idCLient+"/"+idTypeProjet; 
+    console.log(offUrl);
+    console.log("Fin Url");
+    return this.http.get<CrmProjet>(offUrl);
   }
   
 

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CrmTacheLib } from '../CRMinterface/crm-tache-lib';
+import { CrmCommentaireTacheLib } from '../CRMinterface/crm-commentaire-tache-lib';
 
 @Injectable({
   providedIn: 'root'
@@ -90,4 +91,35 @@ export class TacheSprintService {
   getTachesJur(idProject?:string): Observable<any> {
     return this.http.get<any>(this.apiUrl+"taskJur/"+idProject+"/");
   }
+
+  getCommentaireTache(idTache?:string): Observable<any> {
+    return this.http.get<CrmCommentaireTacheLib>(this.apiUrl +"commentaire/"+idTache);
+  }
+
+  getTachesCleint(idProject?:string): Observable<any> {
+    return this.http.get<any>(this.apiUrl+'client'+"/"+idProject);
+  }
+
+  //   +-----------------+--------------+------+-----+---------------------+-------+
+// | Field           | Type         | Null | Key | Default             | Extra |
+// +-----------------+--------------+------+-----+---------------------+-------+
+// | id              | varchar(20)  | NO   | PRI | NULL                |       |
+// | expediteur_id   | varchar(20)  | YES  | MUL | NULL                |       |
+// | destinataire_id | varchar(20)  | YES  | MUL | NULL                |       |
+// | idTache         | varchar(20)  | YES  | MUL | NULL                |       |
+// | contenu         | varchar(255) | YES  |     | NULL                |       |
+// | date_envoi      | date         | YES  |     | current_timestamp() |       |
+// | statut          | int(11)      | YES  |     | 0                   |       |
+// | etat            | int(11)      | NO   |     | 1                   |       |
+// +-----------------+--------------+------+-----+---------------------+-------+
+  saveCommentsTask(credentials: { 
+    expediteur_id: string,
+    destinataire_id: string,
+    idTache: string,
+    contenu: string
+    }): Observable<any> {
+      return this.http.post<any>(this.apiUrl+'commentaire'+"/", credentials);
+  }
+
+  
 }

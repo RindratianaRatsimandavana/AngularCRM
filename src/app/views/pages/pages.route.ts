@@ -20,6 +20,7 @@ import { ProjectClListComponent } from '@/app/CRMComponent/project-cl-list/proje
 import { DocumentClListComponent } from '@/app/CRMComponent/document-cl-list/document-cl-list.component'
 import { DocumentClDetailComponent } from '@/app/CRMComponent/document-cl-detail/document-cl-detail.component'
 import { ProjectClDetailComponent } from '@/app/CRMComponent/project-cl-detail/project-cl-detail.component'
+import { TaskClDetailComponent } from '@/app/CRMComponent/task-cl-detail/task-cl-detail.component'
 
 export const PAGES_ROUTES: Route[] = [
   {
@@ -123,9 +124,14 @@ export const PAGES_ROUTES: Route[] = [
     data: { title: 'Vos projets' },
   },
   {
-    path: 'projectClDetail/:id/',
+    path: 'projectClDetail/:id',
     component: ProjectClDetailComponent,
     data: { title: 'Vos projets' },
+  },
+  {
+    path: 'taskDetail/:id',
+    component: TaskClDetailComponent,
+    data: { title: 'Type de projet' },
   }
 
 ]

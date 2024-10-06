@@ -224,4 +224,16 @@ selectedTechno: string [] = [];
   //   });
   // }
 
+  getAvatarUserConnectedOtherUser(nom: string | undefined) {
+    if (!nom) {
+        return ''; // ou toute autre valeur par défaut
+    }
+
+    return nom
+        .split(' ')
+        .map((word: string) => word[0])
+        .join('')
+        .toUpperCase();
+}
+
 }

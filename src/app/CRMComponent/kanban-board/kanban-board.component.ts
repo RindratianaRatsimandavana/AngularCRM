@@ -44,4 +44,6 @@ export class KanbanBoardComponent {
     const userObject = userString ? JSON.parse(userString) : null;
   }
 
+  
+
 }
