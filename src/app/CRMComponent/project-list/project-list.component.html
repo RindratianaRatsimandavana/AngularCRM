@@ -56,6 +56,18 @@
                         <!-- Some quick example text to build on the card title and make up the
                         bulk of the card's content. -->
                     </p>
+                    <span
+                        class="badge rounded bg-transparent border p-1"
+                        [ngClass]="{
+                          'text-purple border-purple': a.projet_statut == 0, 
+                          'text-blue border-blue': a.projet_statut == 1,  
+                          'text-warning border-warning': a.projet_statut == 2,
+                          'text-green border-green': a.projet_statut == 3 
+                        }"
+                      >
+                        {{ a.projet_statut == 0 ? 'À venir' : a.projet_statut == 1 ? 'En cours' : a.projet_statut == 2 ? 'Finition' : 'Terminé' }}
+                      </span>
+                      <br><br>
                     <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm"
                     routerLink="/pages/projectDetail/{{a.id_projet}}/{{a.permission}}">Voir les détails</a
                     >
@@ -351,7 +363,7 @@
                   <!--end col-->
                   <div class="col-lg-3 col-6 mb-2 mb-lg-1">
 						<button class="btn btn-primary" type="button" (click)="ajouterMembre()">
-							Ajouter le melbre
+							Ajouter le membre
 						</button>
                   </div>
                   <!--end col-->
@@ -407,11 +419,11 @@
               class="btn btn-secondary btn-sm"
               (click)="modal.dismiss()"
             >
-              Close
+              Fermer
             </button>
-            <button type="button" class="btn btn-primary btn-sm">
+            <!-- <button type="button" class="btn btn-primary btn-sm">
               Save changes
-            </button>
+            </button> -->
           </div>
 
           

@@ -1,188 +1,357 @@
 <div> 
- <h4 class="card-title">{{ title }} </h4> 
+  <h4 class="card-title">{{ title }} </h4> 
 
   <ul class="nav nav-tabs">
-    <li class="nav-item">
-      <a class="nav-link" href="javascript:void(0);" routerLink="/pages/projectDetail/{{idProjet}}/{{permission}}">Liste</a>
+    <li class="nav-item active">
+      <a class="nav-link" href="javascript:void(0);" routerLink="/pages/projectDetail/{{idProjet}}/{{permission}}">
+        <!-- Icône pour Liste -->
+        <i class="iconoir-okrs"></i> Liste
+      </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="javascript:void(0);" routerLink="/pages/kanban/{{idProjet}}/{{permission}}">Kanban</a>
+      <a class="nav-link" href="javascript:void(0);" routerLink="/pages/kanban/{{idProjet}}/{{permission}}">
+        <!-- Icône pour Kanban -->
+        <i class="iconoir-kanban-board"></i> Kanban
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="javascript:void(0);" routerLink="/pages/projectDashboard/{{idProjet}}/{{permission}}">
+        <!-- Icône pour Kanban -->
+        <i class="iconoir-reports"></i> Vue d'ensemble du projet
+      </a>
     </li>
   </ul>
-
 </div>
 
-<div>
-  <button (click)="openModal(addTask, { centered: true })">Ajouter une tâche></button>
-</div>
+
 
 <!-- debut corps liste -->
 
-<div class="card" *ngFor="let sprint of tachesParSprint | keyvalue; let i = index">
-  <div class="card-header">
-    <div class="row align-items-center">
-      <div class="col">
 
-        <div class="col-lg-6"> 
-          <h4 class="card-title">Sprint:{{ sprint.key }}</h4>
-          <h5>{{ sprint.value[0].sprint_date_debut | date:'MMM d, y' }} - {{ sprint.value[0].sprint_date_fin | date:'MMM d, y'  }}</h5>
-        </div>
-        <div class="col-lg-6"> 
-          @if(sprint.value[0].sprint_active === 1 )
-          {
-            <h5 style="color: green;">Active</h5>
-          }
+
+@if(permission==='admin'){
+  <div style="margin-top: 2%;">
+    <!-- <button (click)="openModal(addTask, { size: 'xl' })">Importer des tâches</button> -->
+    <button class="btn btn-primary" (click)="openModal(createSprintModal, { size: 'xl' })">Créer un sprint</button> &nbsp;
+  
+    <button class="btn btn-primary" (click)="openModal(createSprintModal, { size: 'xl' })">Ajouter une tâche</button> &nbsp;
+    <button class="btn btn-danger" disabled (click)="openModal(createSprintModal, { size: 'xl' })">Clôturer le projet</button> &nbsp;
+  </div>
+  <br>
+}
+
+
+@if(isEmptyObject(tachesParSprint)){
+  <p style="text-align: center;">Pas encore de sprint enregistré</p>
+}
+
+@else{
+  <div class="card rounded border-dashed border-theme-color p-2 mb-3" style="box-shadow: 0px 2px 9px 2px rgba(0, 0, 0, 0.3)" *ngFor="let sprint of tachesParSprint | keyvalue; let i = index">
+    <div class="card-header">
+      <div class="row align-items-center">
+        <div class="col">
+  
+          <div class="col-lg-6"> 
+            <!-- titreSprint: -->
+            <h4 class="card-title"><b>{{ sprint.key }}</b></h4>
+            <br>
+            <h5><i>{{ sprint.value[0].sprint_date_debut | date:'MMM d, y' }} - {{ sprint.value[0].sprint_date_fin | date:'MMM d, y'  }}</i></h5>
+          </div>
+          <hr>
+          <div class="col-lg-6"> 
+            <!-- @if(sprint.value[0].sprint_active === 1 )
+            {
+              <h5 style="color: green;">Active</h5>
+            } -->
+            @if(sprint.value[0].sprint_active === 1 )
+            {
+              <div class="form-check form-switch form-switch-success">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="customSwitchSuccess"
+                  checked
+                />
+                <label class="form-check-label" for="customSwitchSuccess"
+                  >Active</label
+                >
+              </div>
+            }
+            @else
+            {
+              <!-- <div class="form-check form-switch">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="flexSwitchCheckDefault"
+                />
+                <label class="form-check-label" for="flexSwitchCheckDefault"
+                  >Inactive</label
+                >
+              </div> -->
+              <div class="form-check form-switch">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="flexSwitchCheckDefault"
+                  checked
+                />
+                <label class="form-check-label" for="flexSwitchCheckDefault">
+                  Active
+                </label>
+              </div>
+              
+              <!-- <div class="form-check form-switch">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="flexSwitchCheckDefault"
+                  [(ngModel)]="isActive"
+                />
+                <label class="form-check-label" for="flexSwitchCheckDefault">
+                  {{ isActive ? 'Active' : 'Inactive' }}
+                </label>
+              </div> -->
+             
+            }
+
+
+
+
+
+
+
+
+
+            
+            
+          </div>
+  
+  
           
         </div>
-
-
-        
+        <!--end col--> 
       </div>
-      <!--end col--> 
+      <!--end row-->
     </div>
-    <!--end row-->
-  </div>
-  <!--end card-header-->
-  <div class="card-body pt-0">
-    <div
-      ngbAccordion
-      [closeOthers]="true"
-      class="accordion card-bg"
-    >
-      @for (task of sprint.value; track task.id; let last = $last) {
-        @if(!task.id)
-        {
-            <p>Pas encore de tâche pour ce sprint</p>
-        }
-        @else
-        {
-          <div
-          ngbAccordionItem
-          [collapsed]="task.id == 'CRMTCH_10' ? false : true"
-          class="task-accordion rounded border-dashed border-theme-color p-2"
-          [ngClass]="{ 'mb-3': !last }"
-        >
-          <div
-            ngbAccordionHeader
-            class="cursor-pointer"
-            data-bs-toggle="collapse"
-            data-bs-target="#task-one"
-            aria-expanded="true"
-            aria-controls="task-one"
-          >
-            <div ngbAccordionToggle class="table-responsive">
-              <table class="table text-nowrap mb-0">
-                <tbody>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <i class="iconoir-calendar fs-2 me-2"></i>
-                        <div class="flex-grow-1 text-truncate">
-                          <h6 class="m-0 mb-1 fw-semibold">
-                            {{ task.nom }}
-                          </h6>
-                          <div class="fw-semibold">
-                            <!--<span>{{ task.sprint_date_debut }}</span> --->
-                            <span class="text-danger">
-                              <!--{{ task.sprint_date_fin }}--></span
-                            >
-                          </div>
-                        </div>
-                        <!--end media body-->
-                      </div>
-                    </td>
-                    <td class="text-end">
-                      <h6 class="m-0 mb-1 fw-semibold">Priorité</h6>
-                      <span
-                        [class]="{
-                          'text-danger': task.priorite == 1,
-                          'text-warning': task.priorite == 2,
-                          'text-info': task.priorite == 3,
-                        }"
-                        ><i class="fa-solid fa-stop fs-10"></i>
-                        {{ task.priorite == 1 ? 'Élevé' : task.priorite == 2 ? 'Moyen' : 'Bas' }}</span
-                      >
-                    </td>
-                    <td class="text-end">
-                      <h6 class="m-0 mb-1 fw-semibold">Statut</h6>
-                      <span
-                      class="badge rounded bg-transparent border p-1"
-                      [ngClass]="{
-                        'text-purple border-purple': task.sprint_statut == 0, 
-                        'text-blue border-blue': task.sprint_statut == 1,  
-                        'text-warning border-warning': task.sprint_statut == 2,
-                        'text-green border-green': task.sprint_statut == 3 
-                      }"
-                    >
-                      {{ task.statut == 0 ? 'À faire' : task.statut == 1 ? 'En cours' : task.statut == 2 ? 'Revue' : 'Terminé' }}
-                    </span>
-                    
-                    </td>
-                    <!-- <td class="text-start"></td>
-                      <h6 class="m-0 mb-1 fw-semibold">Priorité</h6>
-                       <span class="fs-13 fw-semibold">{{ task.task }}a</span> 
-                    </td> -->
-
-                    <td class="text-end">
-                      <h6 class="m-0 mb-1 fw-semibold">Temps estimé</h6>
-                      <span class="text-secondary">{{ task.temps_estime }} j</span>
-                    </td>
-
-                    <td class="text-end">
-                      <h6 class="m-0 mb-1 fw-semibold">Temps actuel</h6>
-                      <span class="text-secondary">{{ task.temps_actuel_dyn }} j</span> <!--eto mbola asiana couleur correspondant-->
-                    </td>
-
-                    @if(permission === 'admin' && task.statut === 3)
-                    {
-                      <td class="text-end">
-                      <h6 class="m-0 mb-1 fw-semibold"></h6>
-                      <span class="text-secondary" (click)="openModal(rating, { centered: true })">Noter</span> <!--eto mbola asiana couleur correspondant-->
-                      </td>
-                    }
-                    @else
-                    {
-                      <td class="text-end">
-                        <h6 class="m-0 mb-1 fw-semibold"></h6>
-                        <span class="text-secondary"></span> <!--eto mbola asiana couleur correspondant-->
-                        </td>
-                    }
-                    
-
-                    <!-- afaka atao avy eto iany le fasiana note refaveo -->
-                    <!-- <td class="text-end">
-                      <h6 class="m-0 mb-1 fw-semibold">Temps actuel</h6>
-                      <span
-                        class="badge rounded bg-transparent border p-1"
-                        [ngClass]="{
-                          'text-blue border-blue': task.sprint_statut == 2,
-                          'text-success border-success': task.sprint_statut == 4,
-                          'text-secondary border-secondary':
-                            task.sprint_statut == 3,
-                        }"
-                        >{{ task.sprint_statut }}</span
-                      >
-                    </td> -->
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div
-            ngbAccordionCollapse
-            id="task-one"
-            class="accordion-collapse collapse show"
+    <!--end card-header-->
+    <div class="card-body pt-0">
+      <div
+        ngbAccordion
+        [closeOthers]="true"
+        class="accordion card-bg"
+      >
+        @for (task of sprint.value; track task.id; let last = $last) {
+          @if(!task.id)
+          {
+              <p style="text-align: center;">Pas encore de tâche pour ce sprint</p>
+          }
+          @else
+          {
+            <div
+            ngbAccordionItem
+            [collapsed]="task.id == 'CRMTCH_10' ? false : true"
+            class="task-accordion rounded border-dashed border-theme-color p-2"
+            [ngClass]="{ 'mb-3': !last }"
           >
             <div
-              ngbAccordionBody
-              class="accordion-body bg-body border-dashed-top p-3 p-3"
+              ngbAccordionHeader
+              class="cursor-pointer"
+              data-bs-toggle="collapse"
+              data-bs-target="#task-one"
+              aria-expanded="true"
+              aria-controls="task-one"
             >
-              <h6 class="fw-semibold">Détails de la tâche</h6>
-              <p class="mt-2 mb-3">
-                {{ task.descTache }}
-              </p>
-              <div class="row row-cols-auto g-3">
-                <div class="col col-md-3">
+              <div ngbAccordionToggle class="table-responsive">
+                <table class="table text-nowrap mb-0">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <i class="iconoir-calendar fs-2 me-2"></i>
+                          <div class="flex-grow-1 text-truncate">
+                            <h6 class="m-0 mb-1 fw-semibold">
+                              {{ task.nom }}
+                            </h6>
+                            <div class="fw-semibold">
+                              <span>{{ task.date_debutEnCours ? "Commencé le " + (task.date_debutEnCours | date:'MMM d, y') : "" }}</span>
+                              <span>
+                                {{ task.date_termineTache ? " - Terminé le " + (task.date_termineTache | date:'MMM d, y') : "" }}</span
+                              >
+                            </div>
+                          </div>
+                          <!--end media body-->
+                        </div>
+                      </td>
+                      <td class="text-end">
+                        <h6 class="m-0 mb-1 fw-semibold">Priorité</h6>
+                        <span
+                          [class]="{
+                            'text-danger': task.priorite == 1,
+                            'text-warning': task.priorite == 2,
+                            'text-info': task.priorite == 3,
+                          }"
+                          ><i class="fa-solid fa-stop fs-10"></i>
+                          {{ task.priorite == 1 ? 'Élevé' : task.priorite == 2 ? 'Moyen' : 'Bas' }}</span
+                        >
+                      </td>
+                      <td class="text-end">
+                        <h6 class="m-0 mb-1 fw-semibold">Statut</h6>
+                        <span
+                        class="badge rounded bg-transparent border p-1"
+                        [ngClass]="{
+                          'text-purple border-purple': task.sprint_statut == 0, 
+                          'text-blue border-blue': task.sprint_statut == 1,  
+                          'text-warning border-warning': task.sprint_statut == 2,
+                          'text-green border-green': task.sprint_statut == 3 
+                        }"
+                      >
+                        {{ task.statut == 0 ? 'À faire' : task.statut == 1 ? 'En cours' : task.statut == 2 ? 'Revue' : 'Terminé' }}
+                      </span>
+                      
+                      </td>
+                      <!-- <td class="text-start"></td>
+                        <h6 class="m-0 mb-1 fw-semibold">Priorité</h6>
+                         <span class="fs-13 fw-semibold">{{ task.task }}a</span> 
+                      </td> -->
+  
+                      <td class="text-end">
+                        <h6 class="m-0 mb-1 fw-semibold">Temps estimé</h6>
+                        <span class="text-secondary">{{ task.temps_estime }} j</span>
+                      </td>
+  
+                      <td class="text-end">
+                        <h6 class="m-0 mb-1 fw-semibold">Temps actuel</h6>
+                        <span class="text-secondary">{{ task.temps_actuel_dyn !== null ? task.temps_actuel_dyn +" j" : "_" }}</span> <!--eto mbola asiana couleur correspondant-->
+                      </td>
+  
+                      @if(permission === 'admin' && task.statut === 3 && task.etat === 1)
+                      {
+                        <td class="text-end">
+                        <h6 class="m-0 mb-1 fw-semibold"></h6>
+                        <span class="text-secondary" (click)="openModal(rating, { centered: true },task.id,task.id_employe_assigne)">Noter</span> <!--eto mbola asiana couleur correspondant-->
+                        </td>
+                      }
+                      @if(permission === 'admin' && task.statut === 3 && task.etat === 3)
+                      {
+                        <td class="text-end">
+                        <h6 class="m-0 mb-1 fw-semibold"></h6>
+                          <div class="col-sm-6 col-md-4 col-xl-3">
+                            <i class="fas fa-check-circle" style="color: #22c55e;"></i> Noté
+                          </div>
+                        </td>
+                      }
+                      @else
+                      {
+                        <td class="text-end">
+                          <h6 class="m-0 mb-1 fw-semibold"></h6>
+                          <span class="text-secondary" style="display: none;">Noter</span> <!--eto mbola asiana couleur correspondant-->
+                          </td>
+                      }
+                      
+  
+                      <!-- afaka atao avy eto iany le fasiana note refaveo -->
+                      <!-- <td class="text-end">
+                        <h6 class="m-0 mb-1 fw-semibold">Temps actuel</h6>
+                        <span
+                          class="badge rounded bg-transparent border p-1"
+                          [ngClass]="{
+                            'text-blue border-blue': task.sprint_statut == 2,
+                            'text-success border-success': task.sprint_statut == 4,
+                            'text-secondary border-secondary':
+                              task.sprint_statut == 3,
+                          }"
+                          >{{ task.sprint_statut }}</span
+                        >
+                      </td> -->
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div
+              ngbAccordionCollapse
+              id="task-one"
+              class="accordion-collapse collapse show"
+            >
+              <div
+                ngbAccordionBody
+                class="accordion-body bg-body border-dashed-top p-3 p-3"
+              >
+                <h6 class="fw-semibold">Détails de la tâche</h6>
+                <!-- <p class="mt-2 mb-3">
+                  {{ task.descTache }}
+                </p> -->
+                
+                <div class="row row-cols-auto g-3">
+                  <div class="col col-md-3">
+                    <div class="d-flex align-items-center">
+                      <!-- <img
+                        [src]=""
+                        class="thumb-md align-self-center rounded-circle"
+                        alt="..."
+                      /> -->
+                      <span
+                        class="thumb-lg justify-content-center d-flex align-items-center bg-success-subtle text-success rounded-circle me-2"
+                        >{{getAvatarUserConnectedOtherUser(task.client_nom)}}
+                      </span>
+                      <div class="flex-grow-1 ms-2">
+                        <h6 class="m-0 mb-1 fw-semibold">
+                          Nom du client:
+                        </h6>
+                        <p class="text-muted mb-0">{{task.client_nom}}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <!--end col-->
+                  <!-- <div class="col col-md-3">
+                    <h6 class="m-0 mb-1 fw-semibold">Suivi</h6>
+                    <p class="text-muted mb-0">Sprint</p>
+                  </div> -->
+                  <!--end col-->
+                  <div class="col col-md-2 text-end align-self-center">
+                    <div class="d-flex justify-content-between">
+                      <h6 class="m-0 mb-1 fw-semibold">Avancement</h6>
+                      <!-- <small class="text-end">{{task.progresDyn!}}%</small> -->
+                    </div>
+                    <ngb-progressbar type="secondary" class="mb-3" [value]="task.progresDyn!"
+                      >
+                      <small style="color: rgb(249, 247, 252);">{{task.progresDyn!}}%</small>
+                      </ngb-progressbar>
+                    
+                    <!-- <ngb-progressbar-stacked
+                      class="progress bg-secondary-subtle"
+                      style="height: 5px"
+                    >
+                      <ngb-progressbar
+                        class="progress-bar bg-secondary rounded-pill"
+                        [value]="service.dividePercentage(5)"
+                        style="margin-right: 2px; height: 5px"
+                      ></ngb-progressbar>
+                      <ngb-progressbar
+                        class="progress-bar bg-secondary rounded-pill"
+                        [value]="service.dividePercentage(5)"
+                        style="margin-right: 2px; height: 5px"
+                      ></ngb-progressbar>
+                      <ngb-progressbar
+                        class="progress-bar bg-secondary rounded-pill"
+                        [value]="service.dividePercentage(5)"
+                        style="margin-right: 2px; height: 5px"
+                      ></ngb-progressbar>
+                    </ngb-progressbar-stacked> -->
+                  </div>
+                  <!--end col-->
+                  <div class="col col-md-2">
+                    <h6 class="m-0 mb-1 fw-semibold"></h6>
+                    <p class="text-muted mb-0"></p>
+                  </div>
+                  <!--end col-->
+  
+                  <!-- <div class="col col-md-2 ms-auto">
+                    <h6 class="m-0 mb-1 fw-semibold">Employé assigné</h6>
+                    <p class="text-muted mb-0">{{ task.employe_nom }}</p>
+                  </div> -->
+  
                   <div class="d-flex align-items-center">
                     <!-- <img
                       [src]=""
@@ -191,194 +360,149 @@
                     /> -->
                     <span
                       class="thumb-lg justify-content-center d-flex align-items-center bg-success-subtle text-success rounded-circle me-2"
-                      >{{getAvatarUserConnectedOtherUser(task.client_nom)}}
+                      >{{getAvatarUserConnectedOtherUser(task.employe_nom)}}
                     </span>
                     <div class="flex-grow-1 ms-2">
                       <h6 class="m-0 mb-1 fw-semibold">
-                        Nom du client:
+                        Employé assigné
                       </h6>
-                      <p class="text-muted mb-0">{{task.client_nom}}</p>
+                      <p class="text-muted mb-0">{{ task.employe_nom }}</p>
                     </div>
                   </div>
+  
+                  <!--end col-->
                 </div>
-                <!--end col-->
-                <!-- <div class="col col-md-3">
-                  <h6 class="m-0 mb-1 fw-semibold">Suivi</h6>
-                  <p class="text-muted mb-0">Sprint</p>
-                </div> -->
-                <!--end col-->
-                <div class="col col-md-2 text-end align-self-center">
-                  <div class="d-flex justify-content-between">
-                    <h6 class="m-0 mb-1 fw-semibold">Avancement</h6>
-                    <!-- <small class="text-end">{{task.progresDyn!}}%</small> -->
-                  </div>
-                  <ngb-progressbar type="secondary" class="mb-3" [value]="task.progresDyn!"
-                    >
-                    <small style="color: rgb(249, 247, 252);" class="text-end">{{task.progresDyn!}}%</small>
-                    </ngb-progressbar
-                  >
-                  
-                  <!-- <ngb-progressbar-stacked
-                    class="progress bg-secondary-subtle"
-                    style="height: 5px"
-                  >
-                    <ngb-progressbar
-                      class="progress-bar bg-secondary rounded-pill"
-                      [value]="service.dividePercentage(5)"
-                      style="margin-right: 2px; height: 5px"
-                    ></ngb-progressbar>
-                    <ngb-progressbar
-                      class="progress-bar bg-secondary rounded-pill"
-                      [value]="service.dividePercentage(5)"
-                      style="margin-right: 2px; height: 5px"
-                    ></ngb-progressbar>
-                    <ngb-progressbar
-                      class="progress-bar bg-secondary rounded-pill"
-                      [value]="service.dividePercentage(5)"
-                      style="margin-right: 2px; height: 5px"
-                    ></ngb-progressbar>
-                  </ngb-progressbar-stacked> -->
-                </div>
-                <!--end col-->
-                <div class="col col-md-2">
-                  <h6 class="m-0 mb-1 fw-semibold"></h6>
-                  <p class="text-muted mb-0"></p>
-                </div>
-                <!--end col-->
-
-                <!-- <div class="col col-md-2 ms-auto">
-                  <h6 class="m-0 mb-1 fw-semibold">Employé assigné</h6>
-                  <p class="text-muted mb-0">{{ task.employe_nom }}</p>
-                </div> -->
-
-                <div class="d-flex align-items-center">
-                  <!-- <img
-                    [src]=""
-                    class="thumb-md align-self-center rounded-circle"
-                    alt="..."
-                  /> -->
-                  <span
-                    class="thumb-lg justify-content-center d-flex align-items-center bg-success-subtle text-success rounded-circle me-2"
-                    >{{getAvatarUserConnectedOtherUser(task.employe_nom)}}
-                  </span>
-                  <div class="flex-grow-1 ms-2">
-                    <h6 class="m-0 mb-1 fw-semibold">
-                      Employé assigné
-                    </h6>
-                    <p class="text-muted mb-0">{{ task.employe_nom }}</p>
-                  </div>
-                </div>
-
-                <!--end col-->
+                <!--end row-->
               </div>
-              <!--end row-->
+              <!--end accordion-body-->
             </div>
-            <!--end accordion-body-->
+            <!--end task-->
           </div>
-          <!--end task-->
-        </div>
-        <!--end -->
+          <!--end -->
+          }
         }
-      }
+      </div>
+      <!--end accordion-->
     </div>
-    <!--end accordion-->
-  </div>
+
+ 
+
+
+  
 </div>
+}
+
+
 
 
 <!-- pour backlog -->
-@if(permission === 'admin')
-{
+
+@if(permission==='admin'){
   <div class="card">
     <card-title title="Backlog" />
     <div class="card-body pt-0">
-      <div class="table-responsive">
-        
-            <table class="table mb-0">
-              <thead class="table-light">
-                <tr>
-                  <th class="border-top-0"></th>
-                  <th class="border-top-0">Tâche</th>
-                  <th class="border-top-0">Description</th>
-                  <!-- <th class="border-top-0">Priorité</th>
-                  <th class="border-top-0">Sprint</th> -->
-                  <th class="border-top-0"></th>
-                  <th class="border-top-0"></th>
-                </tr>
-                <!--end tr-->
-              </thead>
-              <tbody>
-                @for (tache of tacheBacklog; track tache.id) {
-                      <tr>
-                        <td>
-                          <div class="d-flex align-items-center">
-                            <img
-                              src="assets/images/minitask.jpg"
-                              height="40"
-                              class="me-3 align-self-center rounded"
-                              alt="..."
-                            />
-                            <!-- <div class="flex-grow-1 text-truncate">
-                              <h6 class="m-0"></h6>
-                              <a href="javascript:void(0);" class="fs-12 text-primary"
-                                >ID: {{ product.productID }}</a
-                              >
-                            </div> -->
-                            <!--end media body-->
-                          </div>
-                        </td>
-                        <td>
-                          {{ tache.nom }}
-                          <!-- <del class="text-muted fs-10"
-                            >{{ currency }}{{ product.originalPrice }}</del
-                          > -->
-                        </td>
-                        <td>
-                          {{ tache.descTache }}
-                          
-                        </td>
-                        <!-- <td>
-                          <select id="priorite" formControlName="priorite">
-                            <option value="">Sélectionner la priorité</option>
-                            <option value="1">Haute</option>
-                            <option value="2">Moyenne</option>
-                            <option value="3">Faible</option>
-                          </select>
-                          
-                        </td>
-                        <td>
-                          For sprint list
-                          <select id="id_sprint" formControlName="id_sprint">
-                            <option value="">Sélectionner un sprint pour le projet</option>
-                            <option *ngFor="let sp of listeSprint" [value]="sp.id">{{ sp.nom }}</option>
-                          </select>
-                        </td>
-                        <td>
-                          For employee list
-                          <select id="id_employe_assigne" formControlName="id_employe_assigne">
-                            <option value="">Sélectionner un employé</option>
-                            <option *ngFor="let emp of listeEmployeInfo" [value]="emp.id">{{ emp.nom }}</option>
-                          </select>
-                        </td> -->
-                        <td>
-                          <button type="button" class="btn btn-primary btn-sm" (click)="openModal(exampleModalScrollable, { centered: true })">
-                            Attribuer
-                          </button>
-                        </td>
-                      </tr>
-                  <!--end tr-->
-                }
-              </tbody>
-            </table>
-        
-        <!--end table-->
+      <div>
+        <button class="btn btn-primary" (click)="openModal(addTask, { size: 'xl' })">Importer des tâches</button>
       </div>
+      <br>
+          @if(permission === 'admin' && tacheBacklog.length>0) 
+          {
+            <div class="table-responsive">
+              
+                  <table class="table mb-0">
+                    <thead class="table-light">
+                      <tr>
+                        <th class="border-top-0"></th>
+                        <th class="border-top-0">Tâche</th>
+                        <!-- <th class="border-top-0">Description</th> -->
+                        <!-- <th class="border-top-0">Priorité</th>
+                        <th class="border-top-0">Sprint</th> -->
+                        <th class="border-top-0"></th>
+                        <th class="border-top-0"></th>
+                      </tr>
+                      <!--end tr-->
+                    </thead>
+                    <tbody>
+                      @for (tache of tacheBacklog; track tache.id) {
+                            <tr>
+                              <td>
+                                <div class="d-flex align-items-center">
+                                  <img
+                                    src="assets/images/minitask.jpg"
+                                    height="40"
+                                    class="me-3 align-self-center rounded"
+                                    alt="..."
+                                  />
+                                  <!-- <div class="flex-grow-1 text-truncate">
+                                    <h6 class="m-0"></h6>
+                                    <a href="javascript:void(0);" class="fs-12 text-primary"
+                                      >ID: {{ product.productID }}</a
+                                    >
+                                  </div> -->
+                                  <!--end media body-->
+                                </div>
+                              </td>
+                              <td>
+                                {{ tache.nom }}
+                                <!-- <del class="text-muted fs-10"
+                                  >{{ currency }}{{ product.originalPrice }}</del
+                                > -->
+                              </td>
+                              <!-- <td>
+                                {{ tache.descTache }}
+                                
+                              </td> -->
+                              <!-- <td>
+                                <select id="priorite" formControlName="priorite">
+                                  <option value="">Sélectionner la priorité</option>
+                                  <option value="1">Haute</option>
+                                  <option value="2">Moyenne</option>
+                                  <option value="3">Faible</option>
+                                </select>
+                                
+                              </td>
+                              <td>
+                                For sprint list
+                                <select id="id_sprint" formControlName="id_sprint">
+                                  <option value="">Sélectionner un sprint pour le projet</option>
+                                  <option *ngFor="let sp of listeSprint" [value]="sp.id">{{ sp.nom }}</option>
+                                </select>
+                              </td>
+                              <td>
+                                For employee list
+                                <select id="id_employe_assigne" formControlName="id_employe_assigne">
+                                  <option value="">Sélectionner un employé</option>
+                                  <option *ngFor="let emp of listeEmployeInfo" [value]="emp.id">{{ emp.nom }}</option>
+                                </select>
+                              </td> -->
+                              <td>
+                                <button type="button" class="btn btn-primary btn-sm" (click)="openModal(exampleModalScrollable, { centered: true } )">
+                                  Attribuer
+                                </button>
+                              </td>
+                            </tr>
+                        <!--end tr-->
+                      }
+                    </tbody>
+                  </table>
+              
+              <!--end table-->
+            </div>
+          }
+          @else
+          {
+            <h2 style="text-align: center;">Pas de tâches dans le backlog</h2>
+          }
       <!--end /div-->
     </div>
     <!--end card-body-->
   </div>
   <!--end card-->
 }
+
+  
+
+
 
 
 <ng-template
@@ -418,9 +542,19 @@ aria-hidden="true"
                 </select>
                 
               </div>
-              <div class="row mb-3">
+              <br>
+              <div class="row mb-3 input-group">
                 <label class="col-md-3 my-2 my-md-0 control-label"
-                  >Compétence requises</label
+                  >Temps estimé (en jours) : </label
+                >
+                <div class="col-md-9">
+                  <input type="text" class="form-control" name="" />
+                </div>
+                <br>
+              </div>
+              <div class="row mb-3 input-group">
+                <label class="col-md-3 my-2 my-md-0 control-label"
+                  >Compétences requises : </label
                 >
                 <div class="col-md-9">
                   <div class="form-check form-check-inline">
@@ -494,17 +628,114 @@ aria-hidden="true"
                     >
                   </div>
                 </div>
+                <br>
                 <div>
-                  <button type="submit">Suggestion d'attribution</button>
+                  <button type="submit" 
+                  class="btn btn-secondary btn-sm">Suggestion d'attribution</button>
               </div>
               </div>
+              
               <div class="row mb-3">
-                <p class="form-group">Les meilleures scores de performances:</p>
+                <!-- <p class="form-group">Les meilleures scores de performances:</p>
                 <ul class="form-group">
                   <li>Andriamalala Sophie: 0.92</li>
                   <li>Rakotobe Adan: 0.89</li>
                   <li>Ravelomanana Annie: 0.78</li>
-                </ul>
+                </ul> -->
+
+                <div class="row justify-content-center" *ngIf="isLoadingPredict">
+                  <div class="col-md-6 col-lg-6">
+                    <div class="card">
+                      <div class="card-header">
+                        <div class="row align-items-center">
+                          <div class="col">
+                            <h4 class="card-title">Chargement...</h4>
+                          </div>
+                          <!--end col-->
+                        </div>
+                        <!--end row-->
+                      </div>
+                      <!--end card-header-->
+                      <div class="card-body pt-0">
+                        <div class="spinner-border text-primary" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </div>
+                      <!--end card-body-->
+                    </div>
+                    <!--end card-->
+                  </div>
+                  <!--end col-->
+                  
+                </div>
+
+
+                <div class="col-md-12 col-lg-12"  *ngIf="showPredict">
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="row align-items-center">
+                        <div class="col">
+                          <h4 class="card-title">Recommendation d'attribution pour cette tâche</h4>
+                        </div>
+                        <!--end col-->
+                      </div>
+                      <!--end row-->
+                    </div>
+                    <!--end card-header-->
+                    <div class="card-body pt-0">
+                      <div class="table-responsive">
+                        Priorité de la tâche : 1 (Elevé)
+                        <table class="table mb-0">
+                          <thead class="table-light">
+                            <tr>
+                              <th>Nom</th>
+                              <th>Score</th>
+                              <th>Disponibilité (Semaine du 09 Septembre)</th>
+                              <th>Disponibilité (Semaine du 16 Septembre)</th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <th>Julie</th>
+                              <td scope="row">92</td>
+                              <td>0 (j)</td>
+                              <td>
+                                4 (j)
+                              </td>
+
+                              <td><button class="btn btn-secondary btn-sm" (click)="modal.dismiss()">Attribuer</button></td>
+                            </tr>
+                            <tr>
+                              <th>Patrick</th>
+                              <td scope="row">88</td>
+                              <td>1 (j)</td>
+                              <td>
+                                5 (j)
+                              </td>
+
+                              <td><button class="btn btn-secondary btn-sm" (click)="modal.dismiss()">Attribuer</button></td>
+                            </tr>
+                            <tr>
+                              <th>Anna</th>
+                              <td scope="row">82</td>
+                              <td>1 (j)</td>
+                              <td>
+                                5 (j)
+                              </td>
+                              <td><button class="btn btn-secondary btn-sm" (click)="modal.dismiss()">Attribuer</button></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!--end /table-->
+                      </div>
+                      <!--end /tableresponsive-->
+                    </div>
+                    <!--end card-body-->
+                  </div>
+                  <!--end card-->
+                </div>
+
               </div>
             </form>
           </div>
@@ -520,6 +751,7 @@ aria-hidden="true"
             <button type="button" class="btn btn-primary btn-sm">
               Attribuer
             </button>
+
           </div>
           <!--end modal-footer--> </ng-template
         ><!--end modal-->
@@ -548,40 +780,58 @@ aria-hidden="true"
           </div>
           <!--end modal-header-->
           <div class="modal-body">
-              <form class="p-4 pt-3" (ngSubmit)="submitFeedBackAndScore()">
+            <form class="p-4 pt-3" (ngSubmit)="submitFeedBackAndScore()">
               
-                <div class="form-group mb-3">
-                  <!-- <input type="text" name="comment" placeholder="Entrez ici votre remarque" [(ngModel)]="commentValue"> -->
-                  <textarea
-                              class="form-control"
-                              #clipboardTextarea
-                              [(ngModel)]="commentValue"
-                              rows="3"
-                              id="clipboardTextarea"
-                              placeholder="Entrez ici votre remarque"
-                            ></textarea
-                            >
-                </div>
-                <div class="starability-basic">
-                  <input type="radio" id="rate1" name="score" value="1" [(ngModel)]="valueScore"/>
-                  <label for="rate1" title="Terrble">1 star</label>
-        
-                  <input type="radio" id="rate2" name="score" value="2" [(ngModel)]="valueScore" />
-                  <label for="rate2" title="Pas bien">2 stars</label>
-        
-                  <input type="radio" id="rate3" name="score" value="3" [(ngModel)]="valueScore" />
-                  <label for="rate3" title="Moyen">3 stars</label>
-        
-                  <input type="radio" id="rate4" name="score" value="4" [(ngModel)]="valueScore"/>
-                  <label for="rate4" title="Très bien">4 stars</label>
-        
-                  <input type="radio" id="rate5" name="score" value="5" [(ngModel)]="valueScore"/>
-                  <label for="rate5" title="Excellent">5 stars</label>
-                </div>
-                <br/>
-            <div class="form-group mb-3">
-              <button type="submit" class="btn btn-primary me-0.5">Enregistrer la revue</button>
-          </div>
+                  <div class="form-group mb-3">
+                    <!-- <input type="text" name="comment" placeholder="Entrez ici votre remarque" [(ngModel)]="commentValue"> -->
+                    <textarea
+                                class="form-control"
+                                #clipboardTextarea
+                                [(ngModel)]="commentValue"
+                                rows="3"
+                                id="clipboardTextarea"
+                                placeholder="Entrez ici votre remarque"
+                              ></textarea
+                              >
+                  </div>
+                  <div class="starability-basic">
+                    <input type="radio" id="rate1" name="score" value="1" [(ngModel)]="valueScore" (change)="onStarChange(1)" />
+                    <label for="rate1" title="Terrble">1 star</label>
+          
+                    <input type="radio" id="rate2" name="score" value="2" [(ngModel)]="valueScore" (change)="onStarChange(2)" />
+                    <label for="rate2" title="Pas bien">2 stars</label>
+          
+                    <input type="radio" id="rate3" name="score" value="3" [(ngModel)]="valueScore" (change)="onStarChange(3)" />
+                    <label for="rate3" title="Moyen">3 stars</label>
+          
+                    <input type="radio" id="rate4" name="score" value="4" [(ngModel)]="valueScore" (change)="onStarChange(4)" />
+                    <label for="rate4" title="Très bien">4 stars</label>
+          
+                    <input type="radio" id="rate5" name="score" value="5" [(ngModel)]="valueScore" (change)="onStarChange(5)" />
+                    <label for="rate5" title="Excellent">5 stars</label>
+                  </div>
+                  <!-- Input de score précis, apparaît quand une étoile est sélectionnée -->
+                  <div *ngIf="valueScore > 0" class="form-group mt-3">
+                    <label for="preciseScore">
+                      Sélectionnez un score précis entre({{ minScore }} - {{ maxScore }})
+                    </label>
+                    <input
+                      type="number"
+                      id="preciseScore"
+                      class="form-control"
+                      [(ngModel)]="preciseScore"
+                      name="preciseScore"
+                      [min]="minScore"
+                      [max]="maxScore"
+                      placeholder="Entrez un score précis"
+                      required
+                      [value]="maxScore"
+                    />
+                  </div>
+                  <br/>
+              <div class="form-group mb-3">
+                <button type="submit" class="btn btn-primary me-0.5">Enregistrer la revue</button>
+              </div>
 
             </form>
           </div>
@@ -630,52 +880,106 @@ aria-hidden="true"
               <!-- <div id="drag-drop-area">
                 <input class="form-control" type="file" name="comment" placeholder="Entrez ici votre remarque" value="Intégration de l'authentification OAuth2">
               </div> -->
-              <div class="input-group">
-                <input
-                  type="file"
-                  class="form-control"
-                  id="inputGroupFile04"
-                  aria-describedby="inputGroupFileAddon04"
-                  aria-label="Upload"
-                />
-                <button
-                  class="btn btn-outline-secondary"
-                  type="button"
-                  id="inputGroupFileAddon04"
-                >
-                Avoir la liste des tâches
-                </button>
-              </div>
+              <form (submit)="uploadCdc()" enctype="multipart/form-data">
+                <!-- <input type="file" (change)="onFileSelected($event)" />
+                <button type="submit" class="btn btn-primary">Upload</button> -->
+
+                <div class="input-group">
+                  <input
+                    type="file" (change)="onFileSelected($event)"
+                    class="form-control"
+                    id="inputGroupFile04"
+                    aria-describedby="inputGroupFileAddon04"
+                    aria-label="Upload"
+                  />
+                  <button
+                    class="btn btn-outline-secondary"
+                    type="submit"
+                    id="inputGroupFileAddon04"
+                  >
+                  Avoir la liste des tâches
+                  </button>
+                </div>
+
+
+                <div class="row justify-content-center" *ngIf="isLoading">
+                  <div class="col-md-6 col-lg-6">
+                    <div class="card">
+                      <div class="card-header">
+                        <div class="row align-items-center">
+                          <div class="col">
+                            <h4 class="card-title">Chargement...</h4>
+                          </div>
+                          <!--end col-->
+                        </div>
+                        <!--end row-->
+                      </div>
+                      <!--end card-header-->
+                      <div class="card-body pt-0">
+                        <div class="spinner-border text-primary" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </div>
+                      <!--end card-body-->
+                    </div>
+                    <!--end card-->
+                  </div>
+                  <!--end col-->
+                  
+                </div>
+
+                <div class="form-group mb-3" *ngIf="showTasks">
+                  <label class="form-label mt-2" for="pro-message">Contenu du cahier de charge</label>
+                  <textarea
+                    class="form-control"
+                    rows="5"
+                    id="pro-message"
+                    placeholder="..."
+                    [(ngModel)]="extractedText" name="cdcContenu" readonly
+                    style="height: 200px;" 
+                  ></textarea>
+                </div>
+              </form>
+
+              
               <!-- <div>
                 <button type="submit">Avoir la liste des tâches</button>
             </div> -->
             </div>
-              <form class="p-4 pt-3" >
-                  <h4>Les liste de tâches obtenus</h4>
-
+            <form class="p-4 pt-3" *ngIf="listTaskCDC.length > 0" (submit)="insertBackLogTask()" >
+                <h4>La liste des tâches du cahier de charge</h4>
+                <!-- <div *ngFor="let task of listTaskCDC; let i = index">
+                  <input class="form-control" type="text" name="comment" placeholder="Entrez ici votre remarque" [value]="task">
                   
+                  <span (click)="deleteListeTache(i)" style="cursor: pointer; color: red;"> Supprimer</span>
+                </div> -->
+                <div *ngFor="let task of listTaskCDC; let i = index" class="d-flex align-items-center mb-2">
+                  <input class="form-control me-2" type="text" name="comment" placeholder="Entrez ici votre remarque" [value]="task">
+                  
+                  <button (click)="deleteListeTache(i)" class="btn btn-link p-0 text-danger">
+                    <i class="las la-trash-alt fs-18"></i>
+                  </button>
+                </div>                
+                <!-- <input class="form-control" type="text" name="comment" placeholder="Entrez ici votre remarque" [value]="task"> <span (click)="deleteListeTache(i)" style="cursor: pointer; color: red;"> Supprimer</span> -->
+                <!-- le mampiseho anle donnée -->
+                <!-- <li *ngFor="let task of listTaskCDC; let i = index">
+                  {{ task }}
+                  <span (click)="deleteListeTache(i)" style="cursor: pointer; color: red;"> Supprimer</span>
+                </li> -->
+                <!-- @for(a of listTaskCDC; track a.) 
+                {
+
+                }
+                
                 <div class="mb-3 row">
                   <input class="form-control" type="text" name="comment" placeholder="Entrez ici votre remarque" value="Intégration de l'authentification OAuth2">
                   
-                </div>
-                <div class="mb-3 row">
-                  <input class="form-control" type="text" name="comment" placeholder="Entrez ici votre remarque" value="Gestion du reste de commande">
-                  
-                </div>
-                <div class="mb-3 row">
-                  <input class="form-control" type="text" name="comment" placeholder="Entrez ici votre remarque" value="Notifications en temps réel de la partie backend">
-                  <!-- <span><i class="fas fa-check-circle"></i></span>
-                  <span><i class="fas fa-prescription-bottle"></i></span> -->
-                </div>
-
-                <div class="mb-3 row">
-                  <input class="form-control" type="text" name="comment" placeholder="Entrez ici votre remarque" value="Optimisation des requêtes SQL pour la gestion des rapports">
-                  
-                </div>
+                </div> -->
                 
-            <div class="mb-3 row">
-              <button type="submit" class="btn btn-primary me-0.5">Ajouter les tâches</button>
-          </div>
+                
+              <div class="mb-3 row">
+                <button type="submit" class="btn btn-primary me-0.5">Ajouter les tâches</button>
+              </div>
 
             </form>
           </div>
@@ -693,3 +997,120 @@ aria-hidden="true"
             </button> -->
           </div>
           <!--end modal-footer--> </ng-template>
+
+
+
+
+<!-- create sprint -->
+<ng-template
+          #createSprintModal
+          let-modal
+          class="modal fade bd-example-modal-xl"
+          id="bd-example-modal-xl"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="myExtraLargeModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-header">
+            <h6 class="modal-title m-0" id="myExtraLargeModalLabel">
+              Créer votre sprint
+            </h6>
+
+            <button
+              type="button"
+              class="btn-close"
+              (click)="modal.dismiss()"
+              aria-label="Close"
+            ></button>
+          </div>
+          
+          <div class="modal-body">
+           
+            <form class="p-4 pt-3" (ngSubmit)="createSprint()">
+              <div class="form-group mb-2 mb-lg-1">
+                <label for="projectName" class="form-label">Nom du sprint :</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nomProjet"
+                  aria-describedby="emailHelp"
+                  placeholder="Entrez le nom du projet"
+                  [(ngModel)]="nomSprint" name="nomSprint"
+                />
+              </div>
+              <!--end form-group-->
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+                    <label class="form-label mt-2" for="pro-start-date">Date de debut</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      name="startdate"
+                      appDatepicker
+                      #startDateInput
+                      id="pro-start-date"
+                      placeholder="Enter start date"
+                      [(ngModel)]="startdate" 
+                    />
+                  </div>
+                  <!--end col-->
+                  <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+                    <label class="form-label mt-2" for="pro-end-date">Date d'écheance</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      name="enddate"
+                      appDatepicker
+                      #endDateInput
+                      id="pro-end-date"
+                      placeholder="Enter end date"
+                      [(ngModel)]="enddate" 
+                    />
+                  </div>
+                  <!--end col-->
+                 
+                  <!--end col-->
+                  
+                  <!--end col-->
+                </div>
+                <!--end row-->
+              </div>
+              <!--end form-group-->
+              
+              <!--end form-group-->
+              
+              <!--end form-group-->
+
+              <!-- dEBUT AJOUT MEMBRE -->
+              
+              <!-- Fin ajout membre -->
+
+            
+              <button type="submit" class="btn btn-primary me-0.5">Creer le sprint</button>
+              <button type="button" class="btn btn-danger">Annuler</button>
+            </form>
+            <!--end form-->
+            
+          </div>
+          <!--end modal-body-->
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm"
+              (click)="modal.dismiss()"
+            >
+              Fermer
+            </button>
+            <!-- <button type="button" class="btn btn-primary btn-sm">
+              Save changes
+            </button> -->
+          </div>
+
+          
+          <!--end modal-footer--> </ng-template
+        ><!--end modal-->
+
+
+          

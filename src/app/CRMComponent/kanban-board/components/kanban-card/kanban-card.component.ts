@@ -1,6 +1,6 @@
 import { UtilsService } from '@/app/core/service/utils.service'
 import { CommonModule } from '@angular/common'
-import { Component, inject, Input, TemplateRef } from '@angular/core'
+import { ChangeDetectorRef, Component, inject, Input, TemplateRef } from '@angular/core'
 import {
   NgbDropdownModule,
   NgbProgressbarModule,
@@ -21,6 +21,8 @@ import {
 import { TacheSprintService } from '@/app/CRMservice/tache-sprint.service'
 import { CrmTache } from '@/app/CRMinterface/crm-tache'
 import { CrmTacheLib } from '@/app/CRMinterface/crm-tache-lib'
+import { CrmCommentaireTacheLib } from '@/app/CRMinterface/crm-commentaire-tache-lib'
+import { User } from '@/app/CRMinterface/user'
 
 
 @Component({
@@ -38,16 +40,84 @@ export class KanbanCardComponent {
   public service = inject(UtilsService) 
   private modalService = inject(NgbModal)
 
+  constructor(
+    private cdRef: ChangeDetectorRef
+  ) {}
+
   public tacheSprintService = inject(TacheSprintService)
 
   nameSousTask= "";
   id_tache_parent= "";
+  id_employe_assigne= "";
+  contenu= "";
+  id_expediteur="";
+  userObject!:User;
+
 
   ssTaskList: CrmTacheLib[] = [];
   thistask!: CrmTacheLib
+
+  listeCommentsTask: CrmCommentaireTacheLib[] = [];
+
+
+  data = [
+    { id: 'FWU1', nom: 'Rakotovelo Marcel' },
+    { id: 'FWU2', nom: 'Rabeharisoa Clara' },
+    { id: 'FWU3', nom: 'Randrianarisoa Jean' },
+    { id: 'FWU4', nom: 'Andriamalala Sophie' },
+    { id: 'FWU5', nom: 'Rakotoniaina Thierry' },
+    { id: 'FWU6', nom: 'Rasoanaivo Marie' },
+    { id: 'FWU7', nom: 'Andriambelo Eric' },
+    { id: 'FWU8', nom: 'Ravelojaona Julie' },
+    { id: 'FWU9', nom: 'Rasamoelina Patrick ' },
+    { id: 'FWU10', nom: 'Ratsimandresy Anna' },
+    { id: 'FWU11', nom: 'Ramakavelo Christine' },
+    { id: 'FWU12', nom: 'Randrianarisoa Jacques' },
+    { id: 'FWU13', nom: 'Rabeharisoa Jane' },
+    { id: 'FWU14', nom: 'Randrianarisoa Claude' },
+    { id: 'FWU15', nom: 'Andriamalala Marthe' },
+    { id: 'FWU16', nom: 'Rakotoniaina Harry' }
+  ];
+
+
+
   
   ngOnInit() {
   }
+
+
+
+  // loadData() {
+  //   const idTache = this.route.snapshot.params['id']; 
+
+  //   this.tacheSprintService.getCommentaireTache(idTache,this.destinataire_id,this.userObject.id,"client").subscribe(result => {
+  //     this.listeCommentsTask= result.data;
+  //   });
+
+    
+  //   this.tacheSprintService.getTacheByIdTache(idTache).subscribe(result => {
+  //     console.log("result.data",result.data)
+  //     this.detailTache = result.data[0];
+  //     this.idTache= result.data[0].id;
+  //     this.destinataire_id= result.data[0].id_employe_assigne;
+  //     console.log("this.detailTache",this.detailTache)
+  //     console.log("this.idTache",this.idTache);
+  //     console.log("this.destinataire_id",this.destinataire_id);
+
+  //   });
+    
+  // }
+
+
+
+
+
+
+
+
+
+
+
 
   calculateProgress(compleTask: number, totalTask: number) {
     this.progress = (compleTask / totalTask) * 100
@@ -56,7 +126,7 @@ export class KanbanCardComponent {
   
   openModal(content: TemplateRef<HTMLElement>, options: NgbModalOptions,idTask:string) {
     console.log("idTache",idTask)
-    this.id_tache_parent=idTask;
+    this.id_tache_parent=idTask; 
     this.tacheSprintService.getssTachesByIdTache(idTask)
     .subscribe(result => {
       console.log("hi log resultat");
@@ -64,11 +134,88 @@ export class KanbanCardComponent {
       console.log(result.data);
       console.log("fin log resultat");
       this.ssTaskList = result.data;
+      this.id_employe_assigne=result.data[0].id_employe_assigne;
+
+
+      const userString = localStorage.getItem('user');
+      const user = userString ? JSON.parse(userString) : null;
+      this.userObject=user
+      this.id_expediteur= user.id;
+      this.tacheSprintService.getCommentaireTache(idTask,this.id_employe_assigne,user.id,"membre").subscribe(result => {
+        this.listeCommentsTask= result.data;
+      });
+
+
     });  
     this.refreshTask();
     this.modalService.open(content, options)
+    // const userString = localStorage.getItem('user');
+    // const user = userString ? JSON.parse(userString) : null;
+    // this.userObject=user
+    // this.id_expediteur= user.id;
+    // this.tacheSprintService.getCommentaireTache(idTask,this.id_employe_assigne,user.id,"membre").subscribe(result => {
+    //   this.listeCommentsTask= result.data;
+    // });
   }
 
+  onSubmit(){
+    console.log("onsubmit")
+    //const hoho= this.userObject.id
+    const object = {
+      expediteur_id: this.id_expediteur,
+      destinataire_id : this.id_employe_assigne,
+      idTache : this.id_tache_parent,
+      contenu : this.contenu
+    }
+
+    this.tacheSprintService
+      .saveCommentsTask(object)
+      .subscribe((result) => {
+        console.log("après save message");
+        console.log(result.message);
+        this.contenu= "";
+        this.refreshData()
+      });
+  }
+
+  refreshData() {
+    // Ici, tu mets à jour les données de ton composant
+    // Par exemple :
+    this.loadData();
+    
+    // Ensuite, forcer Angular à détecter les changements
+    this.cdRef.detectChanges();
+  }
+
+  loadData()
+  {
+    //console.log("idTache",idTask)
+    //this.id_tache_parent=idTask; 
+    this.tacheSprintService.getssTachesByIdTache(this.id_tache_parent)
+    .subscribe(result => {
+      console.log("hi log resultat");
+      console.log(result);
+      console.log(result.data);
+      console.log("fin log resultat");
+      this.ssTaskList = result.data;
+      this.id_employe_assigne=result.data[0].id_employe_assigne;
+
+
+      const userString = localStorage.getItem('user');
+      const user = userString ? JSON.parse(userString) : null;
+      this.userObject=user
+      this.tacheSprintService.getCommentaireTache(this.id_tache_parent,this.id_employe_assigne,user.id,"membre").subscribe(result => {
+        this.listeCommentsTask= result.data;
+      });
+    });  
+    this.refreshTask();
+    // const userString = localStorage.getItem('user');
+    // const user = userString ? JSON.parse(userString) : null;
+    // this.userObject=user
+    // this.tacheSprintService.getCommentaireTache(this.id_tache_parent,this.id_employe_assigne,user.id,"membre").subscribe(result => {
+    //   this.listeCommentsTask= result.data;
+    // });
+  }
 
   addSousTask(){
       this.submitssTask();
@@ -146,6 +293,8 @@ export class KanbanCardComponent {
         .join('')
         .toUpperCase();
   }
+
+  
 
   
   

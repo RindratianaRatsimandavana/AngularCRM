@@ -11,6 +11,9 @@
             <div class="col">
               <h4 class="card-title" style="text-align: center;">{{listTask[0].projet_nom}}</h4>
               <p class="text-muted mt-3" style="text-align: center;">{{listTask[0].projet_description}}</p>
+              <a class="nav-link" href="javascript:void(0);" routerLink="/pages/advanced/file-manager">
+                <i class="iconoir-book"></i> Document
+              </a>
             </div>
             <!--end col-->
           </div>
@@ -45,7 +48,18 @@
                     }
                     <div class="d-flex justify-content-between align-items-center">
                         <h6 class="m-0 w-75">{{task.nom}}</h6>
-                      <span class="text-muted d-block" (click)="marqueFini(task.id)"><i class="fas fa-check-circle">Terminer</i></span>
+                      <!-- <span class="text-muted d-block" (click)="marqueFini(task.id)"><i class="fas fa-check-circle">Terminer</i></span> -->
+
+                      <span *ngIf="task.statut === 3; else notFinished">
+                        <i class="fas fa-check-circle" style="color: #22c55e;"></i> Terminé
+                      </span>
+                      <ng-template #notFinished>
+                        <span class="text-muted d-block" (click)="marqueFini(task.id)">
+                          <i class="fas fa-check-circle"></i> Terminer
+                        </span>
+                      </ng-template>
+                      
+
                       <span class="text-muted d-block" (click)="openModal(exampleModalScrollable, { scrollable: true },task.nom,task.date_debutEnCours,task.statut)"><i class="las la-pen fs-16 me-1 align-text-bottom">Modifier</i></span>
                     </div>
                     <p class="text-muted mt-3">
@@ -192,9 +206,9 @@
   aria-labelledby="exampleModalScrollableTitle"
   aria-hidden="true"
 >
-  <div class="modal-header"> formnameTask formdateDebutEnCours formstatut
-    <h6 class="modal-title m-0" id="exampleModalScrollableTitle"> modalnameTask modaldateDebutEnCours modalstatut
-      Modifier une tâche
+  <div class="modal-header"> 
+    <h6 class="modal-title m-0" id="exampleModalScrollableTitle"> 
+      Ajouter un évenement
     </h6>
     <button
       type="button"
@@ -205,47 +219,48 @@
   </div>
   <!--end modal-header-->
   <div class="modal-body">
-    <form class="p-4 pt-3" (ngSubmit)="modifierTache()">
+    <form class="p-4 pt-3" (ngSubmit)="addTache()">
         <div class="form-group mb-2 mb-lg-1">
-          <label for="projectName" class="form-label">Nom du projet : {{modalnameTask}}</label>
+          <label for="projectName" class="form-label">Entrez le nom de l'évenement</label>
           <input
             type="text"
             class="form-control"
             id="nomProjet"
             aria-describedby="emailHelp"
-            placeholder="Entrez le nom du projet"
+            placeholder=""
             [(ngModel)]="modalnameTask" name="modalnameTask"
           />
         </div>
-        <div class="form-group">
-          <div class="row">
-            <div class="col-lg-3 col-6 mb-2 mb-lg-1">
-              <label class="form-label mt-2" for="pro-start-date">Date de debut</label>
-              <input
-                type="datetime-local"
-                class="form-control"
-                name="modaldateDebutEnCours"
-                appDatepicker
-                #startDateInput
-                id="pro-start-date"
-                placeholder="Enter start date"
-                [(ngModel)]="modaldateDebutEnCours" 
-              />
-            </div>
-            <!--end col-->
-            <div class="col-lg-3 col-6 mb-2 mb-lg-1">
-                <div class="col-lg-3 col-6 mb-2 mb-lg-1">
-                    <label class="form-label mt-2" for="pro-rate">Type de projet</label>
-                    <select class="form-select" [(ngModel)]="modalstatut" name="modalstatut">
-                        <option value="modalstatut">modalstatut</option>
-                        <option value="CRMTP2">Judiciaire</option>
-                        <option value="CRMTP3">Marketing</option>
-                      </select>
-                  </div>
-            </div>
-          </div>
+
+        <div class="form-group mb-2 mb-lg-1">
+          <label for="projectName" class="form-label">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            id="nomProjet"
+            aria-describedby="emailHelp"
+            placeholder="Entrez le nom de l'évenement"
+            [(ngModel)]="modaldescTask" name="modaldescTask"
+          />
         </div>
-        <button type="submit" class="btn btn-primary me-0.5">Creer le projet</button>
+
+        <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+          <label class="form-label mt-2" for="pro-start-date">Date de l'évènement</label>
+          <input
+            type="date"
+            class="form-control"
+            name="startdate"
+            appDatepicker
+            #startDateInput
+            id="pro-start-date"
+            placeholder="Enter start date"
+            [(ngModel)]="dateEvent" 
+          />
+        </div>
+
+        
+        
+        <button type="submit" class="btn btn-primary me-0.5">Ajouter l'évènement</button>
         <button type="button" class="btn btn-danger">Annuler</button>
       </form>
   </div>

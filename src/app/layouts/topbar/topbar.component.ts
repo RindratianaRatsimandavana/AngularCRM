@@ -37,12 +37,15 @@ export class TopbarComponent {
   coutNotif=100;
 
   userPrenom!:User;
+
+  userNomComplet!:string;
   
   ngOnInit(): void {
     const userString = localStorage.getItem('user');
     const userObject = userString ? JSON.parse(userString) : null;
     const tabTemp = userObject.nom.split(" ");
     this.userPrenom = tabTemp[1]; 
+    this.userNomComplet=userObject.nom;
 
     this.generalService.getNotification(userObject.id)
     .subscribe(result => {

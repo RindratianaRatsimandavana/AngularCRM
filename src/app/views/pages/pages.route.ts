@@ -21,6 +21,10 @@ import { DocumentClListComponent } from '@/app/CRMComponent/document-cl-list/doc
 import { DocumentClDetailComponent } from '@/app/CRMComponent/document-cl-detail/document-cl-detail.component'
 import { ProjectClDetailComponent } from '@/app/CRMComponent/project-cl-detail/project-cl-detail.component'
 import { TaskClDetailComponent } from '@/app/CRMComponent/task-cl-detail/task-cl-detail.component'
+import { ProjectDashboardComponent } from '@/app/CRMComponent/project-dashboard/project-dashboard.component'
+import { FilesComponent } from '../advance_ui/files/files.component'
+import { ChatComponent } from '../applications/chat/chat.component'
+import { ChatComponent2 } from '../applications/chat-copy/chat.component'
 
 export const PAGES_ROUTES: Route[] = [
   {
@@ -132,6 +136,26 @@ export const PAGES_ROUTES: Route[] = [
     path: 'taskDetail/:id',
     component: TaskClDetailComponent,
     data: { title: 'Type de projet' },
+  },
+  {
+    path: 'projectDashboard/:id/:permission',
+    component: ProjectDashboardComponent,
+    data: { title: 'Vue d\'ensemble du projet' },
+  },
+  {
+    path: 'advanced/file-manager',
+    component: FilesComponent,
+    data: { title: 'Vue d\'ensemble du projet' },
+  },
+  {
+    path: 'apps/chat2',
+    component: ChatComponent2,
+    data: { title: 'Vue d\'ensemble du projet' },
+  },
+  {
+    path: 'apps/chat',
+    component: ChatComponent,
+    data: { title: 'Vue d\'ensemble du projet' },
   }
 
 ]

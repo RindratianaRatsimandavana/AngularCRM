@@ -1,10 +1,10 @@
-import { Component, inject, Input, TemplateRef } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input, TemplateRef, NgZone } from '@angular/core';
 import { UtilsService } from '@/app/core/service/utils.service'
 import { TacheSprintService } from '@/app/CRMservice/tache-sprint.service';
 import { ActivatedRoute } from '@angular/router';
 import { CrmTacheLib } from '@/app/CRMinterface/crm-tache-lib';
 import { CommonModule } from '@angular/common';
-import {NgbAccordionModule,NgbProgressbarModule} from '@ng-bootstrap/ng-bootstrap'
+import {NgbAccordionModule,NgbModalRef,NgbProgressbarModule} from '@ng-bootstrap/ng-bootstrap'
 
 import { RouterLink } from '@angular/router';
 import { CrmTache } from '@/app/CRMinterface/crm-tache';
@@ -23,6 +23,7 @@ import {
   NgbModalConfig,
   type NgbModalOptions,
 } from '@ng-bootstrap/ng-bootstrap'
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -35,6 +36,8 @@ import {
 })
 export class ProjectDetailComponent {
 
+  isActive: boolean = false; // Initialement inactif
+
   @Input() title: string = 'Liste des tâches';
 
   private modalService = inject(NgbModal)
@@ -42,17 +45,47 @@ export class ProjectDetailComponent {
   idProjet?:string;
   permission?:string;
   tacheBacklog: CrmTache[] = [];
-//  tachesParSprint: any = {};
-tachesParSprint: { [sprintId: string]: CrmTacheLib[] } = {};
+  //  tachesParSprint: any = {};
+  tachesParSprint: { [sprintId: string]: CrmTacheLib[] } = {};
 
-listeSprint: CrmSprint[] = [];
-listeEmployeInfo: User[] = [];
+  listeSprint: CrmSprint[] = [];
+  listeEmployeInfo: User[] = [];
 
-valueScore=1;
-commentValue="";
+  //resaka scoring
+  //valueScore=1;
+  commentValue="";
+  valueScore: number = 0; // score sélectionné (étoile)
+  preciseScore: number | null = null; // score précis
+  minScore: number = 0; // valeur minimale pour l'input de score précis
+  maxScore: number = 0; // valeur maximale pour l'input de score précis
+  idTaskToRate= '';
+  idEmplAssigne= '';
+  modalRef: NgbModalRef | undefined;
+
+  // resaka sprint 
+  nomSprint= "";
+  startdate = "";
+  enddate = "";
 
 
 selectedTechno: string [] = [];
+
+
+// TRAITEMENT CDC:
+selectedFile: File | undefined ;
+
+extractedText: string = ''; // Variable pour stocker le texte extrait
+
+listTaskCDC: string[] = [];
+
+showTasks: boolean = false; // Variable pour contrôler l'affichage du textarea
+isLoading: boolean = false; // Variable pour gérer l'état de chargement
+
+
+isLoadingPredict: boolean = false;
+showPredict: boolean = false;
+
+
   //modalService: any;
 
  // idProject=this.route.snapshot.params['id'];
@@ -61,14 +94,26 @@ selectedTechno: string [] = [];
 
 
   constructor(private fb: FormBuilder,private tacheSprintService: TacheSprintService,private route:ActivatedRoute,
-    public service :UtilsService,public generalService :GeneralService) {
+    public service :UtilsService,public generalService :GeneralService,private http: HttpClient,
+    private cdRef: ChangeDetectorRef, private zone: NgZone) {
       // Initialise le formulaire principal
     // this.backlogForm = this.fb.group({
     //   tasks: this.fb.array([]) // FormArray qui contiendra les formulaires pour chaque ligne de tâche
     // });
 }
 
-  ngOnInit() {
+
+isEmptyObject(obj: any): boolean {
+  return Object.keys(obj).length === 0;
+}
+
+getKeys(obj: any): string[] {
+  return Object.keys(obj);
+}
+
+
+  loadData()
+  {
     const id = this.route.snapshot.params['id']; 
     const permission = this.route.snapshot.params['permission'];
     console.log("id:"+id);
@@ -121,6 +166,19 @@ selectedTechno: string [] = [];
     // }); 
   }
 
+  refreshData() {
+    // Ici, tu mets à jour les données de ton composant
+    // Par exemple :
+    this.loadData();
+    
+    // Ensuite, forcer Angular à détecter les changements
+    this.cdRef.detectChanges();
+  }
+
+  ngOnInit() {
+    this.loadData();
+  }
+
   // Fonction pour regrouper les tâches par sprint
   // groupBySprint(taches: any[]): any {
   //   return taches.reduce((grouped, tache) => {
@@ -151,9 +209,31 @@ selectedTechno: string [] = [];
     return task.id; // Assurez-vous que chaque tâche a un ID unique
   }
 
-  openModal(content: TemplateRef<HTMLElement>, options: NgbModalOptions) {
-    this.modalService.open(content, options)
+  openModal(content: TemplateRef<HTMLElement>, options: NgbModalOptions,paramidTaskToRate: string = '',
+    paramidEmployeAssigne: string = ''
+  ) {
+    this.modalRef =this.modalService.open(content, options);
+    //if(!paramidTaskToRate){
+      this.idTaskToRate= paramidTaskToRate
+
+      console.log("modal this.idTaskToRate",this.idTaskToRate)
+    //} 
+    //if(!paramidEmployeAssigne){
+      this.idEmplAssigne= paramidEmployeAssigne
+      console.log("modal this.idEmplAssigne ",this.idEmplAssigne)
+    //}
+    
+    
+
   }
+
+  closeModal() {
+    if (this.modalRef) {
+      this.modalRef.dismiss();  // ou .close() si vous voulez déclencher le résultat de fermeture
+    }
+    this.refreshData();
+  }
+
 
   onCheckboxChange(event: any) {
     const value = event.target.value;
@@ -171,17 +251,95 @@ selectedTechno: string [] = [];
     console.log(this.selectedTechno); // Pour vérifier les valeurs sélectionnées
   }
 
-  submitFeedBackAndScore(){
-    const object = {
-      id_tache:"iddddd",
-      scoreClient: this.valueScore,
-      commentaireClient : this.commentValue
+  // resaka scoring 
+  // submitFeedBackAndScore(){
+  //   const object = {
+  //     id_tache:"iddddd",
+  //     scoreClient: this.valueScore,
+  //     commentaireClient : this.commentValue
+  //   }
+  //   console.log("Objeeeeeeeeeeect",object);
+  // }
+   // Fonction appelée lors de la sélection d'une étoile
+   onStarChange(starValue: number) {
+    this.valueScore = starValue;
+
+    // Définir les intervalles basés sur l'étoile choisie
+    switch (starValue) {
+      case 1:
+        this.minScore = 0;
+        this.maxScore = 20;
+        break;
+      case 2:
+        this.minScore = 21;
+        this.maxScore = 40;
+        break;
+      case 3:
+        this.minScore = 41;
+        this.maxScore = 60;
+        break;
+      case 4:
+        this.minScore = 61;
+        this.maxScore = 80;
+        break;
+      case 5:
+        this.minScore = 81;
+        this.maxScore = 100;
+        break;
+      default:
+        this.minScore = 0;
+        this.maxScore = 100;
+        break;
     }
-    console.log("Objeeeeeeeeeeect",object);
   }
 
+  submitFeedBackAndScore() {
+    if (this.preciseScore !== null) {
+      console.log(`Commentaire: ${this.commentValue}`);
+      console.log(`Score étoile: ${this.valueScore}, Score précis: ${this.preciseScore}`);
+      console.log("idTache ",this.idTaskToRate);
+
+      //id_tache/commentaireChefProjet/id_employe_assigne
+      const object = { 
+        id_tache: this.idTaskToRate,
+        commentaireChefProjet: this.commentValue,
+        scoreChefProjet: this.preciseScore,
+        id_employe_assigne: this.idEmplAssigne
+        };
+  
+      this.tacheSprintService
+        .saveScoreCP(object)
+        .subscribe((result) => {
+          console.log(result.message);
+          console.log("score enregistré")
+          this.tacheSprintService
+          .updateTaskEtat(this.idTaskToRate,2)
+          .subscribe((result) => {
+            //console.log(result.message);
+            console.log("etat modifié")
+            this.closeModal();
+          });
+
+
+          this.closeModal();
+        });
+
+
+      
+    } else {
+      alert('Veuillez entrer un score précis.');
+    }
+  }
+
+
    getPrediction(){
+    this.isLoadingPredict=true;
     console.log("valueCheckBox",this.selectedTechno);
+    // Attendre 5 secondes (5000 millisecondes)
+    setTimeout(() => {
+      this.isLoadingPredict = false;
+      this.showPredict = true
+    }, 5000); // 5000 millisecondes = 5 secondes
   }
   // Méthode pour créer un FormArray dynamique basé sur les tâches du backlog
   // initTaskForms() {
@@ -234,6 +392,191 @@ selectedTechno: string [] = [];
         .map((word: string) => word[0])
         .join('')
         .toUpperCase();
-}
+  }
+
+
+  // TRAITEMENT CDC:
+    onFileSelected(event: any) {
+      this.selectedFile = event.target.files[0];
+    }
+
+
+    // getDataFromAPI() {
+    //   if (!this.selectedFile) {
+    //     console.error('Aucun fichier sélectionné.');
+    //     return; // On arrête la fonction si aucun fichier n'est sélectionné
+    //   }
+    //   const formData = new FormData();
+    //   formData.append('file', this.selectedFile); // Ici `selectedFile` est garanti d'être défini
+    //   this.http.post<any>('http://127.0.0.1:5000/getDataCDC', formData).subscribe({
+    //     next: (response) => {
+    //       // Si 'tasksCDC' est une chaîne de caractères JSON, vous devez la parser
+    //       if (typeof response.tasksCDC === 'string') {
+    //         try {
+    //           this.tasksCDC = JSON.parse(response.tasksCDC);
+    //         } catch (e) {
+    //           console.error('Erreur de parsing JSON pour tasksCDC', e);
+    //         }
+    //       } else {
+    //         this.tasksCDC = response.tasksCDC; // Si c'est déjà un tableau, l'assigner directement
+    //       }
+    //     },
+    //     error: (error) => {
+    //       console.error('Erreur lors de la récupération des données', error);
+    //     }
+    //   });
+    // }
+
+    uploadCdc() {
+      if (!this.selectedFile) {
+        console.error('Aucun fichier sélectionné.');
+        return; // On arrête la fonction si aucun fichier n'est sélectionné
+      }
+    
+      const formData = new FormData();
+      formData.append('file', this.selectedFile); // Ici `selectedFile` est garanti d'être défini
+
+      this.isLoading = true; // Début du chargement
+    
+      // Envoi du fichier au backend Flask
+      this.http.post<any>('http://127.0.0.1:5000/getDataCDC', formData).subscribe(
+        (response) => {
+          console.log('Contenu du fichier:', response);
+          console.log("response",response)
+          // Accède à la propriété "data" sans erreur de type
+          this.extractedText = response.contenuCDC;
+          this.listTaskCDC=JSON.parse(response.tasksCDC);
+
+          // Afficher le textarea seulement si des tâches sont présentes
+          this.showTasks = this.listTaskCDC && this.listTaskCDC.length > 0;
+
+          // Ensuite, forcer Angular à détecter les changements
+          //this.cdRef.detectChanges();
+          // Forcer la détection des changements
+            this.zone.run(() => {
+              this.cdRef.detectChanges();
+            });
+
+           // Fin du chargement
+          this.isLoading = false; // Arrêt du chargement
+
+        },
+        (error) => {
+          console.error('Erreur lors du téléchargement du fichier:', error);
+        }
+      );
+      
+
+    }
+
+   // Méthode pour supprimer un élément à un indice donné
+    deleteListeTache(index: number): void {
+      if (index > -1 && index < this.listTaskCDC.length) {
+        this.listTaskCDC.splice(index, 1); // Supprime l'élément à l'indice spécifié
+      }
+    }
+
+
+    //INSERT INTO crm_tache (id, nom, descTache, statut, id_projet)
+    // VALUES ('CRMTCH_21', 'Tache 1', 'Desc tache 1','CRMPJ1');
+    insertBackLogTask() {
+      // const tasks = [
+      //   'Design de la structure application',
+      //   'Création interface de connexion',
+      //   'Amélioration du tableau de bord',
+      //   // Ajoute d'autres tâches ici
+      // ];
+    
+      // Crée un tableau de `taskBackLog` basé sur `tasks`
+      const taskBackLogs = this.listTaskCDC.map(task => ({
+        id: this.idTaskToRate,   // Identifiant fixe ou variable pour chaque tâche
+        nom: task,               // Ici, on injecte la chaîne de caractères dans la propriété 'nom'
+        descTache: "",           // Propriété fixe
+        statut: 0,               // Propriété fixe
+        id_projet: this.idProjet // Propriété fixe ou variable
+      }));
+    
+      // Appel API pour sauvegarder toutes les tâches en une seule requête
+      this.tacheSprintService.insertBackLogs(taskBackLogs).subscribe(response => {
+        console.log('All tasks saved successfully');
+        this.closeModal();
+          this.refreshData();
+      }, error => {
+        console.error('Error saving tasks:', error);
+      });
+    }
+    
+    createSprint() {
+      const id = this.route.snapshot.params['id'];
+      const object = {
+        nom: this.nomSprint,
+        date_creation: this.startdate,
+        date_echeance: this.enddate,
+        id_projet: id,
+        statut: 0
+      };
+    
+      this.tacheSprintService
+        .createSprint(object)
+        .subscribe((result) => {
+          console.log(result.message);
+          this.nomSprint = "";
+          this.startdate = "";
+          this.enddate = "";
+          this.closeModal();
+          this.refreshData();
+        });
+    }
+
+
+    // attribuerTache() {
+    //     const object = { 
+    //       id: "string",
+    //       priorite: number,
+    //       temps_estime: string,
+    //       id_employe_assigne: string,
+    //       id_sprint: string,
+    //       statut: string
+    //   };
+    
+    //     this.tacheSprintService
+    //       .saveScoreCP(object)
+    //       .subscribe((result) => {
+    //         console.log(result.message);
+    //         console.log("score enregistré")
+    //         this.tacheSprintService
+    //         .updateTaskEtat(this.idTaskToRate,2)
+    //         .subscribe((result) => {
+    //           //console.log(result.message);
+    //           console.log("etat modifié")
+    //           this.closeModal();
+    //         });
+  
+  
+    //         this.closeModal();
+    //       });
+  
+    // }
+    
+    
+
+
+    // const taskbackLog = { 
+    //   id: this.idTaskToRate,
+    //   nom:"" ,
+    //   descTache: "",
+    //   statut: 0,
+    //   id_projet:this.idProjet
+    //   };
+
+      // const object = { 
+      //   id_tache: this.idTaskToRate,
+      //   commentaireChefProjet: this.commentValue,
+      //   scoreChefProjet: this.preciseScore,
+      //   id_employe_assigne: this.idEmplAssigne
+      //   };
+    
+    
+
 
 }

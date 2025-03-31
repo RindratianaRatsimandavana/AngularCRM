@@ -3,6 +3,7 @@ import { ChatComponent } from './chat/chat.component'
 import { ContactListComponent } from './contact-list/contact-list.component'
 import { CalendarComponent } from './calendar/calendar.component'
 import { InvoiceComponent } from './invoice/invoice.component'
+import { ChatComponent2 } from './chat-copy/chat.component'
 
 export const APPS_ROUTES: Route[] = [
   {
@@ -23,6 +24,11 @@ export const APPS_ROUTES: Route[] = [
   {
     path: 'chat',
     component: ChatComponent,
+    data: { title: 'Chat' },
+  },
+  {
+    path: 'chat2',
+    component: ChatComponent2,
     data: { title: 'Chat' },
   },
   {

@@ -1,18 +1,18 @@
-import { Component, inject, Input, ViewChild } from '@angular/core'
-import { MessageData, type ContactType } from '../../data'
-import { CommonModule, DatePipe } from '@angular/common'
+import { Component, inject, Input, ViewChild } from '@angular/core';
+import { ContactList, type ContactType } from '../../data';
+import { CommonModule, DatePipe, JsonPipe } from '@angular/common';
 import {
   SimplebarAngularModule,
   type SimplebarAngularComponent,
-} from 'simplebar-angular'
-import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
+} from 'simplebar-angular';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import {
   FormsModule,
   ReactiveFormsModule,
   UntypedFormBuilder,
   Validators,
   type UntypedFormGroup,
-} from '@angular/forms'
+} from '@angular/forms';
 
 @Component({
   selector: 'chat-message',
@@ -23,69 +23,104 @@ import {
     NgbTooltipModule,
     FormsModule,
     ReactiveFormsModule,
+    JsonPipe
   ],
   templateUrl: './message.component.html',
   styles: ``,
 })
 export class MessageComponent {
-  @Input() profileDetail!: ContactType
-  formData!: UntypedFormGroup
-  messageList = MessageData
-  submitted = false
+  formData!: UntypedFormGroup;
+  messageList: any[] = [];
+  submitted = false;
+  allContact!: ContactType[];
 
-  public formBuilder = inject(UntypedFormBuilder)
-  public datePipe = inject(DatePipe)
+  public formBuilder = inject(UntypedFormBuilder);
+  public datePipe = inject(DatePipe);
+
   @ViewChild('scrollRef', { static: false })
-  scrollRef!: SimplebarAngularComponent
+  scrollRef!: SimplebarAngularComponent;
+
+  private _profileDetail!: ContactType;
+
+  @Input()
+  set profileDetail(value: ContactType) {
+    this._profileDetail = value;
+    this.loadMessages();  // Charger les messages spécifiques à ce contact
+  }
+
+  get profileDetail(): ContactType {
+    return this._profileDetail;
+  }
 
   ngOnInit(): void {
-    // Validation
+    this.allContact = ContactList;
+    localStorage.setItem('allContact', JSON.stringify(this.allContact));
+
+    // Validation du formulaire
     this.formData = this.formBuilder.group({
       message: ['', [Validators.required]],
-    })
+    });
+
+    // Charger les messages spécifiques à ce contact au démarrage
+    this.loadMessages();
   }
 
   ngAfterViewInit() {
-    this.scrollRef.SimpleBar.getScrollElement().scrollTop = 300
-    this.onListScroll()
+    this.scrollRef.SimpleBar.getScrollElement().scrollTop = 300;
+    this.onListScroll();
   }
 
   onListScroll() {
     if (this.scrollRef !== undefined) {
       setTimeout(() => {
         this.scrollRef.SimpleBar.getScrollElement().scrollTop =
-          this.scrollRef.SimpleBar.getScrollElement().scrollHeight
-      }, 100)
+          this.scrollRef.SimpleBar.getScrollElement().scrollHeight;
+      }, 100);
     }
   }
 
+  // Charger les messages pour ce contact depuis localStorage
+  loadMessages() {
+    const storedMessages = localStorage.getItem(`chatMessages_${this.profileDetail.name}`);
+    if (storedMessages) {
+      this.messageList = JSON.parse(storedMessages);
+    } else {
+      this.messageList = this.profileDetail.dataMessage || [];  // Si aucun message n'est stocké
+    }
+  }
+
+  // Sauvegarder les messages spécifiques à ce contact dans localStorage
+  saveMessages() {
+    localStorage.setItem(`chatMessages_${this.profileDetail.name}`, JSON.stringify(this.messageList));
+  }
+
   messageSend() {
-    const message = this.formData.get('message')!.value
+    const message = this.formData.get('message')!.value;
+
     if (this.formData.valid && message) {
-      this.messageList.push({
+      // Création du nouveau message
+      const newMessage = {
         id: this.messageList.length + 1,
         messages: [message],
         time: this.datePipe.transform(new Date(), 'shortTime')!,
         direction: 'right',
-        userImage: 'assets/images/users/avatar-3.jpg',
-      })
-      setTimeout(() => {
-        this.messageList.push({
-          id: this.messageList.length + 1,
-          messages: ['Hello'],
-          time: this.datePipe.transform(new Date(), 'shortTime')!,
-          direction: 'left',
-          userImage: this.profileDetail.image,
-        })
-        this.onListScroll()
-      }, 1000)
-    } else {
-      this.submitted = true
-    }
+        // userImage: 'assets/images/users/avatar-3.jpg',
+        userImage: 'assets/images/users/avatar-2.jpg',
+        // userImage: 'assets/images/users/avatar-1.jpg',
+      };
 
-    this.onListScroll()
-    setTimeout(() => {
-      this.formData.reset()
-    }, 500)
+      // Ajouter le nouveau message à la liste actuelle des messages
+      this.messageList.push(newMessage);
+
+      // Sauvegarder les messages spécifiques à ce contact dans localStorage
+      this.saveMessages();
+
+      // Réinitialiser le formulaire après l'envoi du message
+      this.formData.reset();
+
+      this.onListScroll();
+    } else {
+      this.submitted = true;
+    }
   }
 }

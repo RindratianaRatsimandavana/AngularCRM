@@ -1,158 +1,189 @@
 
-<p>nom tâche:</p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
+
+
 <div class="card">
-  <div class="card-body pb-0">
+  <card-title [title]="detailTache.nom!" />
+  <div class="card-body pb-0" style="box-shadow: 0px 2px 9px 2px rgba(0, 0, 0, 0.3)">
+    <!-- <p><b><u>Tâche:</u></b> {{detailTache.nom}}</p> -->
+    <p><b><u>Progrès:</u></b></p>
+    <ngb-progressbar type="secondary" class="mb-3" [value]="detailTache.progresDyn!">
+      <small style="color: rgb(249, 247, 252);">{{detailTache.progresDyn!}}%</small>
+    </ngb-progressbar>
+    <p><b><u>Employé assigné:</u></b> {{detailTache.employe_nom}}</p>
+    <p>
+      <b><u>Statut:</u></b> 
+      &nbsp;
+      <span
+        class="badge rounded bg-transparent border p-1"
+        [ngClass]="{
+          'text-purple border-purple': detailTache.statut == 0, 
+          'text-blue border-blue': detailTache.statut == 1,  
+          'text-warning border-warning': detailTache.statut == 2,
+          'text-green border-green': detailTache.statut == 3 
+        }"
+      >
+        {{ detailTache.statut == 0 ? 'À faire' : detailTache.statut == 1 ? 'En cours' : detailTache.statut == 2 ? 'Revue' : 'Terminé' }}
+      </span>
+    </p>
+    
+
+      
+    
     <div class="row">
       <div class="col">
         <p class="text-dark fw-semibold mb-0">Commentaires ({{listeCommentsTask.length}})</p>
       </div>
       <!--end col-->
     </div>
-    <!--end row-->
-  </div>
-  <!--end card-body-->
-  <div class="card-body border-bottom-dashed">
-    @for (item of listeCommentsTask; track item.id) 
-    {
-        @if(item.exp_id != userObject.id)
-        {
-            <ul class="list-unstyled mb-0">
-
-                <li ngClass="mt-3">
-                  <div class="row">
-                    <div class="col-auto">
-                      <img
-                        src=""
-                        alt=""
-                        class="thumb-md rounded-circle"
-                      />
+    <div class="card-body border-bottom-dashed">
+      @for (item of listeCommentsTask; track item.id) 
+      {
+          @if(item.exp_id != userObject.id)
+          {
+              <ul class="list-unstyled mb-0">
+  
+                  <li ngClass="mt-3">
+                    <div class="row">
+                      <div class="col-auto">
+                        <!-- <img
+                          src=""
+                          alt=""
+                          class="thumb-md rounded-circle"
+                        /> -->
+                        <span
+                        class="thumb-lg justify-content-center d-flex align-items-center bg-success-subtle text-success rounded-circle me-2"
+                          > {{getAvatarUserConnectedOtherUser(item.exp_nom)}}
+                        </span>
+                      </div>
+                      <!--end col-->
+                      <div class="col">
+                        <div class="bg-light rounded ms-n2 bg-light-alt p-3">
+                          <div class="row">
+                            <div class="col">
+                              <p class="text-dark fw-semibold mb-2">
+                                {{item.exp_nom}} 
+                              </p>
+                            </div>
+                            <!--end col-->
+                            <div class="col-auto">
+                              <span class="text-muted"
+                                ><i class="far fa-clock me-1"></i
+                                >{{item.date_envoi| date:'hh:mm a'}} </span
+                              >
+                            </div>
+                            <!--end col-->
+                          </div>
+                          <!--end row-->
+                          <p>{{item.contenu}}</p>
+                          <!-- <a href="javascript:void(0);" class="text-primary"
+                            ><i class="fas fa-reply me-1"></i>Replay</a
+                          > -->
+                        </div>
+                      </div>
+                      <!--end col-->
                     </div>
-                    <!--end col-->
-                    <div class="col">
-                      <div class="bg-light rounded ms-n2 bg-light-alt p-3">
-                        <div class="row">
+                    <!--end row-->
+                  </li> 
+                  <!-- end partie gauche -->
+              </ul>
+  
+          }
+          @else
+          {
+                   <!-- debut partie droite  -->
+              <ul class="list-unstyled ms-5">
+                  <li>
+                  <div class="row mt-3">
+                      <div class="col-auto">
+                      <!-- <img
+                          src=""
+                          alt=""
+                          class="thumb-md rounded-circle"
+                      />
+                       -->
+                       <span
+                        class="thumb-lg justify-content-center d-flex align-items-center bg-success-subtle text-success rounded-circle me-2"
+                          > {{getAvatarUserConnectedOtherUser(item.exp_nom)}}
+                        </span>
+                      </div>
+                      <!--end col-->
+                      <div class="col">
+                      <div
+                          class="bg-light rounded ms-n2 bg-light-alt p-3"
+                      >
+                          <div class="row">
                           <div class="col">
-                            <p class="text-dark fw-semibold mb-2">
-                              {{item.exp_nom}} 
-                            </p>
+                              <p class="text-dark fw-semibold mb-2">
+                                  {{item.exp_nom}} 
+                              </p>
                           </div>
                           <!--end col-->
                           <div class="col-auto">
-                            <span class="text-muted"
+                              <span class="text-muted"
                               ><i class="far fa-clock me-1"></i
-                              >{{item.date_envoi}} </span
-                            >
+                              >{{item.date_envoi| date:'hh:mm a'}} </span
+                              >
                           </div>
                           <!--end col-->
-                        </div>
-                        <!--end row-->
-                        <p>{{item.contenu}}</p>
-                        <!-- <a href="javascript:void(0);" class="text-primary"
-                          ><i class="fas fa-reply me-1"></i>Replay</a
-                        > -->
+                          </div>
+                          <!--end row-->
+                          <p>{{item.contenu}} </p>
+                          <!-- <p class="mb-0">Thank you</p> -->
                       </div>
-                    </div>
-                    <!--end col-->
+                      </div>
+                      <!--end col-->
                   </div>
-                  <!--end row-->
-                </li> 
-                <!-- end partie gauche -->
-            </ul>
-
-        }
-        @else
-        {
-                 <!-- debut partie droite  -->
-            <ul class="list-unstyled ms-5">
-                <li>
-                <div class="row mt-3">
-                    <div class="col-auto">
-                    <img
-                        src=""
-                        alt=""
-                        class="thumb-md rounded-circle"
-                    />
-                    </div>
-                    <!--end col-->
-                    <div class="col">
-                    <div
-                        class="bg-light rounded ms-n2 bg-light-alt p-3"
-                    >
-                        <div class="row">
-                        <div class="col">
-                            <p class="text-dark fw-semibold mb-2">
-                                {{item.exp_nom}} 
-                            </p>
-                        </div>
-                        <!--end col-->
-                        <div class="col-auto">
-                            <span class="text-muted"
-                            ><i class="far fa-clock me-1"></i
-                            >{{item.date_envoi}} </span
-                            >
-                        </div>
-                        <!--end col-->
-                        </div>
-                        <!--end row-->
-                        <p>{{item.contenu}} </p>
-                        <!-- <p class="mb-0">Thank you</p> -->
-                    </div>
-                    </div>
-                    <!--end col-->
-                </div>
-                    <!--end row-->
-             </li>
-            </ul>
-    
-
-        }
-
-    }
-    
-
-
-    
-
-    <div class="card-body">
-        <div class="row">
-          <div class="col">
-            <p class="text-dark fw-semibold mb-0">Ajouter un commentaire</p>
-          </div>
-          <!--end col-->
-        </div>
-        <!--end row-->
-      </div>
-      <!--end card-body-->
-      <div class="card-body pt-0">
-        <form (ngSubmit)="onSubmit()">
-          <div class="form-group mb-3">
-            <textarea [(ngModel)]="contenu" name="contenu"
-              class="form-control"
-              rows="5"
-              id="leave_comment"
-              placeholder="Message"
-            ></textarea>
-          </div>
+                      <!--end row-->
+               </li>
+              </ul>
+      
+  
+          }
+  
+      }
+      
+  
+  
+      
+  
+      <div class="card-body">
           <div class="row">
-            <div class="col-sm-12 text-end">
-              <button type="submit" class="btn btn-primary px-4">
-               Poster
-              </button>
+            <div class="col">
+              <p class="text-dark fw-semibold mb-0">Ajouter un commentaire</p>
             </div>
+            <!--end col-->
           </div>
-        </form>
-      </div>
-      <!--end card-body-->
-
-
-
+          <!--end row-->
+        </div>
+        <!--end card-body-->
+        <div class="card-body pt-0">
+          <form (ngSubmit)="onSubmit()">
+            <div class="form-group mb-3">
+              <textarea [(ngModel)]="contenu" name="contenu"
+                class="form-control"
+                rows="5"
+                id="leave_comment"
+                placeholder="Message"
+              ></textarea>
+            </div>
+            <div class="row">
+              <div class="col-sm-12 text-end">
+                <button type="submit" class="btn btn-primary px-4">
+                 Poster
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!--end card-body-->
+  
+  
+  
+    </div>
+    <!--end row-->
   </div>
+  <!--end card-body-->
+  
   
 
 

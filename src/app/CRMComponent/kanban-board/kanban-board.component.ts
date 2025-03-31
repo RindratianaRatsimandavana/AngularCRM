@@ -15,7 +15,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
   standalone: true,
   imports: [InviteMemberComponent, KanbanTasksComponent,RouterLink],
   templateUrl: './kanban-board.component.html',
-  styles: ``,
+  styleUrl: './kanban-board.component.scss'
 })
 export class KanbanBoardComponent {
   @Input() title: string = 'Vue Kanban des tâches';

@@ -1,0 +1,37 @@
+<div> 
+  <h4 class="card-title">Vue d'ensemble du projet </h4> 
+
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link" href="javascript:void(0);" routerLink="/pages/projectDetail/{{idProjet}}/{{permission}}">
+        <!-- Icône pour Liste -->
+        <i class="iconoir-okrs"></i> Liste
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="javascript:void(0);" routerLink="/pages/kanban/{{idProjet}}/{{permission}}">
+        <!-- Icône pour Kanban -->
+        <i class="iconoir-kanban-board"></i> Kanban
+      </a>
+    </li>
+    <li class="nav-item active">
+      <a class="nav-link" href="javascript:void(0);" routerLink="/pages/projectDashboard/{{idProjet}}/{{permission}}">
+        <!-- Icône pour Kanban -->
+        <i class="iconoir-reports"></i> Vue d'ensemble du projet
+      </a>
+    </li>
+  </ul>
+</div>
+<analytics-state />
+<!--end row-->
+
+
+<div class="row justify-content-center">
+  <div class="col-md-12 col-lg-12">
+    <app-timeline />
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+
+<app-clients />

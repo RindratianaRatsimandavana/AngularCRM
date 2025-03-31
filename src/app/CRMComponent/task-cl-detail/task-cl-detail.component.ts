@@ -5,12 +5,16 @@ import { TacheSprintService } from '@/app/CRMservice/tache-sprint.service';
 import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms'; 
+import { GeneralService } from '@/app/CRMservice/general.service';
+import { CommonModule } from '@angular/common';
+import { NgbProgressbarModule } from '@ng-bootstrap/ng-bootstrap';
+import { CardTitleComponent } from '@/app/components/card-title.component';
 
 
 @Component({
   selector: 'app-task-cl-detail',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule,CommonModule,NgbProgressbarModule,CardTitleComponent],
   templateUrl: './task-cl-detail.component.html',
   styleUrl: './task-cl-detail.component.scss'
 })
@@ -26,24 +30,13 @@ export class TaskClDetailComponent {
   contenu= "";
 
   userObject!:User;
-  constructor(private tacheSprintService: TacheSprintService,private route:ActivatedRoute,
+  constructor(private tacheSprintService: TacheSprintService,private generalService: GeneralService,private route:ActivatedRoute,
     private cdRef: ChangeDetectorRef
   ) {
      
   }
 
-//   +-----------------+--------------+------+-----+---------------------+-------+
-// | Field           | Type         | Null | Key | Default             | Extra |
-// +-----------------+--------------+------+-----+---------------------+-------+
-// | id              | varchar(20)  | NO   | PRI | NULL                |       |
-// | expediteur_id   | varchar(20)  | YES  | MUL | NULL                |       |
-// | destinataire_id | varchar(20)  | YES  | MUL | NULL                |       |
-// | idTache         | varchar(20)  | YES  | MUL | NULL                |       |
-// | contenu         | varchar(255) | YES  |     | NULL                |       |
-// | date_envoi      | date         | YES  |     | current_timestamp() |       |
-// | statut          | int(11)      | YES  |     | 0                   |       |
-// | etat            | int(11)      | NO   |     | 1                   |       |
-// +-----------------+--------------+------+-----+---------------------+-------+
+
 
   ngOnInit() {
     //const idTache = this.route.snapshot.params['id']; 
@@ -79,10 +72,7 @@ export class TaskClDetailComponent {
 
   loadData() {
     const idTache = this.route.snapshot.params['id']; 
-    this.tacheSprintService.getCommentaireTache(idTache).subscribe(result => {
-      this.listeCommentsTask= result.data;
-    });
-
+    
     
     this.tacheSprintService.getTacheByIdTache(idTache).subscribe(result => {
       console.log("result.data",result.data)
@@ -92,6 +82,13 @@ export class TaskClDetailComponent {
       console.log("this.detailTache",this.detailTache)
       console.log("this.idTache",this.idTache);
       console.log("this.destinataire_id",this.destinataire_id);
+      
+      const userString = localStorage.getItem('user');
+      const user = userString ? JSON.parse(userString) : null;
+      this.tacheSprintService.getCommentaireTache(idTache,this.destinataire_id,user.id,"client").subscribe(result => {
+        this.listeCommentsTask= result.data;
+      });
+
 
     });
     
@@ -112,8 +109,30 @@ export class TaskClDetailComponent {
         console.log("après save message");
         console.log(result.message);
         this.contenu= "";
+        //envoiNotif() // plus tard
+        // const object = {
+        //   expediteur_id: this.expediteur_id,
+        //   destinataire_id : this.destinataire_id,
+        //   idTache : this.idTache,
+        //   contenu : this.contenu
+        // }
+        // this.generalService.envoiNotif()
+
+
         this.refreshData()
       });
+  }
+
+  getAvatarUserConnectedOtherUser(nom: string | undefined) {
+    if (!nom) {
+        return ''; // ou toute autre valeur par défaut
+    }
+  
+    return nom
+        .split(' ')
+        .map((word: string) => word[0])
+        .join('')
+        .toUpperCase();
   }
 
 

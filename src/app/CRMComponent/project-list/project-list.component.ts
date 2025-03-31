@@ -1,27 +1,20 @@
 import { CRMMembreProjet } from '@/app/CRMinterface/crmmembre-projet';
 import { ProjectService } from '@/app/CRMservice/project.service';
-import { Component, Input } from '@angular/core';
-
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import {inject, type TemplateRef } from '@angular/core'
 import {
   NgbModal,
   NgbModalConfig,
+  NgbModalRef,
   type NgbModalOptions,
 } from '@ng-bootstrap/ng-bootstrap'
 import { NgbProgressbarModule } from '@ng-bootstrap/ng-bootstrap'
-
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms'; 
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
-
-
 import { TempMembreProjet } from '@/app/CRMinterface/temp-membre-projet';
-
 import { RouterLink } from '@angular/router';
-
 import { CommonModule } from '@angular/common';
-
-
 
 
 @Component({
@@ -71,8 +64,10 @@ export class ProjectListComponent {
 
   idNewProject = "";
 
+  modalRef: NgbModalRef | undefined;
+
   constructor(
-    private projectService:ProjectService
+    private projectService:ProjectService,private cdRef: ChangeDetectorRef
   ){ }
 
   getAllUserProject(){
@@ -88,6 +83,7 @@ export class ProjectListComponent {
     });    
   }
 
+
   
   ngOnInit() {
     this.getAllUserProject()
@@ -97,6 +93,17 @@ export class ProjectListComponent {
     //   this.assignments = assignment;
     // });
   }
+
+  refreshData() {
+    // Ici, tu mets à jour les données de ton composant
+    // Par exemple :
+    this.getAllUserProject();
+    
+    // Ensuite, forcer Angular à détecter les changements
+    this.cdRef.detectChanges();
+  }
+
+  
 
   
   // Handle the event when a user is selected from autocomplete
@@ -109,7 +116,17 @@ export class ProjectListComponent {
   }
 
   openModal(content: TemplateRef<HTMLElement>, options: NgbModalOptions) {
-    this.modalService.open(content, options)
+    //this.modalService.open(content, options)
+    
+     this.modalRef = this.modalService.open(content, { size: 'xl' });
+  }
+
+   // Fermer le modal via TS
+   closeModal() {
+    if (this.modalRef) {
+      this.modalRef.dismiss();  // ou .close() si vous voulez déclencher le résultat de fermeture
+    }
+    //this.refreshData();
   }
 
   // Function to add a new member to the list
@@ -174,8 +191,18 @@ export class ProjectListComponent {
         }, error => {
           console.error('Error saving members', error);
         });
-
-
+        
+        this.nomProjet= "";
+        this.startdate = "";
+        this.enddate = "";
+        this.id_type_projet = "";
+        this.id_type_suivi = "";
+        this.id_client = "";
+        this.description = "";
+        this.idNewProject = "";
+        this.membres = [];
+        this.closeModal();
+        this.refreshData();
       });
   }
 
@@ -184,5 +211,14 @@ export class ProjectListComponent {
       this.membres[i].id_projet=idProjet;
     }
   }
+
+  // refreshData() {
+  //   // Ici, tu mets à jour les données de ton composant
+  //   // Par exemple :
+  //   this.loadData();
+    
+  //   // Ensuite, forcer Angular à détecter les changements
+  //   this.cdRef.detectChanges();
+  // }
 
 }

@@ -129,7 +129,7 @@
         <div class="img-group d-flex justify-content-center">
           <span
           class="thumb-lg justify-content-center d-flex align-items-center bg-success-subtle text-success rounded-circle me-2"
-            >AS
+            >AS  
           </span>
 
           <!-- <a
@@ -185,7 +185,7 @@
         >
           <div class="modal-header">
             <h6 class="modal-title m-0" id="myExtraLargeModalLabel">
-              Extra Large Modal
+            Sous-tâches 
             </h6>
             <button
               type="button"
@@ -196,48 +196,221 @@
           </div>
 
           <!--end modal-header-->
-          <form class="p-4 pt-3" (ngSubmit)="addSousTask()">
-          <div class="modal-body">
-            
-              <div class="form-group mb-2 mb-lg-1">
-                <label for="projectName" class="form-label">Ajoutez une sous tâche :</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="nomProjet"
-                  aria-describedby="emailHelp"
-                  placeholder="Entrez le titre de la tâche"
-                  [(ngModel)]="nameSousTask" name="nameSousTask" 
-                />
-              </div>
-              <div class="mb-3 row" *ngIf="ssTaskList.length > 0; else noTasks">
-                <label class="col-md-3 my-2 control-label">Sous-tâches</label>
-                <ngb-progressbar type="secondary" class="mb-3" [value]="thistask!.progresDyn!"
-                    >{{thistask!.progresDyn!}}%</ngb-progressbar
-                  >
-                <div class="col-md-9" *ngFor="let tache of ssTaskList">
-                  <div class="form-check">
+          
+            <div class="modal-body">
+                  
+                
+                <ng-template #noTasks>
+                  <p>Pas de sous-tâches enregistrés.</p>
+                </ng-template>
+              
+             
+              <form class="p-4 pt-3" (ngSubmit)="addSousTask()">
+                @if(thistask!.permission==='admin'){
+                  <div class="form-group mb-2 mb-lg-1">
+                    <label for="projectName" class="form-label">Ajoutez une sous tâche :</label>
                     <input
-                      class="form-check-input"
-                      type="checkbox"
-                      [checked]="tache.statut === 3"
-                      [id]="'flexCheck' + tache.id"
-                      [disabled]="tache.statut === 3"
-                      (change)="toggleSousTaskStatus(tache)"
-
+                      type="text"
+                      class="form-control"
+                      id="nomProjet"
+                      aria-describedby="emailHelp"
+                      placeholder="Entrez le titre de la tâche"
+                      [(ngModel)]="nameSousTask" name="nameSousTask" 
                     />
-                    <label class="form-check-label" [for]="'flexCheck' + tache.id">
-                      {{ tache.nom }}
-                    </label>
+                  </div>
+                }
+                
+                <div class="mb-3 row" *ngIf="ssTaskList.length > 0; else noTasks">
+                  <label class="col-md-3 my-2 control-label">Sous-tâches</label>
+                  <ngb-progressbar type="secondary" class="mb-3" [value]="thistask!.progresDyn!"
+                      >{{thistask!.progresDyn!}}%</ngb-progressbar
+                    >
+                  <div class="col-md-9" *ngFor="let tache of ssTaskList">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        [checked]="tache.statut === 3"
+                        [id]="'flexCheck' + tache.id"
+                        [disabled]="tache.statut === 3"
+                        (change)="toggleSousTaskStatus(tache)"
+
+                      />
+                      <label class="form-check-label" [for]="'flexCheck' + tache.id">
+                        {{ tache.nom }}
+                      </label>
+                    </div>
                   </div>
                 </div>
+                @if(thistask!.permission==='admin')
+                {
+                  <button type="submit" class="btn btn-primary btn-sm"> Créer la tâche
+                  </button>
+
+                }
+                
+                 
+              </form>
+              <div class="row" style="padding: 2.25rem 2.25rem 0 2.25rem !important">
+                <div class="col">
+                  <p class="text-dark fw-semibold mb-0">Commentaires ({{listeCommentsTask.length}})</p>
+                </div>
+                <!--end col-->
               </div>
+                <!-- Atsofoka eto le liste comments -->
+                <div class="card-body border-bottom-dashed" style="padding: 0 2.25rem 2.25rem 2.25rem !important;">
+                  @for (item of listeCommentsTask; track item.id) 
+                  {
+                      @if(item.exp_id != userObject.id)
+                      {
+                          <ul class="list-unstyled mb-0">
               
-              <ng-template #noTasks>
-                <p>Pas de sous-tâches enregistrés.</p>
-              </ng-template>
+                              <li ngClass="mt-3">
+                                <div class="row">
+                                  <div class="col-auto">
+                                    <!-- <img
+                                      src=""
+                                      alt=""
+                                      class="thumb-md rounded-circle"
+                                    /> -->
+                                    <span
+                                    class="thumb-lg justify-content-center d-flex align-items-center bg-success-subtle text-success rounded-circle me-2"
+                                      > {{getAvatarUserConnectedOtherUser(item.exp_nom)}}
+                                    </span>
+
+                                  </div>
+                                  <!--end col-->
+                                  <div class="col">
+                                    <div class="bg-light rounded ms-n2 bg-light-alt p-3">
+                                      <div class="row">
+                                        <div class="col">
+                                          <p class="text-dark fw-semibold mb-2">
+                                            {{item.exp_nom}} 
+                                          </p>
+                                        </div>
+                                        <!--end col-->
+                                        <div class="col-auto">
+                                          <span class="text-muted"
+                                            ><i class="far fa-clock me-1"></i
+                                            >{{item.date_envoi}} </span
+                                          >
+                                        </div>
+                                        <!--end col-->
+                                      </div>
+                                      <!--end row-->
+                                      <p>{{item.contenu}}</p>
+                                      <!-- <a href="javascript:void(0);" class="text-primary"
+                                        ><i class="fas fa-reply me-1"></i>Replay</a
+                                      > -->
+                                    </div>
+                                  </div>
+                                  <!--end col-->
+                                </div>
+                                <!--end row-->
+                              </li> 
+                              <!-- end partie gauche -->
+                          </ul>
+              
+                      }
+                      @else
+                      {
+                               <!-- debut partie droite  -->
+                          <ul class="list-unstyled ms-5">
+                              <li>
+                              <div class="row mt-3">
+                                  <div class="col-auto">
+                                  <!-- <img
+                                      src=""
+                                      alt=""
+                                      class="thumb-md rounded-circle"
+                                  /> -->
+                                  <span
+                                    class="thumb-lg justify-content-center d-flex align-items-center bg-success-subtle text-success rounded-circle me-2"
+                                      > {{getAvatarUserConnectedOtherUser(item.exp_nom)}}
+                                    </span>
+                                  </div>
+                                  <!--end col-->
+                                  <div class="col">
+                                  <div
+                                      class="bg-light rounded ms-n2 bg-light-alt p-3"
+                                  >
+                                      <div class="row">
+                                      <div class="col">
+                                          <p class="text-dark fw-semibold mb-2">
+                                              {{item.exp_nom}} 
+                                          </p>
+                                      </div>
+                                      <!--end col-->
+                                      <div class="col-auto">
+                                          <span class="text-muted"
+                                          ><i class="far fa-clock me-1"></i
+                                          >{{item.date_envoi}} </span
+                                          >
+                                      </div>
+                                      <!--end col-->
+                                      </div>
+                                      <!--end row-->
+                                      <p>{{item.contenu}} </p>
+                                      <!-- <p class="mb-0">Thank you</p> -->
+                                  </div>
+                                  </div>
+                                  <!--end col-->
+                              </div>
+                                  <!--end row-->
+                           </li>
+                          </ul>
+                  
+              
+                      }
+              
+                  }
+                  
+              
+              
+                  
+              
+                  <div class="card-body">
+                      <div class="row">
+                        <div class="col">
+                          <p class="text-dark fw-semibold mb-0">Ajouter un commentaire</p>
+                        </div>
+                        <!--end col-->
+                      </div>
+                      <!--end row-->
+                    </div>
+                    <!--end card-body-->
+                    <div class="card-body pt-0">
+                      <form (ngSubmit)="onSubmit()">
+                        <div class="form-group mb-3">
+                          <textarea [(ngModel)]="contenu" name="contenu"
+                            class="form-control"
+                            rows="5"
+                            id="leave_comment"
+                            placeholder="Message"
+                          ></textarea>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-12 text-end">
+                            <button type="submit" class="btn btn-primary px-4">
+                             Poster
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <!--end card-body-->
+              
+              
+              
+                </div>
+<!-- Fin Atsofoka eto le liste comments -->
+
+
             </div>
-           
+            
+
+
+            
                
                 <!--end modal-body-->
                 <div class="modal-footer">
@@ -248,11 +421,13 @@
                   >
                     Fermer
                   </button>
-                  <button type="submit" class="btn btn-primary btn-sm">
+                  <!-- <button type="submit" class="btn btn-primary btn-sm">
                     Créer la tâche
-                  </button>
+                  </button> -->
                 </div>
-              </form>
+              
+
+
           <!--end modal-footer--> 
           
           

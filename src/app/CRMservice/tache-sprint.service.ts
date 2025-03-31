@@ -31,6 +31,16 @@ export class TacheSprintService {
     return this.http.put<any>(url,{id:taskId, statut: statut });
   }
 
+  saveTask(credentials: { 
+    id: string,
+      nom: string,
+      descTache: string,
+      date_debutEnCours: string,
+      id_employe_assigne:'FWU15'
+}): Observable<any> {
+  return this.http.post<any>(this.apiUrl, credentials);
+}
+
   saveSsTask(credentials: { 
     nom?: string,
     statut?: number,
@@ -65,6 +75,13 @@ export class TacheSprintService {
     return this.http.put(url, {id:taskId, statut: newStatus });
   }
 
+
+  updateTaskEtat(taskId: string, newStatus: number) {
+    //const url = `api/sous-task/${taskId}/status`; // Exemple d'URL pour l'API/
+    const url = this.apiUrl+`score/etat`; 
+    return this.http.put(url, {id:taskId, etat: newStatus });
+  }
+
   
 
   updateattributeTask(credentials: {     
@@ -92,8 +109,8 @@ export class TacheSprintService {
     return this.http.get<any>(this.apiUrl+"taskJur/"+idProject+"/");
   }
 
-  getCommentaireTache(idTache?:string): Observable<any> {
-    return this.http.get<CrmCommentaireTacheLib>(this.apiUrl +"commentaire/"+idTache);
+  getCommentaireTache(idTache?:string,idEmploye?:string,idClient?:string,permission?:string): Observable<any> {
+    return this.http.get<CrmCommentaireTacheLib>(this.apiUrl +"commentaire/"+idTache+"/"+idEmploye+"/"+idClient+"/"+permission);
   }
 
   getTachesCleint(idProject?:string): Observable<any> {
@@ -120,6 +137,73 @@ export class TacheSprintService {
     }): Observable<any> {
       return this.http.post<any>(this.apiUrl+'commentaire'+"/", credentials);
   }
+
+  saveScoreCP(credentials: { 
+    id_tache: string,
+    commentaireChefProjet: string,
+    scoreChefProjet: number,
+    id_employe_assigne: string
+    }): Observable<any> {
+      return this.http.post<any>(this.apiUrl+'score', credentials);
+  }
+
+  updateScore(credentials: {     
+    id: string,
+    commentaireClient: string,
+    scoreClient: number,
+    id_client: string
+  }) {
+    //const url = `api/sous-task/${taskId}/status`; // Exemple d'URL pour l'API/
+    const url = this.apiUrl+'score'; 
+    return this.http.put(url, credentials);
+  }
+
+  // Fonction pour appeler l'API avec toutes les tâches
+  insertBackLogs(taskBackLogs: any[]) {
+    const url = this.apiUrl+"/backlog";  // Remplace par ton URL d'API
+    return this.http.post(url, { tasks: taskBackLogs });
+  }
+
+  createSprint(credentials: { 
+    nom:  string,
+    date_creation : string,
+    date_echeance : string,
+    id_projet:string,
+    statut: number
+}): Observable<any> {
+  const url = this.apiUrl+"sprint";  // Remplace par ton URL d'API
+  return this.http.post<any>(url, credentials);
+}
+
+
+    getAvatarUserConnectedOtherUser(nom: string | undefined) {
+      if (!nom) {
+          return ''; // ou toute autre valeur par défaut
+      }
+
+      return nom
+          .split(' ')
+          .map((word: string) => word[0])
+          .join('')
+          .toUpperCase();
+    }
+
+    getScoreByIdTache(idTache?:string): Observable<any> {
+          return this.http.get<any>(this.apiUrl+"score/"+idTache);
+    }
+
+    attribuerTache(credentials: {     
+      id: string,
+      priorite: number,
+      temps_estime: string,
+      id_employe_assigne: string,
+      id_sprint: string,
+      statut: string
+    }) {
+      //const url = `api/sous-task/${taskId}/status`; // Exemple d'URL pour l'API/
+      const url = this.apiUrl+`attribuerTache`; 
+      return this.http.put(url, credentials);
+    }
 
   
 }

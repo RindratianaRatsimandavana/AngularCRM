@@ -1,26 +1,34 @@
 import { CrmTacheLib } from '@/app/CRMinterface/crm-tache-lib';
 import { TacheSprintService } from '@/app/CRMservice/tache-sprint.service';
-import { Component, inject, Input, TemplateRef } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input, TemplateRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SimplebarAngularModule } from 'simplebar-angular'
 import { CommonModule } from '@angular/common';
-import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms'; // Import FormsModule
+import { RouterLink } from '@angular/router';
 
 
 @Component({
   selector: 'app-document-detail',
   standalone: true,
-  imports: [SimplebarAngularModule,CommonModule,FormsModule],
+  imports: [SimplebarAngularModule,CommonModule,FormsModule,RouterLink],
   templateUrl:'./document-detail.component.html',
   styleUrl: './document-detail.component.scss'
 })
 export class DocumentDetailComponent {
 
+  modalRef: NgbModalRef | undefined;
+
+
   @Input() title: string = 'Chronologies des évenements';
-  modalnameTask?: string;
+ // modalnameTask?: string;
   modaldateDebutEnCours?: string;
   modalstatut?: number;
+
+  modalnameTask = "";
+  modaldescTask = "";
+  dateEvent = "";
 
   // formnameTask?: string; 
   // formdateDebutEnCours?: Date;
@@ -31,7 +39,7 @@ export class DocumentDetailComponent {
   idProjet?:string;
   permission?:string;
   now: Date = new Date(); // Date actuelle
-  constructor(private tacheSprintService: TacheSprintService,private route:ActivatedRoute) {
+  constructor(private tacheSprintService: TacheSprintService,private route:ActivatedRoute, private cdRef: ChangeDetectorRef) {
       // Initialise le formulaire principal
     // this.backlogForm = this.fb.group({
     //   tasks: this.fb.array([]) // FormArray qui contiendra les formulaires pour chaque ligne de tâche
@@ -39,6 +47,11 @@ export class DocumentDetailComponent {
   }
 
   ngOnInit() {
+    
+    this.loadData();
+  }
+
+  loadData(){
     const id = this.route.snapshot.params['id']; 
     this.idProjet=id; 
     // const permission = this.route.snapshot.params['permission'];
@@ -63,7 +76,6 @@ export class DocumentDetailComponent {
 
     //tsy mety mipoitra 
     console.log("formattage date ",this.formatDateForInput(this.listTask[0].date_debutEnCours));
-
   }
 
   isSameDateWithoutTime(date1: string | Date | undefined, date2: string | Date | undefined): boolean {
@@ -94,7 +106,7 @@ export class DocumentDetailComponent {
     console.log("nameTask",nameTask);
     console.log("dateDebutEnCours",dateDebutEnCours);
     console.log("statut",statut);
-    this.modalnameTask = nameTask;
+    //this.modalnameTask = nameTask;
     console.log("dateDebutEnCours.type",) 
     //this.modaldateDebutEnCours = dateDebutEnCours;
     this.modaldateDebutEnCours = this.formatDateForInput(dateDebutEnCours);
@@ -103,7 +115,7 @@ export class DocumentDetailComponent {
     console.log("this.modalnameTask",this.modalnameTask);
     console.log("this.modaldateDebutEnCours",this.modaldateDebutEnCours);
     console.log("this.modalstatut",this.modalstatut);
-    this.modalService.open(content, options)
+    this.modalRef =this.modalService.open(content, options)
   }
 
   modifierTache(){
@@ -142,5 +154,51 @@ export class DocumentDetailComponent {
     this.modalService.open(content, options)
   }
 
+  addTache(){
+    if (!this.idProjet) {
+      console.error("ID du projet non défini");
+      return;
+    }
 
-}
+    
+  
+    const object : any= { 
+      id:'CRMPJ_2',
+      nom: this.modalnameTask,
+      descTache: this.modaldescTask,
+      date_debutEnCours: this.dateEvent,
+      id_employe_assigne:'FWU15'
+    };
+  
+    this.tacheSprintService.saveTask(object).subscribe((result) => {
+      this.closeModal();
+    });
+  }
+  
+  closeModal() {
+    if (this.modalRef) {
+      this.modalRef.dismiss();  // ou .close() si vous voulez déclencher le résultat de fermeture
+    }
+    this.refreshData();
+  }
+
+  refreshData() {
+    // Ici, tu mets à jour les données de ton composant
+    // Par exemple :
+    this.loadData();
+    
+    // Ensuite, forcer Angular à détecter les changements
+    this.cdRef.detectChanges();
+  }
+
+   
+
+       
+     
+
+
+    
+  
+  }
+
+

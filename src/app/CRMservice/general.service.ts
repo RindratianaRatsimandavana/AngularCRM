@@ -33,4 +33,27 @@ export class GeneralService {
   getNotification(idEmploye?:string): Observable<any> {
     return this.http.get<CrmNotification>(this.uri +"CrmTache/newNotif/"+idEmploye);
   }
+
+//   ----------------+--------------+------+-----+---------------------+-------+
+// | Field          | Type         | Null | Key | Default             | Extra |
+// +----------------+--------------+------+-----+---------------------+-------+
+// | id             | varchar(20)  | NO   | PRI | NULL                |       |
+// | id_utilisateur | varchar(20)  | YES  | MUL | NULL                |       |
+// | ref            | varchar(20)  | YES  |     | NULL                |       |
+// | msgN           | varchar(100) | YES  |     | NULL                |       |
+// | urlN           | varchar(20)  | YES  |     | NULL                |       |
+// | date_envoi     | timestamp    | NO   |     | current_timestamp() |       |
+// | etat           | int(11)      | YES  |     | NULL                |       |
+// | statut         | int(11)      | YES  |     | 0                   |       |
+// +----------------+--------------+------+-----+---------------------+-------+
+
+  envoiNotif(credentials: { 
+    id_utilisateur?: string,
+    ref?: number,
+    id_employe_assigne?: string,
+    msgN?: string,
+    urlN?: string
+  }): Observable<any> {
+    return this.http.post<any>(this.uri+"envoiNotif/", credentials);
+  }
 }
